@@ -109,36 +109,40 @@ const NUMBERS = [
 
 const WORK_ITEMS = [
   {
-    slug: "iberolatam",
-    client: "Iberolatam",
-    title: "Plataforma de operación comercial para red ibero­latina",
-    year: "2025",
-    tag: "software",
-    image: "/images/hero-iberolatam-orbit.png",
+    slug: "la-alcoba",
+    client: "La Alcoba",
+    title: "Primera web: experiencia gastronómica, carta y reservas en una sola narrativa",
+    year: "2024",
+    tag: "web",
+    image: "/images/portfolio-la-alcoba.png",
+    demoHref: "https://restaurant-code.vercel.app/",
   },
   {
-    slug: "gemini",
-    client: "Gemini Studio",
-    title: "Web y sistema de identidad para estudio multidisciplinar",
+    slug: "inmobiliaria-fabre",
+    client: "Inmobiliaria Fabre",
+    title: "Sitio inmobiliario con foco en propiedades y contacto directo con el cliente",
+    year: "2025",
+    tag: "web",
+    image: "/images/portfolio-inmobiliaria-fabre.png",
+    demoHref: "https://www.inmobiliariafabre.com/",
+  },
+  {
+    slug: "wavys-technologies",
+    client: "Wavys Technologies",
+    title: "Web corporativa del estudio: mensaje, servicios y conversión en un solo flujo",
     year: "2025",
     tag: "web · brand",
-    image: "/images/hero-gemini-studio.png",
+    image: "/images/portfolio-wavys-technologies.png",
+    demoHref: "https://wavys-technologies.com/",
   },
   {
-    slug: "pulse",
-    client: "Mobile Pulse",
-    title: "App móvil para tracking y rituales de hábitos premium",
-    year: "2024",
-    tag: "mobile",
-    image: "/images/mobile-pulse.png",
-  },
-  {
-    slug: "vertex",
-    client: "Web Vertex",
-    title: "Dashboard interno para equipos de venta B2B",
-    year: "2024",
-    tag: "systems",
-    image: "/images/web-vertex.png",
+    slug: "jlh-seguros",
+    client: "JLH Corredores de Seguros",
+    title: "Portal de correduría: seguros, cotización y confianza para empresas y familias",
+    year: "2025",
+    tag: "web",
+    image: "/images/portfolio-jlh-seguros.png",
+    demoHref: "https://www.jlhcorredoresdeseguros.com/",
   },
 ] as const;
 
@@ -161,7 +165,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "¿Dónde están basados?",
-    a: "España y Latinoamérica. Trabajamos en remoto con equipos de toda Iberolatam y hacemos presencial en Madrid y Lima cuando el proyecto lo pide.",
+    a: "España y Latinoamérica. Trabajamos en remoto con equipos de toda Iberolatam y hacemos presencial en Lima cuando el proyecto lo pide.",
   },
 ] as const;
 
@@ -1046,14 +1050,17 @@ export function LandingPage() {
 
           <div className="mt-14 grid gap-8 md:grid-cols-2 lg:gap-10">
             {WORK_ITEMS.map((item, idx) => (
-              <article
+              <a
                 key={item.slug}
                 data-reveal
-                className={`group relative flex flex-col gap-5 ${
+                href={item.demoHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`group relative flex flex-col gap-5 outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] rounded-[1.25rem] ${
                   idx % 2 === 1 ? "md:mt-16" : ""
                 }`}
               >
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[1.25rem] border border-[var(--line)] bg-[var(--surface)]">
+                <div className="relative aspect-[8/5] overflow-hidden rounded-[1.25rem] border border-[var(--line)] bg-[var(--surface)]">
                   <div
                     data-parallax-img
                     className="absolute inset-0 transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
@@ -1063,7 +1070,7 @@ export function LandingPage() {
                       alt={item.client}
                       fill
                       sizes="(max-width:768px) 100vw, 50vw"
-                      className="object-cover"
+                      className="object-contain object-top"
                     />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)]/60 via-transparent to-transparent" />
@@ -1080,12 +1087,15 @@ export function LandingPage() {
                     <h3 className="mt-3 font-display text-[1.5rem] font-medium leading-[1.2] tracking-[-0.025em] text-[var(--cream)]">
                       {item.title}
                     </h3>
+                    <p className="mt-2 text-[0.72rem] font-mono uppercase tracking-[0.2em] text-[var(--muted)]">
+                      ver demo en vivo
+                    </p>
                   </div>
                   <span className="mt-1 shrink-0 text-[var(--cream)] opacity-60 transition-all duration-500 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1">
                     <ArrowUpRight className="h-5 w-5" />
                   </span>
                 </div>
-              </article>
+              </a>
             ))}
           </div>
         </div>
@@ -1203,8 +1213,8 @@ export function LandingPage() {
                 </span>
               </a>
               <p className="mt-6 max-w-[22rem] text-[0.95rem] leading-7 text-[var(--cream-soft)]/55">
-                Estudio de diseño digital y software a medida. Madrid y Lima.
-                Trabajamos en remoto para toda Iberolatam.
+                Estudio de diseño digital y software a medida. Presencial en Lima;
+                remoto para toda Iberolatam.
               </p>
             </div>
             <div>
@@ -1278,7 +1288,7 @@ export function LandingPage() {
               reservados.
             </p>
             <p className="text-[0.78rem] text-[var(--muted)]">
-              Hecho con intención desde Madrid &amp; Lima
+              Hecho con intención desde Lima
             </p>
           </div>
         </div>
