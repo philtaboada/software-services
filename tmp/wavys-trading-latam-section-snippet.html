@@ -1,0 +1,398 @@
+<style>
+  .wavys-partner-section {
+    --wavys-bg: #111111;
+    --wavys-surface: #1f1f1f;
+    --wavys-surface-2: #171717;
+    --wavys-border: rgba(255, 102, 33, 0.32);
+    --wavys-border-soft: rgba(255, 255, 255, 0.08);
+    --wavys-text: #ffffff;
+    --wavys-text-soft: rgba(255, 255, 255, 0.78);
+    --wavys-accent: #ff661f;
+    --wavys-accent-soft: rgba(255, 102, 33, 0.14);
+    --wavys-brand: #18c8ff;
+    --wavys-brand-soft: rgba(24, 200, 255, 0.14);
+    padding: 72px 20px;
+    background:
+      radial-gradient(circle at top right, rgba(24, 200, 255, 0.12), transparent 28%),
+      radial-gradient(circle at bottom left, rgba(255, 102, 33, 0.12), transparent 30%),
+      var(--wavys-bg);
+    color: var(--wavys-text);
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .wavys-partner-shell {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 10px;
+  }
+
+  .wavys-partner-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+    gap: 28px;
+    padding: 34px;
+    border: 1px solid var(--wavys-border);
+    border-radius: 24px;
+    background:
+      linear-gradient(135deg, rgba(255, 102, 33, 0.05), transparent 40%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)),
+      var(--wavys-surface);
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
+  }
+
+  .wavys-partner-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--wavys-text);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .wavys-partner-kicker::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--wavys-accent), var(--wavys-brand));
+    box-shadow: 0 0 18px rgba(255, 102, 33, 0.45);
+  }
+
+  .wavys-partner-title {
+    margin: 0;
+    font-size: clamp(30px, 5vw, 48px);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  .wavys-partner-title strong {
+    color: var(--wavys-accent);
+  }
+
+  .wavys-partner-copy {
+    margin: 18px 0 0;
+    color: var(--wavys-text-soft);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .wavys-partner-copy + .wavys-partner-copy {
+    margin-top: 12px;
+  }
+
+  .wavys-partner-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 26px 0 24px;
+  }
+
+  .wavys-partner-pill {
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--wavys-border-soft);
+    color: var(--wavys-text);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .wavys-partner-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .wavys-partner-feature {
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid var(--wavys-border-soft);
+    background: var(--wavys-surface-2);
+  }
+
+  .wavys-partner-feature strong {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--wavys-text);
+    font-size: 15px;
+    line-height: 1.35;
+  }
+
+  .wavys-partner-feature span {
+    display: block;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .wavys-partner-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .wavys-partner-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 22px;
+    border-radius: 10px;
+    border: 1px solid var(--wavys-accent);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .wavys-partner-button:hover {
+    transform: translateY(-1px);
+  }
+
+  .wavys-partner-button--primary {
+    background: var(--wavys-accent);
+    color: #ffffff;
+  }
+
+  .wavys-partner-button--secondary {
+    background: transparent;
+    color: #ffffff;
+  }
+
+  .wavys-partner-side {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .wavys-brand-card {
+    padding: 24px;
+    border-radius: 22px;
+    border: 1px solid rgba(24, 200, 255, 0.18);
+    background:
+      linear-gradient(160deg, rgba(24, 200, 255, 0.14), transparent 48%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
+      #101010;
+  }
+
+  .wavys-brand-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    color: #bfefff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .wavys-brand-label::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    background: var(--wavys-brand);
+    box-shadow: 0 0 22px rgba(24, 200, 255, 0.38);
+  }
+
+  .wavys-brand-card h3 {
+    margin: 0 0 12px;
+    font-size: 28px;
+    line-height: 1.15;
+  }
+
+  .wavys-brand-card p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .wavys-side-list {
+    display: grid;
+    gap: 12px;
+    padding: 22px;
+    border-radius: 22px;
+    border: 1px solid var(--wavys-border-soft);
+    background: #121212;
+  }
+
+  .wavys-side-list-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .wavys-side-list-item::before {
+    content: "";
+    flex: 0 0 10px;
+    width: 10px;
+    height: 10px;
+    margin-top: 7px;
+    border-radius: 999px;
+    background: var(--wavys-accent);
+    box-shadow: 0 0 18px rgba(255, 102, 33, 0.36);
+  }
+
+  .wavys-side-note {
+    padding: 20px 22px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, var(--wavys-accent-soft), rgba(255, 102, 33, 0.04));
+    border: 1px solid rgba(255, 102, 33, 0.18);
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .wavys-side-note strong {
+    color: #ffffff;
+  }
+
+  @media (max-width: 980px) {
+    .wavys-partner-card {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .wavys-partner-section {
+      padding: 56px 16px;
+    }
+
+    .wavys-partner-card {
+      padding: 24px;
+      border-radius: 20px;
+      gap: 22px;
+    }
+
+    .wavys-partner-title {
+      font-size: 32px;
+    }
+
+    .wavys-partner-copy {
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .wavys-partner-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .wavys-partner-actions {
+      flex-direction: column;
+    }
+
+    .wavys-partner-button {
+      width: 100%;
+    }
+  }
+</style>
+
+<section class="wavys-partner-section" aria-labelledby="wavys-partner-title">
+  <div class="wavys-partner-shell">
+    <div class="wavys-partner-card">
+      <div class="wavys-partner-main">
+        <span class="wavys-partner-kicker">Partner tecnológico para brokers</span>
+        <h2 class="wavys-partner-title" id="wavys-partner-title">
+          Lleva tu broker a otro nivel con <strong>IA, automatización y operación conectada</strong>
+        </h2>
+
+        <p class="wavys-partner-copy">
+          <strong>Wavys Technologies</strong> desarrolla agentes de IA para ventas, soporte y operaciones,
+          conectados con canales y sistemas reales para reducir carga manual, responder más rápido y mejorar la experiencia del cliente.
+        </p>
+
+        <p class="wavys-partner-copy">
+          Si tu broker ya está operativo o estás en fase de escalamiento, Wavys puede ayudarte a ordenar procesos,
+          automatizar seguimiento comercial y sostener una atención más eficiente sin crecer al mismo ritmo en personal.
+        </p>
+
+        <div class="wavys-partner-pills" aria-label="Capacidades clave de Wavys">
+          <span class="wavys-partner-pill">Ventas automatizadas</span>
+          <span class="wavys-partner-pill">Soporte 24/7</span>
+          <span class="wavys-partner-pill">Operaciones conectadas</span>
+          <span class="wavys-partner-pill">WhatsApp + CRM + workflows</span>
+        </div>
+
+        <div class="wavys-partner-grid">
+          <div class="wavys-partner-feature">
+            <strong>Captura y seguimiento de leads</strong>
+            <span>Responde consultas, califica oportunidades y deja contexto listo para el equipo comercial.</span>
+          </div>
+
+          <div class="wavys-partner-feature">
+            <strong>Atención más rápida y consistente</strong>
+            <span>Reduce tiempos de respuesta en soporte y mantiene continuidad incluso fuera del horario del equipo.</span>
+          </div>
+
+          <div class="wavys-partner-feature">
+            <strong>Automatización operativa</strong>
+            <span>Conecta formularios, CRM, tickets y tareas internas para evitar reprocesos y errores manuales.</span>
+          </div>
+
+          <div class="wavys-partner-feature">
+            <strong>Implementación enfocada en ROI</strong>
+            <span>Empiezas por un caso de uso concreto y escalas con base en impacto real sobre el negocio.</span>
+          </div>
+        </div>
+
+        <div class="wavys-partner-actions">
+          <a
+            class="wavys-partner-button wavys-partner-button--primary"
+            href="https://www.wavys-technologies.com/es"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Conocer Wavys
+          </a>
+
+          <a
+            class="wavys-partner-button wavys-partner-button--secondary"
+            href="https://www.wavys-technologies.com/es#contact"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Solicitar información
+          </a>
+        </div>
+      </div>
+
+      <aside class="wavys-partner-side" aria-label="Resumen de Wavys">
+        <div class="wavys-brand-card">
+          <span class="wavys-brand-label">Wavys Technologies</span>
+          <h3>Agentes de IA que ejecutan, acompañan y escalan procesos</h3>
+          <p>
+            Una propuesta ideal para brokers que necesitan reforzar ventas, soporte y operación
+            sin depender de tareas repetitivas ni flujos dispersos.
+          </p>
+        </div>
+
+        <div class="wavys-side-list">
+          <div class="wavys-side-list-item">Integración con canales de contacto y herramientas comerciales.</div>
+          <div class="wavys-side-list-item">Automatización del seguimiento y la atención inicial al cliente.</div>
+          <div class="wavys-side-list-item">Mejor continuidad operativa para equipos que están creciendo.</div>
+          <div class="wavys-side-list-item">Escalamiento por fases, empezando por el cuello de botella más importante.</div>
+        </div>
+
+        <div class="wavys-side-note">
+          <strong>Recomendación de ubicación:</strong> este bloque encaja especialmente bien
+          después de la sección <em>“¿Ya tienes un broker o estás listo para escalarlo?”</em>
+          o junto al <em>Paso 8: Automatización de procesos</em>.
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vista previa | Sección Wavys para Trading Latam</title>
+    <style>
+      body {
+        margin: 0;
+        background: #0d0d0d;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="height: 56px; background: #0b0b0b;"></div>
+    <div style="height: 520px; background: linear-gradient(180deg, #202020 0%, #111111 100%);"></div>
+    <div style="height: 1px; background: rgba(255,255,255,0.08);"></div>
+    <script>
+      fetch("./wavys-trading-latam-section-snippet.html")
+        .then((response) => response.text())
+        .then((html) => {
+          document.body.insertAdjacentHTML("beforeend", html);
+          document.body.insertAdjacentHTML(
+            "beforeend",
+            '<div style="height: 760px; background: #101010;"></div>',
+          );
+        });
+    </script>
+  </body>
+</html>
