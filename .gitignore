@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# agent skills (install with: bunx skills add alchaincyf/huashu-design -y)
+.agents/
+skills/

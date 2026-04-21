@@ -5,6 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  ProcessPipelineVisual,
+  type ProcessVisualVariant,
+} from "./process-pipeline-visual";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -73,32 +77,49 @@ const CAPABILITIES = [
   },
 ] as const;
 
-const PROCESS_STEPS = [
+const PROCESS_STEPS: readonly {
+  id: string;
+  kicker: string;
+  title: string;
+  body: string;
+  visual: ProcessVisualVariant;
+}[] = [
   {
     id: "01",
-    kicker: "diagnóstico",
-    title: "Leemos el cuello de botella",
-    body: "Antes de diseñar nada aterrizamos qué está frenando el avance: claridad comercial, experiencia o fricción operativa.",
+    kicker: "captura",
+    title: "Web scraping",
+    body: "Extraemos contexto de tu web y referencias: estructura, contenido y señales que importan para decidir con datos, no a ojo.",
+    visual: "web-scraping",
   },
   {
     id: "02",
-    kicker: "dirección",
-    title: "Definimos una dirección que aguante",
-    body: "Estructuramos mensaje, atmósfera y sistema para que la primera versión ya nazca con peso y continuidad.",
+    kicker: "inteligencia",
+    title: "IA + automatización",
+    body: "Conectamos modelos y herramientas en flujos que limpian datos, disparan acciones y quitan trabajo repetido al equipo.",
+    visual: "ai-automation",
   },
   {
     id: "03",
-    kicker: "construcción",
-    title: "Construimos con detalle y control",
-    body: "Diseño, desarrollo, interacción y performance resueltos con una misma mano para que todo se sienta coherente.",
+    kicker: "dirección",
+    title: "Discovery y diseño",
+    body: "Investigación, arquitectura de información, UI y atmósfera con una línea clara: mensaje, ritmo y sistema que escalan.",
+    visual: "discovery-design",
   },
   {
     id: "04",
-    kicker: "entrega",
-    title: "Entregamos base y siguiente jugada",
-    body: "No solo lanzamos. Dejamos claro qué conviene hacer después para que la siguiente fase no llegue a ciegas.",
+    kicker: "release",
+    title: "Deploy",
+    body: "Build reproducible, entornos, DNS y pipeline hasta producción: lo que sube es lo probado, con trazabilidad.",
+    visual: "deploy",
   },
-] as const;
+  {
+    id: "05",
+    kicker: "crear",
+    title: "Crear",
+    body: "Lanzamos el entregable, medimos y documentamos la siguiente jugada para que iterar no sea empezar de cero.",
+    visual: "create",
+  },
+];
 
 const NUMBERS = [
   { value: 120, suffix: "+", label: "proyectos entregados" },
@@ -918,8 +939,8 @@ export function LandingPage() {
           <div className="mx-auto flex w-full max-w-[1440px] items-end justify-between gap-6 px-5 pt-12 sm:px-8 lg:px-12 lg:pt-16">
             <div data-reveal>
               <p className="section-label">Proceso</p>
-              <h2 className="mt-6 font-display text-[clamp(1.8rem,4.5vw,3.4rem)] font-medium leading-[1.05] tracking-[-0.035em] max-w-[20ch]">
-                Cuatro movimientos para que nada quede al <span className="font-serif italic text-[var(--accent)] font-normal">azar.</span>
+              <h2 className="mt-6 font-display text-[clamp(1.8rem,4.5vw,3.4rem)] font-medium leading-[1.05] tracking-[-0.035em] max-w-[22ch]">
+                Cinco movimientos de <span className="font-serif italic text-[var(--accent)] font-normal">pipeline</span> a entrega.
               </h2>
             </div>
             <p
@@ -935,52 +956,56 @@ export function LandingPage() {
             data-process-track
             className="mt-12 flex flex-1 items-center gap-6 px-5 pb-16 sm:px-8 lg:mt-20 lg:gap-8 lg:px-12 lg:pb-0"
           >
-            {PROCESS_STEPS.map((step, idx) => (
-              <article
-                key={step.id}
-                data-process-step
-                className="card-outline relative flex min-h-[22rem] w-[86vw] shrink-0 flex-col justify-between rounded-[1.75rem] p-8 sm:w-[60vw] lg:w-[30rem] lg:min-h-[28rem] lg:p-10"
-              >
-                <div className="flex items-start justify-between">
-                  <span
-                    data-process-reveal
-                    className="font-display text-[5rem] font-medium leading-none tracking-[-0.06em] text-[var(--cream-soft)]/15 lg:text-[7rem]"
-                  >
-                    {step.id}
-                  </span>
-                  <span
-                    data-process-reveal
-                    className={`dot-accent ${idx % 2 === 0 ? "bg-[var(--accent)]" : "bg-[var(--lime)]"}`}
-                    style={{
-                      background:
-                        idx % 2 === 0 ? "var(--accent)" : "var(--lime)",
-                    }}
-                  >
-                    →
-                  </span>
-                </div>
-                <div>
-                  <p
-                    data-process-reveal
-                    className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-[var(--muted)]"
-                  >
-                    / {step.kicker}
-                  </p>
-                  <h3
-                    data-process-reveal
-                    className="mt-4 font-display text-[1.8rem] font-medium leading-[1.1] tracking-[-0.03em] lg:text-[2.2rem]"
-                  >
-                    {step.title}
-                  </h3>
-                  <p
-                    data-process-reveal
-                    className="mt-5 text-[0.95rem] leading-7 text-[var(--cream-soft)]/60"
-                  >
-                    {step.body}
-                  </p>
-                </div>
-              </article>
-            ))}
+            {PROCESS_STEPS.map((step, idx) => {
+              const dotTone =
+                idx % 4 === 0
+                  ? "var(--accent)"
+                  : idx % 4 === 1
+                    ? "var(--lime)"
+                    : idx % 4 === 2
+                      ? "var(--teal)"
+                      : "var(--plum)";
+              return (
+                <article
+                  key={step.id}
+                  data-process-step
+                  className="card-outline relative flex min-h-[26rem] w-[86vw] shrink-0 flex-col rounded-[1.75rem] p-8 sm:w-[60vw] lg:w-[30rem] lg:min-h-[30rem] lg:p-10"
+                >
+                  <div data-process-reveal className="mb-6">
+                    <ProcessPipelineVisual variant={step.visual} />
+                  </div>
+                  <div className="mt-auto flex flex-1 flex-col">
+                    <div className="flex items-center justify-between gap-4">
+                      <span
+                        data-process-reveal
+                        className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-[var(--muted)]"
+                      >
+                        [{step.id}] · {step.kicker}
+                      </span>
+                      <span
+                        data-process-reveal
+                        className="dot-accent shrink-0"
+                        style={{ background: dotTone }}
+                      >
+                        →
+                      </span>
+                    </div>
+                    <h3
+                      data-process-reveal
+                      className="mt-5 font-display text-[1.65rem] font-medium leading-[1.12] tracking-[-0.03em] lg:text-[2rem]"
+                    >
+                      {step.title}
+                    </h3>
+                    <p
+                      data-process-reveal
+                      className="mt-4 text-[0.95rem] leading-7 text-[var(--cream-soft)]/60"
+                    >
+                      {step.body}
+                    </p>
+                  </div>
+                </article>
+              );
+            })}
 
             {/* spacer to allow last card to breathe on horizontal scroll */}
             <div className="w-[12vw] shrink-0 lg:w-[20vw]" aria-hidden="true" />
