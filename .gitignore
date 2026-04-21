@@ -42,4 +42,5 @@ next-env.d.ts
 
 # agent skills (install with: bunx skills add alchaincyf/huashu-design -y)
 .agents/
-skills/
+# Solo el directorio de dependencias en la raíz; no ignorar `.cursor/skills/` del proyecto.
+/skills/
