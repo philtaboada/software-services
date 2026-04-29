@@ -5,10 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  ProcessPipelineVisual,
-  type ProcessVisualVariant,
-} from "./process-pipeline-visual";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -76,42 +72,36 @@ const CAPABILITIES = [
   },
 ] as const;
 
-const PROCESS_STEPS: readonly {
-  id: string;
-  kicker: string;
-  title: string;
-  body: string;
-  visual: ProcessVisualVariant;
-}[] = [
+const PROCESS_STEPS = [
   {
     id: "01",
     kicker: "diagnóstico",
     title: "Leemos el cuello de botella",
     body: "Antes de diseñar nada aterrizamos qué está frenando el avance: claridad comercial, experiencia o fricción operativa.",
-    visual: "web-scraping",
+    accent: "var(--accent)",
   },
   {
     id: "02",
     kicker: "dirección",
     title: "Definimos una dirección que aguante",
     body: "Estructuramos mensaje, atmósfera y sistema para que la primera versión ya nazca con peso y continuidad.",
-    visual: "discovery-design",
+    accent: "var(--lime)",
   },
   {
     id: "03",
     kicker: "construcción",
     title: "Construimos con detalle y control",
     body: "Diseño, desarrollo, interacción y performance resueltos con una misma mano para que todo se sienta coherente.",
-    visual: "ai-automation",
+    accent: "var(--teal)",
   },
   {
     id: "04",
     kicker: "entrega",
     title: "Entregamos base y siguiente jugada",
     body: "No solo lanzamos. Dejamos claro qué conviene hacer después para que la siguiente fase no llegue a ciegas.",
-    visual: "deploy",
+    accent: "var(--accent)",
   },
-];
+] as const;
 
 const NUMBERS = [
   { value: 120, suffix: "+", label: "proyectos entregados" },
@@ -344,12 +334,11 @@ export function LandingPage() {
 
       if (reduceMotion) {
         gsap.set("[data-word-inner]", { y: 0 });
-        gsap.set("[data-reveal]", { autoAlpha: 1, y: 0 });
+        gsap.set("[data-reveal]", { autoAlpha: 1, y: 0, scale: 1 });
         gsap.set(
           "[data-hero-eyebrow], [data-hero-sub], [data-hero-cta], [data-hero-card]",
-          { autoAlpha: 1, y: 0 },
+          { autoAlpha: 1, y: 0, scale: 1 },
         );
-        gsap.set("[data-process-step]", { autoAlpha: 1 });
         return;
       }
 
@@ -358,61 +347,59 @@ export function LandingPage() {
 
       const intro = gsap.timeline({
         defaults: { ease: "power3.out" },
-        delay: 0.08,
+        delay: 0.05,
       });
 
       intro
         .from("[data-nav-item]", {
           autoAlpha: 0,
-          y: -12,
-          stagger: 0.045,
-          duration: 0.45,
+          y: -10,
+          stagger: 0.04,
+          duration: 0.4,
         })
         .from(
           "[data-hero-eyebrow]",
-          { autoAlpha: 0, y: 16, duration: 0.45 },
-          "-=0.2",
+          { autoAlpha: 0, y: 14, duration: 0.4 },
+          "-=0.18",
         )
         .to(
           "[data-hero-line] [data-word-inner]",
-          {
-            y: 0,
-            duration: 0.95,
-            stagger: 0.055,
-            ease: "expo.out",
-          },
-          "-=0.15",
+          { y: 0, duration: 1.05, stagger: 0.05, ease: "expo.out" },
+          "-=0.12",
         )
         .from(
           "[data-hero-sub]",
-          { autoAlpha: 0, y: 18, duration: 0.55 },
-          "-=0.65",
+          { autoAlpha: 0, y: 22, duration: 0.6 },
+          "-=0.72",
         )
         .from(
           "[data-hero-cta]",
-          { autoAlpha: 0, y: 12, stagger: 0.07, duration: 0.45 },
-          "-=0.3",
+          { autoAlpha: 0, y: 14, stagger: 0.08, duration: 0.5 },
+          "-=0.38",
         )
         .from(
           "[data-hero-card]",
           {
             autoAlpha: 0,
-            y: 20,
-            scale: 0.97,
-            stagger: 0.07,
-            duration: 0.65,
+            y: 28,
+            scale: 0.96,
+            stagger: 0.08,
+            duration: 0.7,
             ease: "power2.out",
+            clearProps: "scale",
           },
-          "-=0.35",
+          "-=0.4",
         );
 
-      // ── Generic scroll reveals ───────────────────────────────────────────────
+      // ── Generic scroll reveals (fade + slide + subtle scale) ─────────────────
       gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
         gsap.from(el, {
           autoAlpha: 0,
-          y: 28,
-          duration: 0.8,
+          y: 36,
+          scale: 0.97,
+          duration: 0.85,
           ease: "power3.out",
+          clearProps: "scale,transform",
           scrollTrigger: {
             trigger: el,
             start: "top 88%",
@@ -430,7 +417,7 @@ export function LandingPage() {
             { y: "110%" },
             {
               y: 0,
-              duration: 0.85,
+              duration: 0.9,
               ease: "expo.out",
               scrollTrigger: {
                 trigger: el.closest("[data-reveal-words]") as HTMLElement,
@@ -448,10 +435,14 @@ export function LandingPage() {
       const horizontalTrack = pageRef.current?.querySelector<HTMLElement>(
         "[data-process-track]",
       );
+      const progressDots = pageRef.current?.querySelectorAll<HTMLElement>(
+        "[data-progress-dot]",
+      );
 
       if (horizontalSection && horizontalTrack && window.innerWidth >= 1024) {
         const steps =
           horizontalTrack.querySelectorAll<HTMLElement>("[data-process-step]");
+        const totalSteps = steps.length;
 
         const getDistance = (): number =>
           horizontalTrack.scrollWidth - window.innerWidth;
@@ -462,46 +453,108 @@ export function LandingPage() {
           scrollTrigger: {
             trigger: horizontalSection,
             pin: true,
-            scrub: 1.2,
+            scrub: 1,
             start: "top top",
             end: () => `+=${getDistance()}`,
             invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              // Highlight the correct progress dot
+              if (!progressDots?.length) return;
+              const active = Math.min(
+                Math.floor(self.progress * totalSteps),
+                totalSteps - 1,
+              );
+              progressDots.forEach((dot, i) => {
+                dot.dataset.active = i <= active ? "true" : "false";
+              });
+            },
           },
         });
 
         steps.forEach((step) => {
           const number = step.querySelector<HTMLElement>("[data-process-number]");
-          const rest = step.querySelectorAll<HTMLElement>("[data-process-reveal]");
+          const accent = step.querySelector<HTMLElement>("[data-process-accent]");
+          const textEls = step.querySelectorAll<HTMLElement>("[data-process-reveal]");
 
-          if (number) {
-            gsap.from(number, {
-              autoAlpha: 0,
-              scale: 0.75,
-              duration: 0.9,
-              ease: "expo.out",
+          // Card slides in from right
+          gsap.fromTo(
+            step,
+            { autoAlpha: 0, x: 55, scale: 0.96 },
+            {
+              autoAlpha: 1,
+              x: 0,
+              scale: 1,
+              duration: 0.85,
+              ease: "power3.out",
+              clearProps: "scale",
               scrollTrigger: {
                 trigger: step,
                 containerAnimation: horizontalTween,
-                start: "left 90%",
+                start: "left 92%",
                 once: true,
               },
-            });
+            },
+          );
+
+          // Ghost number scales in with expo bounce
+          if (number) {
+            gsap.fromTo(
+              number,
+              { autoAlpha: 0, scale: 0.55, y: 20 },
+              {
+                autoAlpha: 1,
+                scale: 1,
+                y: 0,
+                duration: 1.1,
+                ease: "expo.out",
+                scrollTrigger: {
+                  trigger: step,
+                  containerAnimation: horizontalTween,
+                  start: "left 88%",
+                  once: true,
+                },
+              },
+            );
           }
 
-          if (rest.length) {
-            gsap.from(rest, {
-              autoAlpha: 0,
-              y: 22,
-              duration: 0.7,
-              stagger: 0.07,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: step,
-                containerAnimation: horizontalTween,
-                start: "left 75%",
-                once: true,
+          // Accent bar draws in
+          if (accent) {
+            gsap.fromTo(
+              accent,
+              { scaleX: 0 },
+              {
+                scaleX: 1,
+                duration: 0.7,
+                ease: "expo.out",
+                scrollTrigger: {
+                  trigger: step,
+                  containerAnimation: horizontalTween,
+                  start: "left 82%",
+                  once: true,
+                },
               },
-            });
+            );
+          }
+
+          // Text elements stagger in
+          if (textEls.length) {
+            gsap.fromTo(
+              textEls,
+              { autoAlpha: 0, y: 18 },
+              {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.65,
+                stagger: 0.09,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: step,
+                  containerAnimation: horizontalTween,
+                  start: "left 78%",
+                  once: true,
+                },
+              },
+            );
           }
         });
       }
@@ -513,13 +566,9 @@ export function LandingPage() {
         const obj = { val: 0 };
         gsap.to(obj, {
           val: target,
-          duration: 1.8,
+          duration: 2,
           ease: "power2.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            once: true,
-          },
+          scrollTrigger: { trigger: el, start: "top 85%", once: true },
           onUpdate: () => {
             el.textContent = `${Math.round(obj.val)}${suffix}`;
           },
@@ -530,16 +579,16 @@ export function LandingPage() {
       gsap.utils.toArray<HTMLElement>("[data-parallax-img]").forEach((el) => {
         gsap.fromTo(
           el,
-          { yPercent: -6, scale: 1.06 },
+          { yPercent: -7, scale: 1.07 },
           {
-            yPercent: 6,
+            yPercent: 7,
             scale: 1.0,
             ease: "none",
             scrollTrigger: {
               trigger: el,
               start: "top bottom",
               end: "bottom top",
-              scrub: 1.4,
+              scrub: 1.5,
             },
           },
         );
@@ -567,8 +616,8 @@ export function LandingPage() {
       const ticker = gsap.ticker.add(() => {
         dotPos.x += (mouse.x - dotPos.x) * 0.35;
         dotPos.y += (mouse.y - dotPos.y) * 0.35;
-        ringPos.x += (mouse.x - ringPos.x) * 0.1;
-        ringPos.y += (mouse.y - ringPos.y) * 0.1;
+        ringPos.x += (mouse.x - ringPos.x) * 0.09;
+        ringPos.y += (mouse.y - ringPos.y) * 0.09;
         if (dotRef.current) {
           dotRef.current.style.transform = `translate(${dotPos.x}px, ${dotPos.y}px) translate(-50%, -50%)`;
         }
@@ -592,7 +641,7 @@ export function LandingPage() {
           gsap.to(el, {
             x: (relX / rect.width) * strength,
             y: (relY / rect.height) * strength,
-            duration: 0.45,
+            duration: 0.4,
             ease: "power3.out",
           });
         });
@@ -601,8 +650,8 @@ export function LandingPage() {
           gsap.to(el, {
             x: 0,
             y: 0,
-            duration: 0.65,
-            ease: "elastic.out(1, 0.4)",
+            duration: 0.7,
+            ease: "elastic.out(1, 0.35)",
           });
         });
 
@@ -1001,13 +1050,20 @@ export function LandingPage() {
                   azar.
                 </span>
               </h2>
-              <a
-                href="/demos/proceso"
-                className="mt-5 inline-flex items-center gap-2 text-[0.82rem] font-medium text-[var(--accent-soft)] transition-colors hover:text-[var(--accent)]"
-              >
-                Ver demos en detalle
-                <ArrowUpRight className="h-3.5 w-3.5" />
-              </a>
+              {/* Step progress dots — animadas por GSAP onUpdate */}
+              <div className="mt-6 flex items-center gap-2">
+                {PROCESS_STEPS.map((s) => (
+                  <span
+                    key={s.id}
+                    data-progress-dot
+                    data-active="false"
+                    className="h-1.5 rounded-full bg-[var(--line)] transition-all duration-300 data-[active=true]:w-6 data-[active=true]:bg-[var(--accent)] w-1.5"
+                  />
+                ))}
+                <span className="ml-2 font-mono text-[0.68rem] uppercase tracking-[0.28em] text-[var(--muted)]">
+                  scroll →
+                </span>
+              </div>
             </div>
             <p
               data-reveal
@@ -1022,66 +1078,65 @@ export function LandingPage() {
             data-process-track
             className="mt-12 flex flex-1 items-center gap-6 px-5 pb-16 sm:px-8 lg:mt-20 lg:gap-8 lg:px-12 lg:pb-0"
           >
-            {PROCESS_STEPS.map((step, idx) => {
-              const dotColor = idx % 2 === 0 ? "var(--accent)" : "var(--lime)";
-              return (
-                <article
-                  key={step.id}
-                  data-process-step
-                  className="card-outline relative flex w-[88vw] shrink-0 flex-col overflow-hidden rounded-[1.75rem] sm:w-[62vw] lg:w-[38rem]"
-                >
-                  {/* Visual animation — fills top area */}
-                  <div
-                    data-process-reveal
-                    className="relative px-6 pt-6 sm:px-8 sm:pt-8"
+            {PROCESS_STEPS.map((step) => (
+              <article
+                key={step.id}
+                data-process-step
+                className="card-outline relative flex min-h-[26rem] w-[82vw] shrink-0 flex-col overflow-hidden rounded-[1.75rem] sm:w-[56vw] lg:w-[30rem] lg:min-h-[30rem]"
+              >
+                {/* Accent bar — animated via data-process-accent */}
+                <div
+                  data-process-accent
+                  className="h-[3px] w-full origin-left"
+                  style={{ background: step.accent }}
+                />
+
+                <div className="relative flex flex-1 flex-col p-8 lg:p-10">
+                  {/* Ghost number — background texture */}
+                  <span
+                    data-process-number
+                    aria-hidden="true"
+                    className="pointer-events-none absolute right-6 top-4 select-none font-display text-[8rem] font-bold leading-none tracking-[-0.08em] text-[var(--foreground)]/[0.06] lg:text-[10rem]"
                   >
-                    <ProcessPipelineVisual variant={step.visual} />
-                  </div>
+                    {step.id}
+                  </span>
 
-                  {/* Divider */}
-                  <div className="mx-6 mt-6 border-t border-[var(--line)] sm:mx-8" />
-
-                  {/* Text content */}
-                  <div className="flex flex-1 flex-col p-6 pt-5 sm:p-8 sm:pt-6">
-                    <div className="flex items-center justify-between gap-4">
-                      <span
-                        data-process-reveal
-                        className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-[var(--muted)]"
-                      >
-                        [{step.id}] · {step.kicker}
-                      </span>
-                      <span
-                        data-process-reveal
-                        className="dot-accent shrink-0"
-                        style={{ background: dotColor }}
-                      >
-                        →
-                      </span>
-                    </div>
+                  {/* Content */}
+                  <div className="relative flex flex-1 flex-col justify-end">
+                    <p
+                      data-process-reveal
+                      className="font-mono text-[0.7rem] uppercase tracking-[0.32em]"
+                      style={{ color: step.accent }}
+                    >
+                      / {step.kicker}
+                    </p>
                     <h3
                       data-process-reveal
-                      className="mt-4 font-display text-[1.65rem] font-medium leading-[1.12] tracking-[-0.03em] lg:text-[2rem]"
+                      className="mt-5 font-display text-[1.75rem] font-medium leading-[1.1] tracking-[-0.03em] lg:text-[2.1rem]"
                     >
                       {step.title}
                     </h3>
                     <p
                       data-process-reveal
-                      className="mt-4 text-[0.95rem] leading-7 text-[var(--cream-soft)]/60"
+                      className="mt-5 text-[0.95rem] leading-7 text-[var(--cream-soft)]/60"
                     >
                       {step.body}
                     </p>
-                    <a
+                    <div
                       data-process-reveal
-                      href={`/demos/proceso/${step.visual}`}
-                      className="mt-5 inline-flex items-center gap-1.5 text-[0.78rem] font-medium text-[var(--accent)]/80 transition-colors hover:text-[var(--accent)]"
+                      className="mt-8 flex items-center gap-2"
                     >
-                      Ver animación completa
-                      <ArrowUpRight className="h-3 w-3" />
-                    </a>
+                      <span
+                        className="dot-accent"
+                        style={{ background: step.accent }}
+                      >
+                        →
+                      </span>
+                    </div>
                   </div>
-                </article>
-              );
-            })}
+                </div>
+              </article>
+            ))}
 
             <div className="w-[12vw] shrink-0 lg:w-[20vw]" aria-hidden="true" />
           </div>
