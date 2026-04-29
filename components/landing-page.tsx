@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -885,21 +886,28 @@ export function LandingPage() {
                 Un equipo, cuatro <span className="font-serif italic text-[var(--accent)] font-normal">territorios.</span>
               </h2>
             </div>
-            <p
-              data-reveal
-              className="max-w-[28rem] text-pretty text-[1rem] leading-7 text-[var(--cream-soft)]/60"
-            >
-              Webs, apps y software interno salen con la misma dirección visual
-              y la misma lógica de sistema. Sin saltos entre pieza y pieza.
-            </p>
+            <div data-reveal className="flex max-w-[28rem] flex-col gap-5">
+              <p className="text-pretty text-[1rem] leading-7 text-[var(--cream-soft)]/60">
+                Webs, apps y software interno salen con la misma dirección visual
+                y la misma lógica de sistema. Sin saltos entre pieza y pieza.
+              </p>
+              <Link
+                href="/demos/capacidades"
+                className="inline-flex items-center gap-2 text-[0.82rem] font-medium text-[var(--accent-soft)] transition-colors hover:text-[var(--accent)]"
+              >
+                Ver animación de cada territorio
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
           </div>
 
           <div className="mt-16 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {CAPABILITIES.map((item) => (
-              <article
+              <Link
                 key={item.code}
+                href={`/demos/capacidades/${item.tag}`}
                 data-reveal
-                className="card-outline group relative flex min-h-[22rem] flex-col justify-between rounded-[1.5rem] p-7"
+                className="card-outline group relative flex min-h-[22rem] flex-col justify-between rounded-[1.5rem] p-7 transition-colors hover:border-[var(--line-strong)]"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-[var(--muted)]">
@@ -923,7 +931,7 @@ export function LandingPage() {
                     <ArrowUpRight className="h-3.5 w-3.5" />
                   </div>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
@@ -942,6 +950,13 @@ export function LandingPage() {
               <h2 className="mt-6 font-display text-[clamp(1.8rem,4.5vw,3.4rem)] font-medium leading-[1.05] tracking-[-0.035em] max-w-[22ch]">
                 Cinco movimientos de <span className="font-serif italic text-[var(--accent)] font-normal">pipeline</span> a entrega.
               </h2>
+              <Link
+                href="/demos/proceso"
+                className="mt-5 inline-flex items-center gap-2 text-[0.82rem] font-medium text-[var(--accent-soft)] transition-colors hover:text-[var(--accent)]"
+              >
+                Ver cada paso en su demo
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
             <p
               data-reveal
@@ -969,7 +984,7 @@ export function LandingPage() {
                 <article
                   key={step.id}
                   data-process-step
-                  className="card-outline relative flex min-h-[26rem] w-[86vw] shrink-0 flex-col rounded-[1.75rem] p-8 sm:w-[60vw] lg:w-[30rem] lg:min-h-[30rem] lg:p-10"
+                  className="card-outline relative flex min-h-[30rem] w-[86vw] shrink-0 flex-col rounded-[1.75rem] p-8 sm:w-[60vw] lg:w-[30rem] lg:min-h-[36rem] lg:p-10"
                 >
                   <div data-process-reveal className="mb-6">
                     <ProcessPipelineVisual variant={step.visual} />
@@ -1002,6 +1017,14 @@ export function LandingPage() {
                     >
                       {step.body}
                     </p>
+                    <Link
+                      data-process-reveal
+                      href={`/demos/proceso/${step.visual}`}
+                      className="mt-5 inline-flex items-center gap-1.5 text-[0.78rem] font-medium text-[var(--accent)]/90 transition-colors hover:text-[var(--accent-bright)]"
+                    >
+                      Abrir demo
+                      <ArrowUpRight className="h-3 w-3" />
+                    </Link>
                   </div>
                 </article>
               );
