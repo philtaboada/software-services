@@ -1,15 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  ProcessPipelineVisual,
-  type ProcessVisualVariant,
-} from "./process-pipeline-visual";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -26,7 +21,6 @@ function readInitialTheme(): Theme {
 const CONTACT_EMAIL_HREF =
   "mailto:hola@wavystechnologies.com?subject=Quiero%20una%20propuesta%20para%20mi%20proyecto";
 
-/** Cal.com: reserva de videollamada (Meet u otro enlace que configures en el evento). */
 const SCHEDULE_MEET_HREF = "https://cal.com/wavys-call/30min" as const;
 
 const NAV_LINKS = [
@@ -78,49 +72,32 @@ const CAPABILITIES = [
   },
 ] as const;
 
-const PROCESS_STEPS: readonly {
-  id: string;
-  kicker: string;
-  title: string;
-  body: string;
-  visual: ProcessVisualVariant;
-}[] = [
+const PROCESS_STEPS = [
   {
     id: "01",
-    kicker: "captura",
-    title: "Web scraping",
-    body: "Extraemos contexto de tu web y referencias: estructura, contenido y señales que importan para decidir con datos, no a ojo.",
-    visual: "web-scraping",
+    kicker: "diagnóstico",
+    title: "Leemos el cuello de botella",
+    body: "Antes de diseñar nada aterrizamos qué está frenando el avance: claridad comercial, experiencia o fricción operativa.",
   },
   {
     id: "02",
-    kicker: "inteligencia",
-    title: "IA + automatización",
-    body: "Conectamos modelos y herramientas en flujos que limpian datos, disparan acciones y quitan trabajo repetido al equipo.",
-    visual: "ai-automation",
+    kicker: "dirección",
+    title: "Definimos una dirección que aguante",
+    body: "Estructuramos mensaje, atmósfera y sistema para que la primera versión ya nazca con peso y continuidad.",
   },
   {
     id: "03",
-    kicker: "dirección",
-    title: "Discovery y diseño",
-    body: "Investigación, arquitectura de información, UI y atmósfera con una línea clara: mensaje, ritmo y sistema que escalan.",
-    visual: "discovery-design",
+    kicker: "construcción",
+    title: "Construimos con detalle y control",
+    body: "Diseño, desarrollo, interacción y performance resueltos con una misma mano para que todo se sienta coherente.",
   },
   {
     id: "04",
-    kicker: "release",
-    title: "Deploy",
-    body: "Build reproducible, entornos, DNS y pipeline hasta producción: lo que sube es lo probado, con trazabilidad.",
-    visual: "deploy",
+    kicker: "entrega",
+    title: "Entregamos base y siguiente jugada",
+    body: "No solo lanzamos. Dejamos claro qué conviene hacer después para que la siguiente fase no llegue a ciegas.",
   },
-  {
-    id: "05",
-    kicker: "crear",
-    title: "Crear",
-    body: "Lanzamos el entregable, medimos y documentamos la siguiente jugada para que iterar no sea empezar de cero.",
-    visual: "create",
-  },
-];
+] as const;
 
 const NUMBERS = [
   { value: 120, suffix: "+", label: "proyectos entregados" },
@@ -165,6 +142,36 @@ const WORK_ITEMS = [
     tag: "web",
     image: "/images/portfolio-jlh-seguros.png",
     demoHref: "https://www.jlhcorredoresdeseguros.com/",
+  },
+] as const;
+
+const TESTIMONIALS = [
+  {
+    quote:
+      "Transformaron nuestra presencia digital por completo. La web que entregaron no solo se ve bien, convierte. Empezamos a recibir consultas de calidad desde el primer mes.",
+    author: "Nombre Apellido",
+    role: "CEO",
+    company: "Empresa S.A.",
+    initials: "NA",
+    result: "+60% consultas calificadas",
+  },
+  {
+    quote:
+      "El nivel de criterio que aplican al diseño y al copy es diferente. No hubo un solo entregable sin intención detrás. Recomendaría a Wavys sin dudarlo.",
+    author: "Nombre Apellido",
+    role: "Directora Comercial",
+    company: "Empresa S.L.",
+    initials: "NA",
+    result: "3x tasa de conversión",
+  },
+  {
+    quote:
+      "Construyeron el sistema interno que necesitábamos para escalar operaciones. Limpio, rápido y adoptado por el equipo desde el primer día.",
+    author: "Nombre Apellido",
+    role: "COO",
+    company: "Empresa Corp.",
+    initials: "NA",
+    result: "−50% fricción operativa",
   },
 ] as const;
 
@@ -324,69 +331,83 @@ export function LandingPage() {
       if (reduceMotion) {
         gsap.set("[data-word-inner]", { y: 0 });
         gsap.set("[data-reveal]", { autoAlpha: 1, y: 0 });
-        gsap.set("[data-hero-eyebrow], [data-hero-sub], [data-hero-cta], [data-hero-card]", { autoAlpha: 1, y: 0 });
+        gsap.set(
+          "[data-hero-eyebrow], [data-hero-sub], [data-hero-cta], [data-hero-card]",
+          { autoAlpha: 1, y: 0 },
+        );
+        gsap.set("[data-process-step]", { autoAlpha: 1 });
         return;
       }
 
+      // ── Hero intro ──────────────────────────────────────────────────────────
+      gsap.set("[data-hero-line] [data-word-inner]", { y: "110%" });
+
       const intro = gsap.timeline({
         defaults: { ease: "power3.out" },
-        delay: 0.1,
+        delay: 0.08,
       });
 
       intro
         .from("[data-nav-item]", {
           autoAlpha: 0,
-          y: -14,
-          stagger: 0.05,
-          duration: 0.5,
+          y: -12,
+          stagger: 0.045,
+          duration: 0.45,
         })
         .from(
           "[data-hero-eyebrow]",
-          { autoAlpha: 0, y: 18, duration: 0.5 },
-          "-=0.25",
+          { autoAlpha: 0, y: 16, duration: 0.45 },
+          "-=0.2",
         )
         .to(
           "[data-hero-line] [data-word-inner]",
           {
             y: 0,
-            duration: 1,
-            stagger: 0.06,
+            duration: 0.95,
+            stagger: 0.055,
             ease: "expo.out",
           },
-          "-=0.2",
+          "-=0.15",
         )
         .from(
           "[data-hero-sub]",
-          { autoAlpha: 0, y: 20, duration: 0.6 },
-          "-=0.6",
+          { autoAlpha: 0, y: 18, duration: 0.55 },
+          "-=0.65",
         )
         .from(
           "[data-hero-cta]",
-          { autoAlpha: 0, y: 14, stagger: 0.08, duration: 0.5 },
-          "-=0.35",
+          { autoAlpha: 0, y: 12, stagger: 0.07, duration: 0.45 },
+          "-=0.3",
         )
         .from(
           "[data-hero-card]",
-          { autoAlpha: 0, y: 24, scale: 0.96, stagger: 0.08, duration: 0.7 },
-          "-=0.4",
+          {
+            autoAlpha: 0,
+            y: 20,
+            scale: 0.97,
+            stagger: 0.07,
+            duration: 0.65,
+            ease: "power2.out",
+          },
+          "-=0.35",
         );
 
-      gsap.utils
-        .toArray<HTMLElement>("[data-reveal]")
-        .forEach((el) => {
-          gsap.from(el, {
-            autoAlpha: 0,
-            y: 36,
-            duration: 0.9,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: el,
-              start: "top 85%",
-              once: true,
-            },
-          });
+      // ── Generic scroll reveals ───────────────────────────────────────────────
+      gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
+        gsap.from(el, {
+          autoAlpha: 0,
+          y: 28,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 88%",
+            once: true,
+          },
         });
+      });
 
+      // ── Word-mask scroll reveals ─────────────────────────────────────────────
       gsap.utils
         .toArray<HTMLElement>("[data-reveal-words] [data-word-inner]")
         .forEach((el) => {
@@ -395,110 +416,130 @@ export function LandingPage() {
             { y: "110%" },
             {
               y: 0,
-              duration: 0.9,
+              duration: 0.85,
               ease: "expo.out",
               scrollTrigger: {
                 trigger: el.closest("[data-reveal-words]") as HTMLElement,
-                start: "top 80%",
+                start: "top 82%",
                 once: true,
               },
             },
           );
         });
 
+      // ── Process — horizontal pin ─────────────────────────────────────────────
       const horizontalSection = pageRef.current?.querySelector<HTMLElement>(
         "[data-process-section]",
       );
       const horizontalTrack = pageRef.current?.querySelector<HTMLElement>(
         "[data-process-track]",
       );
+
       if (horizontalSection && horizontalTrack && window.innerWidth >= 1024) {
-        const steps = horizontalTrack.querySelectorAll<HTMLElement>(
-          "[data-process-step]",
-        );
+        const steps =
+          horizontalTrack.querySelectorAll<HTMLElement>("[data-process-step]");
+
         const getDistance = (): number =>
           horizontalTrack.scrollWidth - window.innerWidth;
+
         const horizontalTween = gsap.to(horizontalTrack, {
           x: () => -getDistance(),
           ease: "none",
           scrollTrigger: {
             trigger: horizontalSection,
             pin: true,
-            scrub: 1,
+            scrub: 1.2,
             start: "top top",
             end: () => `+=${getDistance()}`,
             invalidateOnRefresh: true,
           },
         });
+
         steps.forEach((step) => {
-          gsap.from(step.querySelectorAll("[data-process-reveal]"), {
-            autoAlpha: 0,
-            y: 40,
-            duration: 0.9,
-            stagger: 0.08,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: step,
-              containerAnimation: horizontalTween,
-              start: "left right",
-              once: true,
-            },
-          });
+          const number = step.querySelector<HTMLElement>("[data-process-number]");
+          const rest = step.querySelectorAll<HTMLElement>("[data-process-reveal]");
+
+          if (number) {
+            gsap.from(number, {
+              autoAlpha: 0,
+              scale: 0.75,
+              duration: 0.9,
+              ease: "expo.out",
+              scrollTrigger: {
+                trigger: step,
+                containerAnimation: horizontalTween,
+                start: "left 90%",
+                once: true,
+              },
+            });
+          }
+
+          if (rest.length) {
+            gsap.from(rest, {
+              autoAlpha: 0,
+              y: 22,
+              duration: 0.7,
+              stagger: 0.07,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: step,
+                containerAnimation: horizontalTween,
+                start: "left 75%",
+                once: true,
+              },
+            });
+          }
         });
       }
 
-      gsap.utils
-        .toArray<HTMLElement>("[data-counter]")
-        .forEach((el) => {
-          const target = Number(el.dataset.target ?? "0");
-          const suffix = el.dataset.suffix ?? "";
-          const obj = { val: 0 };
-          gsap.to(obj, {
-            val: target,
-            duration: 1.8,
-            ease: "power2.out",
+      // ── Counters ─────────────────────────────────────────────────────────────
+      gsap.utils.toArray<HTMLElement>("[data-counter]").forEach((el) => {
+        const target = Number(el.dataset.target ?? "0");
+        const suffix = el.dataset.suffix ?? "";
+        const obj = { val: 0 };
+        gsap.to(obj, {
+          val: target,
+          duration: 1.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            once: true,
+          },
+          onUpdate: () => {
+            el.textContent = `${Math.round(obj.val)}${suffix}`;
+          },
+        });
+      });
+
+      // ── Parallax images ──────────────────────────────────────────────────────
+      gsap.utils.toArray<HTMLElement>("[data-parallax-img]").forEach((el) => {
+        gsap.fromTo(
+          el,
+          { yPercent: -6, scale: 1.06 },
+          {
+            yPercent: 6,
+            scale: 1.0,
+            ease: "none",
             scrollTrigger: {
               trigger: el,
-              start: "top 85%",
-              once: true,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1.4,
             },
-            onUpdate: () => {
-              el.textContent = `${Math.round(obj.val)}${suffix}`;
-            },
-          });
-        });
+          },
+        );
+      });
 
-      gsap.utils
-        .toArray<HTMLElement>("[data-parallax-img]")
-        .forEach((el) => {
-          gsap.fromTo(
-            el,
-            { yPercent: -8, scale: 1.08 },
-            {
-              yPercent: 8,
-              scale: 1.0,
-              ease: "none",
-              scrollTrigger: {
-                trigger: el,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1.2,
-              },
-            },
-          );
-        });
-
+      // ── Nav scroll state ─────────────────────────────────────────────────────
       const onScroll = () => {
         if (!navRef.current) return;
-        if (window.scrollY > 40) {
-          navRef.current.dataset.scrolled = "true";
-        } else {
-          navRef.current.dataset.scrolled = "false";
-        }
+        navRef.current.dataset.scrolled = window.scrollY > 40 ? "true" : "false";
       };
       onScroll();
       window.addEventListener("scroll", onScroll, { passive: true });
 
+      // ── Custom cursor ────────────────────────────────────────────────────────
       const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
       const dotPos = { x: mouse.x, y: mouse.y };
       const ringPos = { x: mouse.x, y: mouse.y };
@@ -512,8 +553,8 @@ export function LandingPage() {
       const ticker = gsap.ticker.add(() => {
         dotPos.x += (mouse.x - dotPos.x) * 0.35;
         dotPos.y += (mouse.y - dotPos.y) * 0.35;
-        ringPos.x += (mouse.x - ringPos.x) * 0.12;
-        ringPos.y += (mouse.y - ringPos.y) * 0.12;
+        ringPos.x += (mouse.x - ringPos.x) * 0.1;
+        ringPos.y += (mouse.y - ringPos.y) * 0.1;
         if (dotRef.current) {
           dotRef.current.style.transform = `translate(${dotPos.x}px, ${dotPos.y}px) translate(-50%, -50%)`;
         }
@@ -522,13 +563,14 @@ export function LandingPage() {
         }
       });
 
+      // ── Magnetic buttons ─────────────────────────────────────────────────────
       const magneticEls =
         pageRef.current?.querySelectorAll<HTMLElement>("[data-magnetic]") ?? [];
-
       const magneticHandlers: Array<() => void> = [];
 
       magneticEls.forEach((el) => {
         const strength = Number(el.dataset.magneticStrength ?? "24");
+
         const onMove = contextSafe!((event: PointerEvent) => {
           const rect = el.getBoundingClientRect();
           const relX = event.clientX - (rect.left + rect.width / 2);
@@ -536,32 +578,32 @@ export function LandingPage() {
           gsap.to(el, {
             x: (relX / rect.width) * strength,
             y: (relY / rect.height) * strength,
-            duration: 0.5,
+            duration: 0.45,
             ease: "power3.out",
           });
         });
+
         const onLeave = contextSafe!(() => {
           gsap.to(el, {
             x: 0,
             y: 0,
-            duration: 0.7,
+            duration: 0.65,
             ease: "elastic.out(1, 0.4)",
           });
         });
+
         const onEnter = () => {
-          if (ringRef.current) {
-            ringRef.current.dataset.active = "true";
-          }
+          if (ringRef.current) ringRef.current.dataset.active = "true";
         };
         const onRingLeave = () => {
-          if (ringRef.current) {
-            ringRef.current.dataset.active = "false";
-          }
+          if (ringRef.current) ringRef.current.dataset.active = "false";
         };
+
         el.addEventListener("pointermove", onMove);
         el.addEventListener("pointerleave", onLeave);
         el.addEventListener("pointerenter", onEnter);
         el.addEventListener("pointerleave", onRingLeave);
+
         magneticHandlers.push(() => {
           el.removeEventListener("pointermove", onMove);
           el.removeEventListener("pointerleave", onLeave);
@@ -612,7 +654,7 @@ export function LandingPage() {
           >
             <Image
               src="/logo.png"
-              alt=""
+              alt="Wavys Technologies"
               width={36}
               height={36}
               className="h-9 w-auto shrink-0"
@@ -648,9 +690,7 @@ export function LandingPage() {
               type="button"
               onClick={toggleTheme}
               aria-label={
-                theme === "dark"
-                  ? "Activar modo claro"
-                  : "Activar modo oscuro"
+                theme === "dark" ? "Activar modo claro" : "Activar modo oscuro"
               }
               data-nav-item
               className="theme-toggle inline-flex h-10 w-10 shrink-0 aspect-square items-center justify-center"
@@ -685,7 +725,6 @@ export function LandingPage() {
         <div className="grid-bg pointer-events-none absolute inset-0" />
         <div className="noise absolute inset-0" />
 
-        {/* Decorative corner marks */}
         <div className="pointer-events-none absolute inset-x-5 top-24 flex items-center justify-between text-[0.62rem] font-mono uppercase tracking-[0.3em] text-[var(--muted-dim)] sm:inset-x-8 lg:inset-x-12">
           <span>[ N 40.4168° / W 3.7038° ]</span>
           <span className="hidden sm:block">estudio digital · est. 2020</span>
@@ -693,37 +732,37 @@ export function LandingPage() {
 
         <div className="relative mx-auto flex max-w-[1440px] flex-col px-5 sm:px-8 lg:px-12">
           <div className="max-w-[28rem]">
-            <p
-              data-hero-eyebrow
-              className="section-label"
-            >
+            <p data-hero-eyebrow className="section-label">
               Estudio · Diseño · Software
             </p>
           </div>
 
-          {/* Massive hero type */}
           <h1
             data-hero-line
             className="relative mt-10 font-display font-medium uppercase leading-[0.82] tracking-[-0.055em] text-[clamp(3rem,14vw,12rem)] sm:mt-14 lg:mt-16"
           >
             <span className="block">
-              <WordMask>Diseño</WordMask>{" "}
-              <WordMask>que</WordMask>
+              <WordMask>Diseño</WordMask> <WordMask>que</WordMask>
             </span>
             <span className="block pl-[4vw] sm:pl-[8vw] lg:pl-[12vw]">
               <span className="word-mask" data-word-mask>
-                <span data-word-inner className="font-serif italic text-[var(--accent)] font-normal lowercase">
+                <span
+                  data-word-inner
+                  className="font-serif italic text-[var(--accent)] font-normal lowercase"
+                >
                   vende.
                 </span>
               </span>
             </span>
             <span className="block">
-              <WordMask>Software</WordMask>{" "}
-              <WordMask>que</WordMask>
+              <WordMask>Software</WordMask> <WordMask>que</WordMask>
             </span>
             <span className="block pl-[4vw] sm:pl-[8vw] lg:pl-[12vw]">
               <span className="word-mask" data-word-mask>
-                <span data-word-inner className="font-serif italic text-[var(--cream-soft)] font-normal lowercase">
+                <span
+                  data-word-inner
+                  className="font-serif italic text-[var(--cream-soft)] font-normal lowercase"
+                >
                   sostiene.
                 </span>
               </span>
@@ -759,45 +798,42 @@ export function LandingPage() {
             </div>
           </div>
 
-          {/* Floating context cards */}
           <div className="mt-16 grid gap-4 sm:mt-20 sm:grid-cols-3 lg:mt-28">
-            <div
-              data-hero-card
-              className="card-outline rounded-2xl p-6"
-            >
-              <p className="eyebrow text-[var(--accent-soft)]">
-                filosofía
-              </p>
+            <div data-hero-card className="card-outline rounded-2xl p-6">
+              <p className="eyebrow text-[var(--accent-soft)]">filosofía</p>
               <p className="mt-4 font-display text-[1.35rem] font-medium leading-[1.2] tracking-[-0.02em]">
-                Menos adorno. Más intención <span className="font-serif italic text-[var(--cream-soft)]">en cada</span> decisión.
+                Menos adorno. Más intención{" "}
+                <span className="font-serif italic text-[var(--cream-soft)]">
+                  en cada
+                </span>{" "}
+                decisión.
               </p>
             </div>
-            <div
-              data-hero-card
-              className="card-outline rounded-2xl p-6"
-            >
+            <div data-hero-card className="card-outline rounded-2xl p-6">
               <p className="eyebrow text-[var(--accent-soft)]">
                 perfil cliente
               </p>
               <p className="mt-4 font-display text-[1.35rem] font-medium leading-[1.2] tracking-[-0.02em]">
-                Negocios que crecen y <span className="font-serif italic text-[var(--cream-soft)]">no</span> pueden seguir operando sobre parches.
+                Negocios que crecen y{" "}
+                <span className="font-serif italic text-[var(--cream-soft)]">
+                  no
+                </span>{" "}
+                pueden seguir operando sobre parches.
               </p>
             </div>
-            <div
-              data-hero-card
-              className="card-outline rounded-2xl p-6"
-            >
-              <p className="eyebrow text-[var(--accent-soft)]">
-                entregable
-              </p>
+            <div data-hero-card className="card-outline rounded-2xl p-6">
+              <p className="eyebrow text-[var(--accent-soft)]">entregable</p>
               <p className="mt-4 font-display text-[1.35rem] font-medium leading-[1.2] tracking-[-0.02em]">
-                Identidad, interfaz y sistema <span className="font-serif italic text-[var(--cream-soft)]">de una</span> misma mano.
+                Identidad, interfaz y sistema{" "}
+                <span className="font-serif italic text-[var(--cream-soft)]">
+                  de una
+                </span>{" "}
+                misma mano.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Bottom scroll indicator */}
         <div className="pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[0.62rem] uppercase tracking-[0.3em] text-[var(--muted)] lg:flex">
           <span>scroll</span>
           <span className="h-8 w-px bg-[var(--muted-dim)]" />
@@ -807,17 +843,20 @@ export function LandingPage() {
       {/* ═══════════════════ MARQUEE ═══════════════════ */}
       <section className="relative border-y border-[var(--line)] bg-[var(--surface)] py-7 overflow-hidden">
         <div className="marquee-track flex w-max items-center gap-10 whitespace-nowrap">
-          {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS, ...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map(
-            (item, index) => (
-              <div
-                key={`${item}-${index}`}
-                className="flex items-center gap-10 font-display text-[2rem] font-medium tracking-[-0.03em] sm:text-[2.5rem] lg:text-[3rem]"
-              >
-                <span className="text-[var(--cream)]">{item}</span>
-                <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--accent)]" />
-              </div>
-            ),
-          )}
+          {[
+            ...MARQUEE_ITEMS,
+            ...MARQUEE_ITEMS,
+            ...MARQUEE_ITEMS,
+            ...MARQUEE_ITEMS,
+          ].map((item, index) => (
+            <div
+              key={`${item}-${index}`}
+              className="flex items-center gap-10 font-display text-[2rem] font-medium tracking-[-0.03em] sm:text-[2.5rem] lg:text-[3rem]"
+            >
+              <span className="text-[var(--cream)]">{item}</span>
+              <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--accent)]" />
+            </div>
+          ))}
         </div>
       </section>
 
@@ -832,26 +871,26 @@ export function LandingPage() {
               data-reveal-words
               className="font-display text-[clamp(2rem,5.5vw,4.8rem)] font-medium leading-[1.04] tracking-[-0.035em] text-balance"
             >
-              <WordMask>No</WordMask>{" "}
-              <WordMask>vendemos</WordMask>{" "}
+              <WordMask>No</WordMask> <WordMask>vendemos</WordMask>{" "}
               <span className="word-mask" data-word-mask>
-                <span data-word-inner className="font-serif italic text-[var(--accent)] font-normal lowercase">
+                <span
+                  data-word-inner
+                  className="font-serif italic text-[var(--accent)] font-normal lowercase"
+                >
                   estética.
                 </span>
               </span>{" "}
-              <WordMask>Vendemos</WordMask>{" "}
-              <WordMask>criterio</WordMask>{" "}
-              <WordMask>para</WordMask>{" "}
-              <WordMask>que</WordMask>{" "}
-              <WordMask>tu</WordMask>{" "}
-              <WordMask>pieza</WordMask>{" "}
-              <WordMask>digital</WordMask>{" "}
-              <WordMask>deje</WordMask>{" "}
-              <WordMask>de</WordMask>{" "}
-              <WordMask>competir</WordMask>{" "}
+              <WordMask>Vendemos</WordMask> <WordMask>criterio</WordMask>{" "}
+              <WordMask>para</WordMask> <WordMask>que</WordMask>{" "}
+              <WordMask>tu</WordMask> <WordMask>pieza</WordMask>{" "}
+              <WordMask>digital</WordMask> <WordMask>deje</WordMask>{" "}
+              <WordMask>de</WordMask> <WordMask>competir</WordMask>{" "}
               <WordMask>con</WordMask>{" "}
               <span className="word-mask" data-word-mask>
-                <span data-word-inner className="font-serif italic text-[var(--lime)] font-normal lowercase">
+                <span
+                  data-word-inner
+                  className="font-serif italic text-[var(--lime)] font-normal lowercase"
+                >
                   plantillas.
                 </span>
               </span>
@@ -883,31 +922,27 @@ export function LandingPage() {
             <div data-reveal>
               <p className="section-label">Capacidades</p>
               <h2 className="mt-6 font-display text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.05] tracking-[-0.035em] text-balance max-w-[20ch]">
-                Un equipo, cuatro <span className="font-serif italic text-[var(--accent)] font-normal">territorios.</span>
+                Un equipo, cuatro{" "}
+                <span className="font-serif italic text-[var(--accent)] font-normal">
+                  territorios.
+                </span>
               </h2>
             </div>
-            <div data-reveal className="flex max-w-[28rem] flex-col gap-5">
-              <p className="text-pretty text-[1rem] leading-7 text-[var(--cream-soft)]/60">
-                Webs, apps y software interno salen con la misma dirección visual
-                y la misma lógica de sistema. Sin saltos entre pieza y pieza.
-              </p>
-              <Link
-                href="/demos/capacidades"
-                className="inline-flex items-center gap-2 text-[0.82rem] font-medium text-[var(--accent-soft)] transition-colors hover:text-[var(--accent)]"
-              >
-                Ver animación de cada territorio
-                <ArrowUpRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
+            <p
+              data-reveal
+              className="max-w-[28rem] text-pretty text-[1rem] leading-7 text-[var(--cream-soft)]/60"
+            >
+              Webs, apps y software interno salen con la misma dirección visual
+              y la misma lógica de sistema. Sin saltos entre pieza y pieza.
+            </p>
           </div>
 
           <div className="mt-16 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {CAPABILITIES.map((item) => (
-              <Link
+              <article
                 key={item.code}
-                href={`/demos/capacidades/${item.tag}`}
                 data-reveal
-                className="card-outline group relative flex min-h-[22rem] flex-col justify-between rounded-[1.5rem] p-7 transition-colors hover:border-[var(--line-strong)]"
+                className="card-outline group relative flex min-h-[22rem] flex-col justify-between rounded-[1.5rem] p-7"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-[var(--muted)]">
@@ -926,12 +961,11 @@ export function LandingPage() {
                   <p className="mt-4 text-[0.95rem] leading-7 text-[var(--cream-soft)]/60">
                     {item.body}
                   </p>
-                  <div className="mt-8 flex items-center gap-2 text-[0.8rem] font-medium text-[var(--cream)] opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                    <span>ver detalle</span>
+                  <div className="mt-8 flex items-center gap-2 text-[0.8rem] font-medium text-[var(--cream)]">
                     <ArrowUpRight className="h-3.5 w-3.5" />
                   </div>
                 </div>
-              </Link>
+              </article>
             ))}
           </div>
         </div>
@@ -947,16 +981,12 @@ export function LandingPage() {
           <div className="mx-auto flex w-full max-w-[1440px] items-end justify-between gap-6 px-5 pt-12 sm:px-8 lg:px-12 lg:pt-16">
             <div data-reveal>
               <p className="section-label">Proceso</p>
-              <h2 className="mt-6 font-display text-[clamp(1.8rem,4.5vw,3.4rem)] font-medium leading-[1.05] tracking-[-0.035em] max-w-[22ch]">
-                Cinco movimientos de <span className="font-serif italic text-[var(--accent)] font-normal">pipeline</span> a entrega.
+              <h2 className="mt-6 font-display text-[clamp(1.8rem,4.5vw,3.4rem)] font-medium leading-[1.05] tracking-[-0.035em] max-w-[20ch]">
+                Cuatro movimientos para que nada quede al{" "}
+                <span className="font-serif italic text-[var(--accent)] font-normal">
+                  azar.
+                </span>
               </h2>
-              <Link
-                href="/demos/proceso"
-                className="mt-5 inline-flex items-center gap-2 text-[0.82rem] font-medium text-[var(--accent-soft)] transition-colors hover:text-[var(--accent)]"
-              >
-                Ver cada paso en su demo
-                <ArrowUpRight className="h-3.5 w-3.5" />
-              </Link>
             </div>
             <p
               data-reveal
@@ -971,66 +1001,53 @@ export function LandingPage() {
             data-process-track
             className="mt-12 flex flex-1 items-center gap-6 px-5 pb-16 sm:px-8 lg:mt-20 lg:gap-8 lg:px-12 lg:pb-0"
           >
-            {PROCESS_STEPS.map((step, idx) => {
-              const dotTone =
-                idx % 4 === 0
-                  ? "var(--accent)"
-                  : idx % 4 === 1
-                    ? "var(--lime)"
-                    : idx % 4 === 2
-                      ? "var(--teal)"
-                      : "var(--plum)";
-              return (
-                <article
-                  key={step.id}
-                  data-process-step
-                  className="card-outline relative flex min-h-[30rem] w-[86vw] shrink-0 flex-col rounded-[1.75rem] p-8 sm:w-[60vw] lg:w-[30rem] lg:min-h-[36rem] lg:p-10"
-                >
-                  <div data-process-reveal className="mb-6">
-                    <ProcessPipelineVisual variant={step.visual} />
-                  </div>
-                  <div className="mt-auto flex flex-1 flex-col">
-                    <div className="flex items-center justify-between gap-4">
-                      <span
-                        data-process-reveal
-                        className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-[var(--muted)]"
-                      >
-                        [{step.id}] · {step.kicker}
-                      </span>
-                      <span
-                        data-process-reveal
-                        className="dot-accent shrink-0"
-                        style={{ background: dotTone }}
-                      >
-                        →
-                      </span>
-                    </div>
-                    <h3
-                      data-process-reveal
-                      className="mt-5 font-display text-[1.65rem] font-medium leading-[1.12] tracking-[-0.03em] lg:text-[2rem]"
-                    >
-                      {step.title}
-                    </h3>
-                    <p
-                      data-process-reveal
-                      className="mt-4 text-[0.95rem] leading-7 text-[var(--cream-soft)]/60"
-                    >
-                      {step.body}
-                    </p>
-                    <Link
-                      data-process-reveal
-                      href={`/demos/proceso/${step.visual}`}
-                      className="mt-5 inline-flex items-center gap-1.5 text-[0.78rem] font-medium text-[var(--accent)]/90 transition-colors hover:text-[var(--accent-bright)]"
-                    >
-                      Abrir demo
-                      <ArrowUpRight className="h-3 w-3" />
-                    </Link>
-                  </div>
-                </article>
-              );
-            })}
+            {PROCESS_STEPS.map((step, idx) => (
+              <article
+                key={step.id}
+                data-process-step
+                className="card-outline relative flex min-h-[22rem] w-[86vw] shrink-0 flex-col justify-between rounded-[1.75rem] p-8 sm:w-[60vw] lg:w-[30rem] lg:min-h-[28rem] lg:p-10"
+              >
+                <div className="flex items-start justify-between">
+                  <span
+                    data-process-number
+                    className="font-display text-[5rem] font-medium leading-none tracking-[-0.06em] text-[var(--cream-soft)]/15 lg:text-[7rem]"
+                  >
+                    {step.id}
+                  </span>
+                  <span
+                    data-process-reveal
+                    className="dot-accent shrink-0"
+                    style={{
+                      background:
+                        idx % 2 === 0 ? "var(--accent)" : "var(--lime)",
+                    }}
+                  >
+                    →
+                  </span>
+                </div>
+                <div>
+                  <p
+                    data-process-reveal
+                    className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-[var(--muted)]"
+                  >
+                    / {step.kicker}
+                  </p>
+                  <h3
+                    data-process-reveal
+                    className="mt-4 font-display text-[1.8rem] font-medium leading-[1.1] tracking-[-0.03em] lg:text-[2.2rem]"
+                  >
+                    {step.title}
+                  </h3>
+                  <p
+                    data-process-reveal
+                    className="mt-5 text-[0.95rem] leading-7 text-[var(--cream-soft)]/60"
+                  >
+                    {step.body}
+                  </p>
+                </div>
+              </article>
+            ))}
 
-            {/* spacer to allow last card to breathe on horizontal scroll */}
             <div className="w-[12vw] shrink-0 lg:w-[20vw]" aria-hidden="true" />
           </div>
         </div>
@@ -1039,13 +1056,13 @@ export function LandingPage() {
       {/* ═══════════════════ NUMBERS ═══════════════════ */}
       <section className="relative py-28 sm:py-36 lg:py-44">
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <div
-            data-reveal
-            className="mx-auto mb-16 max-w-[36rem] text-center"
-          >
+          <div data-reveal className="mx-auto mb-16 max-w-[36rem] text-center">
             <p className="section-label">En cifras</p>
             <h2 className="mt-6 font-display text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.05] tracking-[-0.035em] text-balance">
-              Un track record <span className="font-serif italic text-[var(--accent)] font-normal">sin ruido.</span>
+              Un track record{" "}
+              <span className="font-serif italic text-[var(--accent)] font-normal">
+                sin ruido.
+              </span>
             </h2>
           </div>
 
@@ -1073,6 +1090,63 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* ═══════════════════ TESTIMONIALS ═══════════════════ */}
+      <section className="relative border-t border-[var(--line)] py-24 sm:py-32 lg:py-36">
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+            <div data-reveal>
+              <p className="section-label">Clientes</p>
+              <h2 className="mt-6 font-display text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.05] tracking-[-0.035em] text-balance max-w-[22ch]">
+                Lo que dicen quienes{" "}
+                <span className="font-serif italic text-[var(--accent)] font-normal">
+                  ya confían.
+                </span>
+              </h2>
+            </div>
+          </div>
+
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
+            {TESTIMONIALS.map((item) => (
+              <article
+                key={item.author + item.company}
+                data-reveal
+                className="card-outline flex flex-col justify-between gap-10 rounded-[1.5rem] p-8"
+              >
+                <div>
+                  <span className="font-serif text-[4rem] leading-[0.8] text-[var(--accent)]/25 select-none">
+                    &ldquo;
+                  </span>
+                  <p className="mt-3 text-[1.02rem] leading-7 text-[var(--cream-soft)]/80">
+                    {item.quote}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-5">
+                  <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-3 py-1.5">
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
+                    <span className="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-[var(--accent)]">
+                      {item.result}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3 border-t border-[var(--line)] pt-5">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--surface-2)] text-[0.72rem] font-semibold uppercase tracking-wider text-[var(--cream-soft)]">
+                      {item.initials}
+                    </div>
+                    <div>
+                      <p className="text-[0.9rem] font-semibold text-[var(--cream)]">
+                        {item.author}
+                      </p>
+                      <p className="text-[0.78rem] text-[var(--muted)]">
+                        {item.role} · {item.company}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ═══════════════════ WORK ═══════════════════ */}
       <section
         id="trabajo"
@@ -1083,7 +1157,10 @@ export function LandingPage() {
             <div data-reveal>
               <p className="section-label">Trabajo seleccionado</p>
               <h2 className="mt-6 font-display text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.05] tracking-[-0.035em] text-balance max-w-[20ch]">
-                Piezas que salieron con <span className="font-serif italic text-[var(--accent)] font-normal">intención.</span>
+                Piezas que salieron con{" "}
+                <span className="font-serif italic text-[var(--accent)] font-normal">
+                  intención.
+                </span>
               </h2>
             </div>
             <a
@@ -1156,7 +1233,10 @@ export function LandingPage() {
             <div data-reveal>
               <p className="section-label">Dudas frecuentes</p>
               <h2 className="mt-6 font-display text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.05] tracking-[-0.035em] text-balance">
-                Antes de <span className="font-serif italic text-[var(--accent)] font-normal">escribir.</span>
+                Antes de{" "}
+                <span className="font-serif italic text-[var(--accent)] font-normal">
+                  escribir.
+                </span>
               </h2>
               <p className="mt-6 max-w-[22rem] text-[0.95rem] leading-7 text-[var(--cream-soft)]/60">
                 Si tu pregunta no está aquí, escríbenos. Respondemos en menos
@@ -1208,7 +1288,11 @@ export function LandingPage() {
                 data-reveal
                 className="mt-8 font-display text-[clamp(2.5rem,7vw,6rem)] font-medium leading-[0.95] tracking-[-0.04em] text-balance"
               >
-                Cuéntanos qué estás <span className="font-serif italic text-[var(--accent)] font-normal">intentando</span> construir.
+                Cuéntanos qué estás{" "}
+                <span className="font-serif italic text-[var(--accent)] font-normal">
+                  intentando
+                </span>{" "}
+                construir.
               </h2>
               <p
                 data-reveal
@@ -1219,7 +1303,10 @@ export function LandingPage() {
                 primero. Te decimos cómo lo aterrizaríamos con un alcance claro
                 y tiempos reales.
               </p>
-              <div data-reveal className="mt-12 flex flex-col items-start gap-4 sm:flex-row">
+              <div
+                data-reveal
+                className="mt-12 flex flex-col items-start gap-4 sm:flex-row"
+              >
                 <a
                   data-magnetic
                   href={SCHEDULE_MEET_HREF}
@@ -1230,10 +1317,18 @@ export function LandingPage() {
                   <span>Agendar llamada</span>
                   <ArrowIcon className="h-4 w-4" />
                 </a>
-                <a href="#top" className="btn-ghost">
-                  <span>volver arriba</span>
+                <a href={CONTACT_EMAIL_HREF} className="btn-ghost">
+                  <span>Escribir por email</span>
                 </a>
               </div>
+              <a
+                data-reveal
+                href="#top"
+                className="mt-6 inline-flex items-center gap-1.5 text-[0.8rem] text-[var(--muted)] transition-colors hover:text-[var(--cream)]"
+              >
+                <span>↑</span>
+                <span>volver arriba</span>
+              </a>
             </div>
           </div>
         </div>
@@ -1250,7 +1345,7 @@ export function LandingPage() {
               >
                 <Image
                   src="/logo.png"
-                  alt=""
+                  alt="Wavys Technologies"
                   width={36}
                   height={36}
                   className="h-9 w-auto shrink-0"
@@ -1261,8 +1356,8 @@ export function LandingPage() {
                 </span>
               </a>
               <p className="mt-6 max-w-[22rem] text-[0.95rem] leading-7 text-[var(--cream-soft)]/55">
-                Estudio de diseño digital y software a medida. Presencial en Lima;
-                remoto para toda Iberolatam.
+                Estudio de diseño digital y software a medida. Presencial en
+                Lima; remoto para toda Iberolatam.
               </p>
             </div>
             <div>
@@ -1325,15 +1420,15 @@ export function LandingPage() {
                   </span>
                   aceptando proyectos
                 </li>
-                <li>próximo slot: Q2 2026</li>
+                <li>próximo slot: Q3 2026</li>
               </ul>
             </div>
           </div>
 
           <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-[var(--line)] pt-8 sm:flex-row sm:items-center">
             <p className="text-[0.78rem] text-[var(--muted)]">
-              © {new Date().getFullYear()} Wavys Technologies — Todos los derechos
-              reservados.
+              © {new Date().getFullYear()} Wavys Technologies — Todos los
+              derechos reservados.
             </p>
             <p className="text-[0.78rem] text-[var(--muted)]">
               Hecho con intención desde Lima
@@ -1341,7 +1436,6 @@ export function LandingPage() {
           </div>
         </div>
 
-        {/* Huge footer wordmark */}
         <div className="overflow-hidden pb-4 sm:pb-8">
           <p className="font-display text-center text-[18vw] font-bold leading-none tracking-[-0.07em] text-[var(--cream)]/[0.04] select-none">
             WAVYS
