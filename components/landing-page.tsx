@@ -5,6 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  ProcessPipelineVisual,
+  type ProcessVisualVariant,
+} from "./process-pipeline-visual";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -72,32 +76,42 @@ const CAPABILITIES = [
   },
 ] as const;
 
-const PROCESS_STEPS = [
+const PROCESS_STEPS: readonly {
+  id: string;
+  kicker: string;
+  title: string;
+  body: string;
+  visual: ProcessVisualVariant;
+}[] = [
   {
     id: "01",
     kicker: "diagnóstico",
     title: "Leemos el cuello de botella",
     body: "Antes de diseñar nada aterrizamos qué está frenando el avance: claridad comercial, experiencia o fricción operativa.",
+    visual: "web-scraping",
   },
   {
     id: "02",
     kicker: "dirección",
     title: "Definimos una dirección que aguante",
     body: "Estructuramos mensaje, atmósfera y sistema para que la primera versión ya nazca con peso y continuidad.",
+    visual: "discovery-design",
   },
   {
     id: "03",
     kicker: "construcción",
     title: "Construimos con detalle y control",
     body: "Diseño, desarrollo, interacción y performance resueltos con una misma mano para que todo se sienta coherente.",
+    visual: "ai-automation",
   },
   {
     id: "04",
     kicker: "entrega",
     title: "Entregamos base y siguiente jugada",
     body: "No solo lanzamos. Dejamos claro qué conviene hacer después para que la siguiente fase no llegue a ciegas.",
+    visual: "deploy",
   },
-] as const;
+];
 
 const NUMBERS = [
   { value: 120, suffix: "+", label: "proyectos entregados" },
@@ -1005,12 +1019,13 @@ export function LandingPage() {
               <article
                 key={step.id}
                 data-process-step
-                className="card-outline relative flex min-h-[22rem] w-[86vw] shrink-0 flex-col justify-between rounded-[1.75rem] p-8 sm:w-[60vw] lg:w-[30rem] lg:min-h-[28rem] lg:p-10"
+                className="card-outline relative flex min-h-[30rem] w-[86vw] shrink-0 flex-col rounded-[1.75rem] p-8 sm:w-[60vw] lg:w-[30rem] lg:min-h-[36rem] lg:p-10"
               >
-                <div className="flex items-start justify-between">
+                {/* Header: ghost number + dot accent */}
+                <div className="mb-5 flex items-start justify-between">
                   <span
                     data-process-number
-                    className="font-display text-[5rem] font-medium leading-none tracking-[-0.06em] text-[var(--cream-soft)]/15 lg:text-[7rem]"
+                    className="font-display text-[3.5rem] font-medium leading-none tracking-[-0.06em] text-[var(--cream-soft)]/12 lg:text-[4.5rem]"
                   >
                     {step.id}
                   </span>
@@ -1025,7 +1040,14 @@ export function LandingPage() {
                     →
                   </span>
                 </div>
-                <div>
+
+                {/* Animated visual */}
+                <div data-process-reveal className="mb-6">
+                  <ProcessPipelineVisual variant={step.visual} />
+                </div>
+
+                {/* Text content */}
+                <div className="mt-auto flex flex-1 flex-col justify-end">
                   <p
                     data-process-reveal
                     className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-[var(--muted)]"
@@ -1034,13 +1056,13 @@ export function LandingPage() {
                   </p>
                   <h3
                     data-process-reveal
-                    className="mt-4 font-display text-[1.8rem] font-medium leading-[1.1] tracking-[-0.03em] lg:text-[2.2rem]"
+                    className="mt-4 font-display text-[1.65rem] font-medium leading-[1.12] tracking-[-0.03em] lg:text-[2rem]"
                   >
                     {step.title}
                   </h3>
                   <p
                     data-process-reveal
-                    className="mt-5 text-[0.95rem] leading-7 text-[var(--cream-soft)]/60"
+                    className="mt-4 text-[0.95rem] leading-7 text-[var(--cream-soft)]/60"
                   >
                     {step.body}
                   </p>
