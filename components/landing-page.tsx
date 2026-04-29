@@ -1244,57 +1244,94 @@ export function LandingPage() {
       {/* ═══════════════════ TESTIMONIALS ═══════════════════ */}
       <section className="relative border-t border-[var(--line)] py-24 sm:py-32 lg:py-36">
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
-            <div data-reveal>
-              <p className="section-label">Clientes</p>
-              <h2 className="mt-6 font-display text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.05] tracking-[-0.035em] text-balance max-w-[22ch]">
-                Lo que dicen quienes{" "}
-                <span className="font-serif italic text-[var(--accent)] font-normal">
-                  ya confían.
-                </span>
-              </h2>
-            </div>
+          <div data-reveal>
+            <p className="section-label">Clientes</p>
+            <h2 className="mt-6 font-display text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.05] tracking-[-0.035em] text-balance max-w-[22ch]">
+              Lo que dicen quienes{" "}
+              <span className="font-serif italic text-[var(--accent)] font-normal">
+                ya confían.
+              </span>
+            </h2>
           </div>
 
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
-            {TESTIMONIALS.map((item) => (
-              <article
-                key={item.author + item.company}
-                data-reveal
-                data-tilt
-                className="card-outline relative flex flex-col justify-between gap-10 overflow-hidden rounded-[1.5rem] p-8"
+          {/* Featured layout: 1 large left + 2 stacked right */}
+          <div className="mt-14 grid gap-5 lg:grid-cols-[1.45fr_1fr]">
+
+            {/* Featured card — first testimonial */}
+            <article
+              data-reveal
+              data-tilt
+              className="card-outline relative flex flex-col justify-between overflow-hidden rounded-[2rem] p-9 lg:p-12"
+            >
+              {/* Decorative giant quote — background texture */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute -right-4 -top-6 select-none font-serif text-[14rem] leading-none text-[var(--accent)]/[0.07] lg:text-[18rem]"
               >
+                &ldquo;
+              </span>
+
+              <div className="relative">
+                <p className="text-[1.15rem] leading-[1.75] text-[var(--cream-soft)]/85 lg:text-[1.25rem]">
+                  {TESTIMONIALS[0].quote}
+                </p>
+              </div>
+
+              <div className="relative mt-10 flex items-end justify-between gap-6">
                 <div>
-                  <span className="font-serif text-[4rem] leading-[0.8] text-[var(--accent)]/25 select-none">
-                    &ldquo;
-                  </span>
-                  <p className="mt-3 text-[1.02rem] leading-7 text-[var(--cream-soft)]/80">
-                    {item.quote}
+                  <p className="text-[0.95rem] font-semibold text-[var(--cream)]">
+                    {TESTIMONIALS[0].author}
+                  </p>
+                  <p className="mt-0.5 text-[0.8rem] text-[var(--muted)]">
+                    {TESTIMONIALS[0].role} · {TESTIMONIALS[0].company}
                   </p>
                 </div>
-                <div className="flex flex-col gap-5">
-                  <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-3 py-1.5">
-                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
-                    <span className="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-[var(--accent)]">
-                      {item.result}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 border-t border-[var(--line)] pt-5">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--surface-2)] text-[0.72rem] font-semibold uppercase tracking-wider text-[var(--cream-soft)]">
-                      {item.initials}
-                    </div>
+                <div className="shrink-0 rounded-full border border-[var(--accent)]/35 bg-[var(--accent)]/10 px-4 py-2">
+                  <span className="font-mono text-[0.72rem] uppercase tracking-[0.2em] text-[var(--accent)]">
+                    {TESTIMONIALS[0].result}
+                  </span>
+                </div>
+              </div>
+            </article>
+
+            {/* Right column — two stacked cards */}
+            <div className="flex flex-col gap-5">
+              {TESTIMONIALS.slice(1).map((item) => (
+                <article
+                  key={item.author + item.company}
+                  data-reveal
+                  data-tilt
+                  className="card-outline relative flex flex-1 flex-col justify-between overflow-hidden rounded-[1.75rem] p-7"
+                >
+                  {/* Small decorative quote */}
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute right-4 top-2 select-none font-serif text-[5rem] leading-none text-[var(--accent)]/[0.09]"
+                  >
+                    &ldquo;
+                  </span>
+
+                  <p className="relative text-[0.97rem] leading-7 text-[var(--cream-soft)]/80">
+                    {item.quote}
+                  </p>
+
+                  <div className="relative mt-6 flex items-center justify-between gap-4">
                     <div>
-                      <p className="text-[0.9rem] font-semibold text-[var(--cream)]">
+                      <p className="text-[0.85rem] font-semibold text-[var(--cream)]">
                         {item.author}
                       </p>
-                      <p className="text-[0.78rem] text-[var(--muted)]">
+                      <p className="text-[0.75rem] text-[var(--muted)]">
                         {item.role} · {item.company}
                       </p>
                     </div>
+                    <span className="shrink-0 rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/8 px-3 py-1.5 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-[var(--accent)]">
+                      {item.result}
+                    </span>
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              ))}
+            </div>
+
           </div>
         </div>
       </section>
