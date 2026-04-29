@@ -1001,6 +1001,13 @@ export function LandingPage() {
                   azar.
                 </span>
               </h2>
+              <a
+                href="/demos/proceso"
+                className="mt-5 inline-flex items-center gap-2 text-[0.82rem] font-medium text-[var(--accent-soft)] transition-colors hover:text-[var(--accent)]"
+              >
+                Ver demos en detalle
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </a>
             </div>
             <p
               data-reveal
@@ -1015,60 +1022,66 @@ export function LandingPage() {
             data-process-track
             className="mt-12 flex flex-1 items-center gap-6 px-5 pb-16 sm:px-8 lg:mt-20 lg:gap-8 lg:px-12 lg:pb-0"
           >
-            {PROCESS_STEPS.map((step, idx) => (
-              <article
-                key={step.id}
-                data-process-step
-                className="card-outline relative flex min-h-[30rem] w-[86vw] shrink-0 flex-col rounded-[1.75rem] p-8 sm:w-[60vw] lg:w-[30rem] lg:min-h-[36rem] lg:p-10"
-              >
-                {/* Header: ghost number + dot accent */}
-                <div className="mb-5 flex items-start justify-between">
-                  <span
-                    data-process-number
-                    className="font-display text-[3.5rem] font-medium leading-none tracking-[-0.06em] text-[var(--cream-soft)]/12 lg:text-[4.5rem]"
-                  >
-                    {step.id}
-                  </span>
-                  <span
+            {PROCESS_STEPS.map((step, idx) => {
+              const dotColor = idx % 2 === 0 ? "var(--accent)" : "var(--lime)";
+              return (
+                <article
+                  key={step.id}
+                  data-process-step
+                  className="card-outline relative flex w-[88vw] shrink-0 flex-col overflow-hidden rounded-[1.75rem] sm:w-[62vw] lg:w-[38rem]"
+                >
+                  {/* Visual animation — fills top area */}
+                  <div
                     data-process-reveal
-                    className="dot-accent shrink-0"
-                    style={{
-                      background:
-                        idx % 2 === 0 ? "var(--accent)" : "var(--lime)",
-                    }}
+                    className="relative px-6 pt-6 sm:px-8 sm:pt-8"
                   >
-                    →
-                  </span>
-                </div>
+                    <ProcessPipelineVisual variant={step.visual} />
+                  </div>
 
-                {/* Animated visual */}
-                <div data-process-reveal className="mb-6">
-                  <ProcessPipelineVisual variant={step.visual} />
-                </div>
+                  {/* Divider */}
+                  <div className="mx-6 mt-6 border-t border-[var(--line)] sm:mx-8" />
 
-                {/* Text content */}
-                <div className="mt-auto flex flex-1 flex-col justify-end">
-                  <p
-                    data-process-reveal
-                    className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-[var(--muted)]"
-                  >
-                    / {step.kicker}
-                  </p>
-                  <h3
-                    data-process-reveal
-                    className="mt-4 font-display text-[1.65rem] font-medium leading-[1.12] tracking-[-0.03em] lg:text-[2rem]"
-                  >
-                    {step.title}
-                  </h3>
-                  <p
-                    data-process-reveal
-                    className="mt-4 text-[0.95rem] leading-7 text-[var(--cream-soft)]/60"
-                  >
-                    {step.body}
-                  </p>
-                </div>
-              </article>
-            ))}
+                  {/* Text content */}
+                  <div className="flex flex-1 flex-col p-6 pt-5 sm:p-8 sm:pt-6">
+                    <div className="flex items-center justify-between gap-4">
+                      <span
+                        data-process-reveal
+                        className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-[var(--muted)]"
+                      >
+                        [{step.id}] · {step.kicker}
+                      </span>
+                      <span
+                        data-process-reveal
+                        className="dot-accent shrink-0"
+                        style={{ background: dotColor }}
+                      >
+                        →
+                      </span>
+                    </div>
+                    <h3
+                      data-process-reveal
+                      className="mt-4 font-display text-[1.65rem] font-medium leading-[1.12] tracking-[-0.03em] lg:text-[2rem]"
+                    >
+                      {step.title}
+                    </h3>
+                    <p
+                      data-process-reveal
+                      className="mt-4 text-[0.95rem] leading-7 text-[var(--cream-soft)]/60"
+                    >
+                      {step.body}
+                    </p>
+                    <a
+                      data-process-reveal
+                      href={`/demos/proceso/${step.visual}`}
+                      className="mt-5 inline-flex items-center gap-1.5 text-[0.78rem] font-medium text-[var(--accent)]/80 transition-colors hover:text-[var(--accent)]"
+                    >
+                      Ver animación completa
+                      <ArrowUpRight className="h-3 w-3" />
+                    </a>
+                  </div>
+                </article>
+              );
+            })}
 
             <div className="w-[12vw] shrink-0 lg:w-[20vw]" aria-hidden="true" />
           </div>
