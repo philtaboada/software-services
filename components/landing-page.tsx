@@ -1263,21 +1263,20 @@ export function LandingPage() {
               data-tilt
               className="card-outline relative flex flex-col justify-between overflow-hidden rounded-[2rem] p-9 lg:p-12"
             >
-              {/* Decorative giant quote — background texture */}
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute -right-4 -top-6 select-none font-serif text-[14rem] leading-none text-[var(--accent)]/[0.07] lg:text-[18rem]"
-              >
-                &ldquo;
-              </span>
-
-              <div className="relative">
-                <p className="text-[1.15rem] leading-[1.75] text-[var(--cream-soft)]/85 lg:text-[1.25rem]">
+              {/* Inline quote mark — no absolute positioning */}
+              <div>
+                <span
+                  aria-hidden="true"
+                  className="block select-none font-serif text-[5rem] leading-[0.75] text-[var(--accent)]/30"
+                >
+                  &ldquo;
+                </span>
+                <p className="mt-5 text-[1.15rem] leading-[1.8] text-[var(--cream-soft)]/85 lg:text-[1.22rem]">
                   {TESTIMONIALS[0].quote}
                 </p>
               </div>
 
-              <div className="relative mt-10 flex items-end justify-between gap-6">
+              <div className="mt-10 flex flex-wrap items-end justify-between gap-4 border-t border-[var(--line)] pt-7">
                 <div>
                   <p className="text-[0.95rem] font-semibold text-[var(--cream)]">
                     {TESTIMONIALS[0].author}
