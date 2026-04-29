@@ -680,14 +680,19 @@ export function LandingPage() {
         pageRef.current?.querySelectorAll<HTMLElement>("[data-tilt]") ?? [];
 
       tiltEls.forEach((el) => {
-        // Inject a glow orb inside every tilt card
+        // Wrapper clips the glow without touching the card's own overflow
+        const glowWrap = document.createElement("div");
+        glowWrap.setAttribute("aria-hidden", "true");
+        glowWrap.style.cssText =
+          "pointer-events:none;position:absolute;inset:0;overflow:hidden;" +
+          "border-radius:inherit;z-index:0;";
         const glow = document.createElement("div");
-        glow.setAttribute("aria-hidden", "true");
         glow.style.cssText =
-          "pointer-events:none;position:absolute;width:260px;height:260px;" +
+          "position:absolute;width:260px;height:260px;" +
           "border-radius:50%;opacity:0;top:0;left:0;will-change:transform,opacity;" +
           "background:radial-gradient(circle,rgba(255,107,44,.13) 0%,transparent 70%);";
-        el.appendChild(glow);
+        glowWrap.appendChild(glow);
+        el.appendChild(glowWrap);
 
         const onMove = contextSafe!((e: PointerEvent) => {
           const rect = el.getBoundingClientRect();
@@ -730,7 +735,7 @@ export function LandingPage() {
         magneticHandlers.push(() => {
           el.removeEventListener("pointermove", onMove);
           el.removeEventListener("pointerleave", onLeave);
-          if (el.contains(glow)) el.removeChild(glow);
+          if (el.contains(glowWrap)) el.removeChild(glowWrap);
         });
       });
 
@@ -921,7 +926,7 @@ export function LandingPage() {
           </div>
 
           <div className="mt-16 grid gap-4 sm:mt-20 sm:grid-cols-3 lg:mt-28">
-            <div data-hero-card data-tilt className="card-outline relative overflow-hidden rounded-2xl p-6">
+            <div data-hero-card data-tilt className="card-outline relative rounded-2xl p-6">
               <p className="eyebrow text-[var(--accent-soft)]">filosofía</p>
               <p className="mt-4 font-display text-[1.35rem] font-medium leading-[1.2] tracking-[-0.02em]">
                 Menos adorno. Más intención{" "}
@@ -931,7 +936,7 @@ export function LandingPage() {
                 decisión.
               </p>
             </div>
-            <div data-hero-card data-tilt className="card-outline relative overflow-hidden rounded-2xl p-6">
+            <div data-hero-card data-tilt className="card-outline relative rounded-2xl p-6">
               <p className="eyebrow text-[var(--accent-soft)]">
                 perfil cliente
               </p>
@@ -943,7 +948,7 @@ export function LandingPage() {
                 pueden seguir operando sobre parches.
               </p>
             </div>
-            <div data-hero-card data-tilt className="card-outline relative overflow-hidden rounded-2xl p-6">
+            <div data-hero-card data-tilt className="card-outline relative rounded-2xl p-6">
               <p className="eyebrow text-[var(--accent-soft)]">entregable</p>
               <p className="mt-4 font-display text-[1.35rem] font-medium leading-[1.2] tracking-[-0.02em]">
                 Identidad, interfaz y sistema{" "}
@@ -1065,7 +1070,7 @@ export function LandingPage() {
                 key={item.code}
                 data-reveal
                 data-tilt
-                className="card-outline group relative flex min-h-[22rem] flex-col justify-between overflow-hidden rounded-[1.5rem] p-7"
+                className="card-outline group relative flex min-h-[22rem] flex-col justify-between rounded-[1.5rem] p-7"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-[var(--muted)]">
@@ -1143,7 +1148,7 @@ export function LandingPage() {
                 key={step.id}
                 data-process-step
                 data-tilt
-                className="card-outline relative flex min-h-[26rem] w-[82vw] shrink-0 flex-col overflow-hidden rounded-[1.75rem] sm:w-[56vw] lg:w-[30rem] lg:min-h-[30rem]"
+                className="card-outline relative flex min-h-[26rem] w-[82vw] shrink-0 flex-col rounded-[1.75rem] sm:w-[56vw] lg:w-[30rem] lg:min-h-[30rem]"
               >
                 {/* Accent bar — animated via data-process-accent */}
                 <div
@@ -1261,7 +1266,7 @@ export function LandingPage() {
             <article
               data-reveal
               data-tilt
-              className="card-outline relative flex flex-col justify-between overflow-hidden rounded-[2rem] p-9 lg:p-12"
+              className="card-outline relative flex flex-col justify-between rounded-[2rem] p-9 lg:p-12"
             >
               {/* Inline quote mark — no absolute positioning */}
               <div>
@@ -1300,7 +1305,7 @@ export function LandingPage() {
                   key={item.author + item.company}
                   data-reveal
                   data-tilt
-                  className="card-outline relative flex flex-1 flex-col justify-between overflow-hidden rounded-[1.75rem] p-7"
+                  className="card-outline relative flex flex-1 flex-col justify-between rounded-[1.75rem] p-7"
                 >
                   {/* Small decorative quote */}
                   <span
