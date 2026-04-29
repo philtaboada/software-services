@@ -146,6 +146,36 @@ const WORK_ITEMS = [
   },
 ] as const;
 
+const TESTIMONIALS = [
+  {
+    quote:
+      "Transformaron nuestra presencia digital por completo. La web que entregaron no solo se ve bien, convierte. Empezamos a recibir consultas de calidad desde el primer mes.",
+    author: "Nombre Apellido",
+    role: "CEO",
+    company: "Empresa S.A.",
+    initials: "NA",
+    result: "+60% consultas calificadas",
+  },
+  {
+    quote:
+      "El nivel de criterio que aplican al diseño y al copy es diferente. No hubo un solo entregable sin intención detrás. Recomendaría a Wavys sin dudarlo.",
+    author: "Nombre Apellido",
+    role: "Directora Comercial",
+    company: "Empresa S.L.",
+    initials: "NA",
+    result: "3x tasa de conversión",
+  },
+  {
+    quote:
+      "Construyeron el sistema interno que necesitábamos para escalar operaciones. Limpio, rápido y adoptado por el equipo desde el primer día.",
+    author: "Nombre Apellido",
+    role: "COO",
+    company: "Empresa Corp.",
+    initials: "NA",
+    result: "−50% fricción operativa",
+  },
+] as const;
+
 const FAQ_ITEMS = [
   {
     q: "¿En cuánto tiempo entregáis un proyecto?",
@@ -590,7 +620,7 @@ export function LandingPage() {
           >
             <Image
               src="/logo.png"
-              alt=""
+              alt="Wavys Technologies"
               width={36}
               height={36}
               className="h-9 w-auto shrink-0"
@@ -1014,12 +1044,69 @@ export function LandingPage() {
                   data-suffix={item.suffix}
                   className="font-display text-[clamp(3.5rem,9vw,6.5rem)] font-medium leading-none tracking-[-0.05em] text-[var(--cream)]"
                 >
-                  0{item.suffix}
+                  {item.value}{item.suffix}
                 </span>
                 <span className="text-[0.95rem] text-[var(--cream-soft)]/60">
                   {item.label}
                 </span>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════ TESTIMONIALS ═══════════════════ */}
+      <section className="relative border-t border-[var(--line)] py-24 sm:py-32 lg:py-36">
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+            <div data-reveal>
+              <p className="section-label">Clientes</p>
+              <h2 className="mt-6 font-display text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.05] tracking-[-0.035em] text-balance max-w-[22ch]">
+                Lo que dicen quienes{" "}
+                <span className="font-serif italic text-[var(--accent)] font-normal">
+                  ya confían.
+                </span>
+              </h2>
+            </div>
+          </div>
+
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
+            {TESTIMONIALS.map((item) => (
+              <article
+                key={item.author + item.company}
+                data-reveal
+                className="card-outline flex flex-col justify-between gap-10 rounded-[1.5rem] p-8"
+              >
+                <div>
+                  <span className="font-serif text-[4rem] leading-[0.8] text-[var(--accent)]/25 select-none">
+                    &ldquo;
+                  </span>
+                  <p className="mt-3 text-[1.02rem] leading-7 text-[var(--cream-soft)]/80">
+                    {item.quote}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-5">
+                  <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-3 py-1.5">
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />
+                    <span className="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-[var(--accent)]">
+                      {item.result}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3 border-t border-[var(--line)] pt-5">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--surface-2)] text-[0.72rem] font-semibold uppercase tracking-wider text-[var(--cream-soft)]">
+                      {item.initials}
+                    </div>
+                    <div>
+                      <p className="text-[0.9rem] font-semibold text-[var(--cream)]">
+                        {item.author}
+                      </p>
+                      <p className="text-[0.78rem] text-[var(--muted)]">
+                        {item.role} · {item.company}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
             ))}
           </div>
         </div>
@@ -1182,10 +1269,18 @@ export function LandingPage() {
                   <span>Agendar llamada</span>
                   <ArrowIcon className="h-4 w-4" />
                 </a>
-                <a href="#top" className="btn-ghost">
-                  <span>volver arriba</span>
+                <a href={CONTACT_EMAIL_HREF} className="btn-ghost">
+                  <span>Escribir por email</span>
                 </a>
               </div>
+              <a
+                data-reveal
+                href="#top"
+                className="mt-6 inline-flex items-center gap-1.5 text-[0.8rem] text-[var(--muted)] transition-colors hover:text-[var(--cream)]"
+              >
+                <span>↑</span>
+                <span>volver arriba</span>
+              </a>
             </div>
           </div>
         </div>
@@ -1202,7 +1297,7 @@ export function LandingPage() {
               >
                 <Image
                   src="/logo.png"
-                  alt=""
+                  alt="Wavys Technologies"
                   width={36}
                   height={36}
                   className="h-9 w-auto shrink-0"
@@ -1277,7 +1372,7 @@ export function LandingPage() {
                   </span>
                   aceptando proyectos
                 </li>
-                <li>próximo slot: Q2 2026</li>
+                <li>próximo slot: Q3 2026</li>
               </ul>
             </div>
           </div>
