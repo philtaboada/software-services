@@ -675,6 +675,65 @@ export function LandingPage() {
         });
       });
 
+      // ── 3D card tilt + spotlight glow ────────────────────────────────────────
+      const tiltEls =
+        pageRef.current?.querySelectorAll<HTMLElement>("[data-tilt]") ?? [];
+
+      tiltEls.forEach((el) => {
+        // Inject a glow orb inside every tilt card
+        const glow = document.createElement("div");
+        glow.setAttribute("aria-hidden", "true");
+        glow.style.cssText =
+          "pointer-events:none;position:absolute;width:260px;height:260px;" +
+          "border-radius:50%;opacity:0;top:0;left:0;will-change:transform,opacity;" +
+          "background:radial-gradient(circle,rgba(255,107,44,.13) 0%,transparent 70%);";
+        el.appendChild(glow);
+
+        const onMove = contextSafe!((e: PointerEvent) => {
+          const rect = el.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const cx = rect.width / 2;
+          const cy = rect.height / 2;
+
+          gsap.to(el, {
+            rotateX: ((y - cy) / cy) * -7,
+            rotateY: ((x - cx) / cx) * 7,
+            transformPerspective: 900,
+            duration: 0.45,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+          gsap.to(glow, {
+            x: x - 130,
+            y: y - 130,
+            opacity: 1,
+            duration: 0.3,
+            overwrite: "auto",
+          });
+        });
+
+        const onLeave = contextSafe!(() => {
+          gsap.to(el, {
+            rotateX: 0,
+            rotateY: 0,
+            duration: 0.7,
+            ease: "power3.out",
+            overwrite: "auto",
+          });
+          gsap.to(glow, { opacity: 0, duration: 0.4, overwrite: "auto" });
+        });
+
+        el.addEventListener("pointermove", onMove);
+        el.addEventListener("pointerleave", onLeave);
+
+        magneticHandlers.push(() => {
+          el.removeEventListener("pointermove", onMove);
+          el.removeEventListener("pointerleave", onLeave);
+          if (el.contains(glow)) el.removeChild(glow);
+        });
+      });
+
       return () => {
         window.removeEventListener("scroll", onScroll);
         window.removeEventListener("pointermove", onPointerMove);
@@ -862,7 +921,7 @@ export function LandingPage() {
           </div>
 
           <div className="mt-16 grid gap-4 sm:mt-20 sm:grid-cols-3 lg:mt-28">
-            <div data-hero-card className="card-outline rounded-2xl p-6">
+            <div data-hero-card data-tilt className="card-outline relative overflow-hidden rounded-2xl p-6">
               <p className="eyebrow text-[var(--accent-soft)]">filosofía</p>
               <p className="mt-4 font-display text-[1.35rem] font-medium leading-[1.2] tracking-[-0.02em]">
                 Menos adorno. Más intención{" "}
@@ -872,7 +931,7 @@ export function LandingPage() {
                 decisión.
               </p>
             </div>
-            <div data-hero-card className="card-outline rounded-2xl p-6">
+            <div data-hero-card data-tilt className="card-outline relative overflow-hidden rounded-2xl p-6">
               <p className="eyebrow text-[var(--accent-soft)]">
                 perfil cliente
               </p>
@@ -884,7 +943,7 @@ export function LandingPage() {
                 pueden seguir operando sobre parches.
               </p>
             </div>
-            <div data-hero-card className="card-outline rounded-2xl p-6">
+            <div data-hero-card data-tilt className="card-outline relative overflow-hidden rounded-2xl p-6">
               <p className="eyebrow text-[var(--accent-soft)]">entregable</p>
               <p className="mt-4 font-display text-[1.35rem] font-medium leading-[1.2] tracking-[-0.02em]">
                 Identidad, interfaz y sistema{" "}
@@ -1005,7 +1064,8 @@ export function LandingPage() {
               <article
                 key={item.code}
                 data-reveal
-                className="card-outline group relative flex min-h-[22rem] flex-col justify-between rounded-[1.5rem] p-7"
+                data-tilt
+                className="card-outline group relative flex min-h-[22rem] flex-col justify-between overflow-hidden rounded-[1.5rem] p-7"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-[var(--muted)]">
@@ -1082,6 +1142,7 @@ export function LandingPage() {
               <article
                 key={step.id}
                 data-process-step
+                data-tilt
                 className="card-outline relative flex min-h-[26rem] w-[82vw] shrink-0 flex-col overflow-hidden rounded-[1.75rem] sm:w-[56vw] lg:w-[30rem] lg:min-h-[30rem]"
               >
                 {/* Accent bar — animated via data-process-accent */}
@@ -1200,7 +1261,8 @@ export function LandingPage() {
               <article
                 key={item.author + item.company}
                 data-reveal
-                className="card-outline flex flex-col justify-between gap-10 rounded-[1.5rem] p-8"
+                data-tilt
+                className="card-outline relative flex flex-col justify-between gap-10 overflow-hidden rounded-[1.5rem] p-8"
               >
                 <div>
                   <span className="font-serif text-[4rem] leading-[0.8] text-[var(--accent)]/25 select-none">
