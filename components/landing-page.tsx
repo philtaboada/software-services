@@ -18,6 +18,8 @@ function readInitialTheme(): Theme {
   return attr === "light" ? "light" : "dark";
 }
 
+import { PresenciaPromoModal } from "@/components/presencia-promo-modal";
+
 const CONTACT_EMAIL_HREF =
   "mailto:hola@wavystechnologies.com?subject=Quiero%20una%20propuesta%20para%20mi%20proyecto";
 
@@ -1635,6 +1637,7 @@ export function LandingPage() {
           </p>
         </div>
       </footer>
+      <PresenciaPromoModal />
     </main>
   );
 }
