@@ -186,7 +186,7 @@ export function PresenciaPromoModal({ showLandingLink = true }: { showLandingLin
             ))}
           </ul>
 
-          <div className="mt-6 grid grid-cols-3 gap-2">
+          <div className="mt-6 grid grid-cols-2 gap-2">
             {PRESENCIA_PROMO_PLANS.map((plan) => (
               <a
                 key={plan.id}

@@ -26,6 +26,7 @@ function readInitialTheme(): Theme {
 const NAV_LINKS = [
   { href: "#trabajo", label: "Trabajo" },
   { href: "#fotos", label: "Fotos" },
+  { href: "#tienda", label: "Tienda" },
   { href: "#planes", label: "Planes" },
   { href: "#faq", label: "FAQ" },
 ] as const;
@@ -80,8 +81,8 @@ const SCHEDULE_HREF = whatsappHref();
 
 const VALUE_STRIP = [
   "Entrega 5–7 días",
-  "Fotos incluidas",
-  "Plan Flex sin permanencia",
+  "Fotos incluidas en Presencia",
+  "Tienda con pedido a WhatsApp",
 ] as const;
 
 const CIUDADES = ["Lima", "Arequipa", "Trujillo", "Cusco", "Piura", "Huancayo", "Iquitos"] as const;
@@ -141,7 +142,7 @@ const PLANS = [
   {
     id: "presencia",
     name: "Presencia",
-    badge: "Plan base",
+    badge: "Servicios y negocios locales",
     price: "149",
     note: "12 meses · regular S/179",
     highlight: false,
@@ -157,45 +158,49 @@ const PLANS = [
     ],
   },
   {
-    id: "pro",
-    name: "Presencia Pro",
-    badge: "Más elegido",
-    price: "189",
-    note: "12 meses · regular S/219",
+    id: "tienda",
+    name: "Presencia Tienda",
+    badge: "Catálogo + pedidos",
+    price: "229",
+    note: "12 meses · regular S/259",
     highlight: true,
-    cta: "Quiero el Pro",
-    whatsappPlan: "Presencia Pro" as const,
+    cta: "Quiero mi tienda",
+    whatsappPlan: "Presencia Tienda" as const,
     items: [
-      "Todo Presencia",
-      "Sesión fotográfica presencial",
-      "15–20 fotos editadas",
-      "1 reel corto",
-      "Entrega prioritaria · 5 días",
-    ],
-  },
-  {
-    id: "flex",
-    name: "Flex",
-    badge: "Sin permanencia",
-    price: "199",
-    note: "Cancela cuando quieras",
-    highlight: false,
-    cta: "Quiero Flex",
-    whatsappPlan: "Flex" as const,
-    items: [
-      "Todo Presencia",
-      "Sin contrato mínimo",
-      "Sesión presencial +S/350",
-      "Misma calidad premium",
+      "Todo Presencia (sin sesión foto)",
+      "Catálogo autogestionable",
+      "Hasta 100 productos incluidos",
+      "Carrito → pedido a WhatsApp",
+      "Panel admin (tus fotos y precios)",
+      "Entrega 10–14 días",
     ],
   },
 ] as const;
 
+const TIENDA_FEATURES = [
+  {
+    title: "Catálogo en Google",
+    body: "Tus productos indexables — no solo un catálogo de WhatsApp con límite de 500 ítems.",
+  },
+  {
+    title: "Carrito → WhatsApp",
+    body: "El cliente arma el pedido y al pagar llega a tu WhatsApp con productos, cantidades y total listos.",
+  },
+  {
+    title: "Tú lo administras",
+    body: "Subes fotos, cambias precios y activas productos desde un panel simple — sin depender de nosotros.",
+  },
+  {
+    title: "Sin comisión por venta",
+    body: "A diferencia de Tiendanube o marketplaces: cobras como siempre — Yape, Plin o transferencia en chat.",
+  },
+] as const;
+
 const PROCESS = [
-  { step: "01", title: "Brief", body: "Formulario corto + lo que tengas de fotos. Pro: agendamos sesión en tu local." },
-  { step: "02", title: "Visual", body: "Retoque, imágenes nuevas o sesión presencial — producción antes del diseño." },
-  { step: "03", title: "Build", body: "Landing con copy claro, CTA visible y base técnica para campañas." },
-  { step: "04", title: "Live", body: "Dominio, hosting, SSL y leads conectados. Tu web lista para vender." },
+  { step: "01", title: "Brief", body: "Formulario + fotos de tu negocio o productos. Tienda: listado inicial de catálogo." },
+  { step: "02", title: "Visual", body: "Retoque Pack Essential (Presencia) u optimización de tus fotos de producto (Tienda)." },
+  { step: "03", title: "Build", body: "Landing o tienda con copy claro, CTA visible y base técnica para campañas." },
+  { step: "04", title: "Live", body: "Dominio, hosting, SSL y WhatsApp conectados. Capacitación del panel admin en Tienda." },
 ] as const;
 
 const TESTIMONIALS = [
@@ -231,28 +236,28 @@ const TESTIMONIALS = [
 
 const FAQ = [
   {
-    q: "¿Qué incluye el plan mensual?",
-    a: "Landing diseñada y desarrollada, dominio el primer año, hosting con SSL, SEO técnico, WhatsApp + formulario, Pixel Meta + Google Tag, soporte con cambios menores y Pack Foto Essential.",
+    q: "¿Qué incluye el plan Presencia?",
+    a: "Landing diseñada y desarrollada, Pack Foto Essential, dominio el primer año, hosting con SSL, SEO técnico, WhatsApp + formulario, Pixel Meta + Google Tag y soporte con cambios menores.",
+  },
+  {
+    q: "¿Qué es Presencia Tienda?",
+    a: "Catálogo web autogestionable con carrito. Al finalizar, el pedido llega a tu WhatsApp con productos, cantidades y total. Tú subes fotos y precios — ideal para ferreterías, textiles y tiendas con muchos productos.",
   },
   {
     q: "¿Qué es el Pack Foto Essential?",
-    a: "Retoque de hasta 5 fotos tuyas + 6–8 imágenes profesionales para web. En Presencia Pro sumamos sesión presencial con 15–20 fotos editadas.",
+    a: "Retoque de hasta 5 fotos tuyas + 6–8 imágenes profesionales para web. Incluido en Presencia. En Presencia Tienda usas tus propias fotos de producto — nosotros solo las optimizamos para web.",
   },
   {
     q: "¿Atienden en todo el Perú?",
-    a: "Sí. Entregamos en las 24 regiones. La sesión presencial del plan Pro se coordina en tu ciudad; en Lima es presencial directa, en provincias coordinamos fotógrafo local o viaje según zona.",
-  },
-  {
-    q: "¿Cuánto tarda la entrega?",
-    a: "5–7 días hábiles desde el brief confirmado. Presencia Pro: prioridad en 5 días hábiles.",
+    a: "Sí. Entregamos en las 24 regiones. Presencia en 5–7 días; Presencia Tienda en 10–14 días desde brief confirmado.",
   },
   {
     q: "¿Sirve para campañas de Meta Ads?",
-    a: "Absolutamente. Instalamos pixel y tags. Una landing editorial con fotos reales multiplica el ROI de tu pauta en cualquier ciudad del Perú.",
+    a: "Absolutamente. Instalamos pixel y tags. Una landing o tienda editorial multiplica el ROI de tu pauta en cualquier ciudad del Perú.",
   },
   {
     q: "¿Puedo cancelar?",
-    a: "Presencia y Pro: 12 meses con precio preferencial. Flex (S/199/mes): sin permanencia. Al terminar, recibes los archivos de tu web.",
+    a: "Ambos planes: 12 meses con precio preferencial. Después del año, renovación mes a mes opcional. Al terminar el contrato cumplido, recibes los archivos de tu web.",
   },
 ] as const;
 
@@ -668,29 +673,29 @@ export function PresenciaDigitalLanding() {
               {[
                 {
                   title: "Pack Essential",
-                  plan: "Presencia & Flex",
+                  plan: "Plan Presencia",
                   body: "Retoque de 5 fotos + 6–8 imágenes nuevas para hero, servicios y redes.",
                   accent: "border-[var(--teal)]",
                   h: "min-h-[180px]",
                 },
                 {
-                  title: "Sesión Pro",
-                  plan: "Presencia Pro · Recomendado",
-                  body: "Fotógrafo en tu local 1.5–2 h. Fachada, interior, equipo, producto. 15–20 fotos editadas + reel.",
+                  title: "Fotos propias",
+                  plan: "Presencia Tienda · BYO",
+                  body: "Tú subes las fotos de cada producto. Nosotros optimizamos formato y peso — sin sesión ni pack limitado por catálogo.",
                   accent: "border-[var(--accent)] ring-1 ring-[color-mix(in_srgb,var(--accent)_25%,transparent)]",
                   h: "min-h-[220px]",
                 },
                 {
-                  title: "Add-on contenido",
-                  plan: "Opcional",
-                  body: "Reel adicional, segunda sesión o pack mensual de fotos para pauta continua.",
+                  title: "Modalidad BYO",
+                  plan: "Presencia opcional",
+                  body: "¿Ya tienes fotos del local? Presencia sin Pack Essential: −S/49 solo meses 2 y 3.",
                   accent: "border-[var(--line-strong)]",
                   h: "min-h-[140px]",
                 },
                 {
-                  title: "Coordinación nacional",
+                  title: "Cobertura nacional",
                   plan: "24 regiones",
-                  body: "Lima: sesión directa. Provincias: red de fotógrafos locales o coordinación de viaje según proyecto.",
+                  body: "Entrega remota en todo el Perú. Brief y materiales por WhatsApp — sin depender de sesión presencial.",
                   accent: "border-[var(--lime)]",
                   h: "min-h-[160px]",
                 },
@@ -713,12 +718,55 @@ export function PresenciaDigitalLanding() {
           </div>
         </section>
 
+        {/* E-commerce — Presencia Tienda */}
+        <section id="tienda" className="border-t border-[var(--line)] bg-[color-mix(in_srgb,var(--accent)_4%,transparent)] py-20 sm:py-28">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+            <div className="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+              <div data-reveal className="lg:sticky lg:top-28">
+                <p className="presencia-chapter">Capítulo 03 · Tienda online</p>
+                <h2 className="mt-6 font-display text-[clamp(2rem,4.5vw,3.25rem)] font-medium leading-[1.02] tracking-[-0.035em] text-[var(--cream)]">
+                  Catálogo profesional que{" "}
+                  <span className="font-serif italic text-[var(--accent-soft)]">cierra en WhatsApp</span>
+                </h2>
+                <p className="mt-5 text-[0.98rem] leading-7 text-[var(--cream-soft)]/68">
+                  Para ferreterías, textiles, bodegas y tiendas con decenas o cientos de productos.
+                  Sin sesión fotográfica — tú subes tus imágenes. El cliente navega, arma el carrito y
+                  el pedido llega directo a tu WhatsApp.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <a
+                    href={whatsappHref("Presencia Tienda")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-primary"
+                  >
+                    <span>Consultar Presencia Tienda</span>
+                    <ArrowIcon className="h-4 w-4" />
+                  </a>
+                  <a href="#planes" className="btn-ghost">
+                    <span>Ver precio</span>
+                  </a>
+                </div>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                {TIENDA_FEATURES.map((f) => (
+                  <article key={f.title} data-reveal className="card-outline rounded-2xl p-5 sm:p-6">
+                    <h3 className="font-display text-[1.05rem] font-medium text-[var(--cream)]">{f.title}</h3>
+                    <p className="mt-2 text-[0.86rem] leading-6 text-[var(--cream-soft)]/58">{f.body}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Features bento */}
         <section id="incluye" className="border-t border-[var(--line)] bg-[color-mix(in_srgb,var(--foreground)_2%,transparent)] py-20 sm:py-28">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <div data-reveal className="mb-12 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="presencia-chapter">Capítulo 03 · Incluye</p>
+                <p className="presencia-chapter">Capítulo 04 · Incluye</p>
                 <h2 className="mt-4 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-medium tracking-[-0.03em] text-[var(--cream)]">
                   Todo lo que tu negocio necesita online
                 </h2>
@@ -747,14 +795,18 @@ export function PresenciaDigitalLanding() {
         {/* Pricing */}
         <section id="planes" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28">
           <div data-reveal className="mx-auto max-w-2xl text-center">
-            <p className="presencia-chapter mx-auto justify-center">Capítulo 04 · Planes</p>
+            <p className="presencia-chapter mx-auto justify-center">Capítulo 05 · Planes</p>
             <h2 className="mt-6 font-display text-[clamp(1.85rem,4vw,2.85rem)] font-medium tracking-[-0.03em] text-[var(--cream)]">
-              Inversión accesible para{" "}
-              <span className="font-serif italic text-[var(--accent-soft)]">cualquier ciudad</span>
+              Dos planes,{" "}
+              <span className="font-serif italic text-[var(--accent-soft)]">un solo modelo</span>
             </h2>
+            <p className="mt-4 text-[0.92rem] leading-7 text-[var(--cream-soft)]/65">
+              Presencia para servicios y negocios locales. Presencia Tienda para catálogo con pedidos a WhatsApp.
+              Ambos: 12 meses de servicio, después tú decides.
+            </p>
           </div>
 
-          <div className="mt-14 grid gap-5 lg:grid-cols-3 lg:gap-6">
+          <div className="mt-14 grid gap-5 md:grid-cols-2 md:gap-8 lg:max-w-4xl lg:mx-auto">
             {PLANS.map((plan) => (
               <article
                 key={plan.id}
@@ -904,15 +956,15 @@ export function PresenciaDigitalLanding() {
               aria-hidden="true"
             />
             <div className="relative">
-              <p className="presencia-masthead text-[var(--accent-soft)]">Todo el Perú · Entrega en 5–7 días</p>
+              <p className="presencia-masthead text-[var(--accent-soft)]">Todo el Perú · Presencia 5–7 d · Tienda 10–14 d</p>
               <h2 className="mt-5 font-display text-[clamp(2rem,5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.04em] text-[var(--cream)]">
                 Tu negocio merece una web que{" "}
-                <span className="font-serif italic text-[var(--accent-soft)]">se vea</span> tan bien
-                como lo que vendes
+                <span className="font-serif italic text-[var(--accent-soft)]">venda</span> tan bien
+                como lo que ofreces
               </h2>
               <p className="mx-auto mt-4 max-w-md text-[0.95rem] leading-7 text-[var(--cream-soft)]/68">
-                Landing + fotos + dominio + hosting desde S/149/mes. Escríbenos por WhatsApp y
-                te contamos qué plan encaja contigo.
+                Landing desde S/149/mes · Tienda con pedido a WhatsApp desde S/229/mes.
+                Escríbenos y te decimos qué plan encaja contigo.
               </p>
 
               <ul className="mx-auto mt-8 flex max-w-lg flex-wrap justify-center gap-x-6 gap-y-2">
