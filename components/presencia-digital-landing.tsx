@@ -8,6 +8,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import { PresenciaHeroPreview } from "@/components/presencia-hero-preview";
+import { PresenciaPhotoStack } from "@/components/presencia-photo-stack";
 import { PresenciaPromoModal } from "@/components/presencia-promo-modal";
 import { whatsappHref } from "@/lib/presencia-promo";
 
@@ -372,6 +373,10 @@ export function PresenciaDigitalLanding() {
         });
       });
 
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
+
       const onScroll = () => {
         if (navRef.current) {
           navRef.current.dataset.scrolled = window.scrollY > 40 ? "true" : "false";
@@ -651,25 +656,29 @@ export function PresenciaDigitalLanding() {
           </div>
         </section>
 
-        {/* Photos — masonry Pinterest */}
+        {/* Photos — editorial grid + reference stacks */}
         <section id="fotos" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28">
-          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-            <div data-reveal className="lg:sticky lg:top-28">
-              <p className="presencia-chapter">Capítulo 02 · Fotografía</p>
-              <h2 className="mt-6 font-display text-[clamp(2rem,4.5vw,3.25rem)] font-medium leading-[1.02] tracking-[-0.035em] text-[var(--cream)]">
+          <div className="grid gap-12 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
+            <div className="flex flex-col lg:sticky lg:top-28">
+              <p data-reveal className="presencia-chapter">
+                Capítulo 02 · Fotografía
+              </p>
+              <h2
+                data-reveal
+                className="mt-6 font-display text-[clamp(2rem,4.5vw,3.25rem)] font-medium leading-[1.02] tracking-[-0.035em] text-[var(--cream)]"
+              >
                 Tu web no puede verse{" "}
                 <span className="font-serif italic text-[var(--accent-soft)]">barata</span>{" "}
                 por culpa de las fotos
               </h2>
-              <p className="mt-5 text-[0.98rem] leading-7 text-[var(--cream-soft)]/68">
+              <p data-reveal className="mt-5 text-[0.98rem] leading-7 text-[var(--cream-soft)]/68">
                 En Perú, la mayoría de landings arrancan con fotos de celular sin tratar. Nosotros
                 incluimos producción visual desde el día uno — en Lima, provincias y campañas
                 nacionales.
               </p>
-              <div className="presencia-pull-rule mt-8" aria-hidden="true" />
             </div>
 
-            <div className="presencia-masonry">
+            <div className="presencia-fotos-grid">
               {[
                 {
                   title: "Pack Essential",
@@ -677,13 +686,15 @@ export function PresenciaDigitalLanding() {
                   body: "Retoque de 5 fotos + 6–8 imágenes nuevas para hero, servicios y redes.",
                   accent: "border-[var(--teal)]",
                   h: "min-h-[180px]",
+                  grid: "lg:col-start-1 lg:row-start-1",
                 },
                 {
                   title: "Fotos propias",
                   plan: "Presencia Tienda · BYO",
                   body: "Tú subes las fotos de cada producto. Nosotros optimizamos formato y peso — sin sesión ni pack limitado por catálogo.",
                   accent: "border-[var(--accent)] ring-1 ring-[color-mix(in_srgb,var(--accent)_25%,transparent)]",
-                  h: "min-h-[220px]",
+                  h: "min-h-[220px] lg:min-h-[260px]",
+                  grid: "lg:col-start-1 lg:row-start-2 lg:row-span-2",
                 },
                 {
                   title: "Modalidad BYO",
@@ -691,6 +702,7 @@ export function PresenciaDigitalLanding() {
                   body: "¿Ya tienes fotos del local? Presencia sin Pack Essential: −S/49 solo meses 2 y 3.",
                   accent: "border-[var(--line-strong)]",
                   h: "min-h-[140px]",
+                  grid: "lg:col-start-2 lg:row-start-1",
                 },
                 {
                   title: "Cobertura nacional",
@@ -698,12 +710,13 @@ export function PresenciaDigitalLanding() {
                   body: "Entrega remota en todo el Perú. Brief y materiales por WhatsApp — sin depender de sesión presencial.",
                   accent: "border-[var(--lime)]",
                   h: "min-h-[160px]",
+                  grid: "lg:col-start-3 lg:row-start-1",
                 },
               ].map((card) => (
                 <article
                   key={card.title}
                   data-reveal
-                  className={`presencia-masonry-item card-outline rounded-2xl border-l-2 p-5 ${card.accent} ${card.h}`}
+                  className={`card-outline rounded-2xl border-l-2 p-5 ${card.accent} ${card.h} ${card.grid}`}
                 >
                   <p className="font-mono text-[0.6rem] uppercase tracking-[0.24em] text-[var(--muted)]">
                     {card.plan}
@@ -714,6 +727,10 @@ export function PresenciaDigitalLanding() {
                   <p className="mt-2 text-[0.88rem] leading-6 text-[var(--cream-soft)]/62">{card.body}</p>
                 </article>
               ))}
+
+              <div className="flex items-center justify-center pb-2 sm:col-span-2 lg:col-start-2 lg:col-span-2 lg:row-start-2 lg:row-span-2 lg:justify-end lg:pr-1">
+                <PresenciaPhotoStack featuredIndex={0} />
+              </div>
             </div>
           </div>
         </section>
