@@ -991,6 +991,129 @@ img {
   }
 }
 
+/* ── PRESENCIA CATÁLOGO · price slider ── */
+
+.catalogo-range-wrap {
+  position: relative;
+  height: 2.75rem;
+}
+
+/* Input nativo encima — thumb invisible, toda el área es draggable */
+.catalogo-range-input {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2.75rem;
+  margin: 0;
+  cursor: pointer;
+  background: transparent;
+  touch-action: pan-x;
+}
+
+.catalogo-range-input:focus {
+  outline: none;
+}
+
+.catalogo-range-input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 0.5rem;
+}
+
+.catalogo-range-input::-webkit-slider-runnable-track {
+  height: 0.5rem;
+  background: transparent;
+  border: none;
+}
+
+.catalogo-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-top: -1.125rem;
+  background: transparent;
+  border: none;
+  cursor: grab;
+  box-shadow: none;
+}
+
+.catalogo-range-input:active::-webkit-slider-thumb {
+  cursor: grabbing;
+}
+
+.catalogo-range-input::-moz-range-track {
+  height: 0.5rem;
+  background: transparent;
+  border: none;
+}
+
+.catalogo-range-input::-moz-range-thumb {
+  width: 2.75rem;
+  height: 2.75rem;
+  background: transparent;
+  border: none;
+  cursor: grab;
+}
+
+/* legacy */
+.catalogo-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 0.625rem;
+  border-radius: 999px;
+  cursor: pointer;
+  touch-action: pan-x;
+  background: linear-gradient(
+    to right,
+    var(--accent) 0%,
+    var(--accent) var(--range-progress, 0%),
+    color-mix(in srgb, var(--foreground) 10%, transparent) var(--range-progress, 0%),
+    color-mix(in srgb, var(--foreground) 10%, transparent) 100%
+  );
+  outline: none;
+}
+
+.catalogo-range:focus-visible {
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--accent);
+}
+
+.catalogo-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: -0.44rem;
+  border-radius: 50%;
+  border: 2px solid var(--background);
+  background: var(--accent-bright);
+  box-shadow: 0 2px 12px color-mix(in srgb, var(--accent) 50%, transparent);
+  cursor: grab;
+  pointer-events: auto;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.catalogo-range:active::-webkit-slider-thumb {
+  cursor: grabbing;
+  transform: scale(1.08);
+}
+
+.catalogo-range::-moz-range-thumb {
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  border: 2px solid var(--background);
+  background: var(--accent-bright);
+  box-shadow: 0 2px 12px color-mix(in srgb, var(--accent) 50%, transparent);
+  cursor: grab;
+}
+
+.catalogo-range::-moz-range-track {
+  height: 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+
 /* ── PRESENCIA PROMO MODAL ── */
 
 .presencia-promo-badge {

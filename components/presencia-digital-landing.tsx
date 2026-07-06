@@ -10,6 +10,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PresenciaHeroPreview } from "@/components/presencia-hero-preview";
 import { PresenciaPhotoStack } from "@/components/presencia-photo-stack";
 import { PresenciaPromoModal } from "@/components/presencia-promo-modal";
+import { CATALOGO_SUMMARY_ITEMS } from "@/lib/presencia-catalogo";
+import { CatalogoPriceSlider } from "@/components/catalogo-price-slider";
 import { whatsappHref } from "@/lib/presencia-promo";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -25,11 +27,12 @@ function readInitialTheme(): Theme {
 }
 
 const NAV_LINKS = [
-  { href: "#trabajo", label: "Trabajo" },
-  { href: "#fotos", label: "Fotos" },
-  { href: "#tienda", label: "Tienda" },
-  { href: "#planes", label: "Planes" },
-  { href: "#faq", label: "FAQ" },
+  { href: "#trabajo", label: "Trabajo", anchor: true },
+  { href: "#fotos", label: "Fotos", anchor: true },
+  { href: "/presencia-catalogo", label: "Catálogo", anchor: false },
+  { href: "#tienda", label: "Tienda", anchor: true },
+  { href: "#planes", label: "Planes", anchor: true },
+  { href: "#faq", label: "FAQ", anchor: true },
 ] as const;
 
 const WORK_ITEMS = [
@@ -82,7 +85,7 @@ const SCHEDULE_HREF = whatsappHref();
 
 const VALUE_STRIP = [
   "Entrega 5–7 días",
-  "Fotos incluidas en Presencia",
+  "Catálogo gratis · 10 productos",
   "Tienda con pedido a WhatsApp",
 ] as const;
 
@@ -239,6 +242,10 @@ const FAQ = [
   {
     q: "¿Qué incluye el plan Presencia?",
     a: "Landing diseñada y desarrollada, Pack Foto Essential, dominio el primer año, hosting con SSL, SEO técnico, WhatsApp + formulario, Pixel Meta + Google Tag y soporte con cambios menores.",
+  },
+  {
+    q: "¿Qué es Presencia Catálogo?",
+    a: "Catálogo web inteligente y fácil de rellenar: tus productos en la web, consultas por WhatsApp, sin carrito. Gratis hasta 10 productos; planes de pago hasta 1.000 (S/99–199/mes). Toda la información está en la página Presencia Catálogo.",
   },
   {
     q: "¿Qué es Presencia Tienda?",
@@ -427,16 +434,27 @@ export function PresenciaDigitalLanding() {
             aria-label="Navegación principal"
             className="nav-pill hidden shrink-0 items-center justify-center gap-1 rounded-full p-1 md:flex md:justify-self-center"
           >
-            {NAV_LINKS.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                data-nav-item
-                className="rounded-full px-4 py-1.5 text-[0.82rem] text-[var(--muted)] transition-colors duration-300 hover:text-[var(--foreground)]"
-              >
-                {item.label}
-              </a>
-            ))}
+            {NAV_LINKS.map((item) =>
+              item.anchor ? (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  data-nav-item
+                  className="rounded-full px-4 py-1.5 text-[0.82rem] text-[var(--muted)] transition-colors duration-300 hover:text-[var(--foreground)]"
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  data-nav-item
+                  className="rounded-full px-4 py-1.5 text-[0.82rem] text-[var(--muted)] transition-colors duration-300 hover:text-[var(--foreground)]"
+                >
+                  {item.label}
+                </Link>
+              ),
+            )}
           </nav>
 
           <div className="flex shrink-0 items-center justify-end justify-self-end gap-2 md:min-w-0 md:gap-2.5">
@@ -814,16 +832,50 @@ export function PresenciaDigitalLanding() {
           <div data-reveal className="mx-auto max-w-2xl text-center">
             <p className="presencia-chapter mx-auto justify-center">Capítulo 05 · Planes</p>
             <h2 className="mt-6 font-display text-[clamp(1.85rem,4vw,2.85rem)] font-medium tracking-[-0.03em] text-[var(--cream)]">
-              Dos planes,{" "}
+              Tres líneas,{" "}
               <span className="font-serif italic text-[var(--accent-soft)]">un solo modelo</span>
             </h2>
             <p className="mt-4 text-[0.92rem] leading-7 text-[var(--cream-soft)]/65">
-              Presencia para servicios y negocios locales. Presencia Tienda para catálogo con pedidos a WhatsApp.
-              Ambos: 12 meses de servicio, después tú decides.
+              Presencia para servicios. Catálogo para mostrar productos. Tienda para pedidos con carrito a WhatsApp.
             </p>
           </div>
 
-          <div className="mt-14 grid gap-5 md:grid-cols-2 md:gap-8 lg:max-w-4xl lg:mx-auto">
+          <article
+            data-reveal
+            className="card-outline relative mx-auto mt-14 max-w-4xl overflow-visible rounded-3xl p-6 sm:p-8"
+          >
+            <div className="presencia-plan-spine" aria-hidden="true" />
+            <div className="relative z-[1] max-w-lg">
+              <p className="font-mono text-[0.6rem] uppercase tracking-[0.24em] text-[var(--muted)]">
+                Productos · vitrina web
+              </p>
+              <h3 className="mt-3 font-display text-[1.5rem] font-medium text-[var(--cream)]">
+                Presencia Catálogo
+              </h3>
+              <p className="mt-3 text-[0.9rem] leading-7 text-[var(--cream-soft)]/68">
+                Catálogo inteligente y sencillo de rellenar. Tus clientes ven productos en la web y consultan
+                por WhatsApp — sin carrito, sin e-commerce.
+              </p>
+              <ul className="mt-5 space-y-2">
+                {CATALOGO_SUMMARY_ITEMS.map((item) => (
+                  <li key={item} className="flex gap-2.5 text-[0.84rem] text-[var(--cream-soft)]/75">
+                    <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent)]" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <CatalogoPriceSlider
+              embedded
+              defaultCount={125}
+              showCta
+              showDetailLink
+              className="relative z-[1] mt-8 border-t border-[var(--line)] pt-8"
+            />
+          </article>
+
+          <div className="mt-10 grid gap-5 md:grid-cols-2 md:gap-8 lg:max-w-4xl lg:mx-auto">
             {PLANS.map((plan) => (
               <article
                 key={plan.id}
@@ -980,7 +1032,7 @@ export function PresenciaDigitalLanding() {
                 como lo que ofreces
               </h2>
               <p className="mx-auto mt-4 max-w-md text-[0.95rem] leading-7 text-[var(--cream-soft)]/68">
-                Landing desde S/149/mes · Tienda con pedido a WhatsApp desde S/229/mes.
+                Catálogo gratis · Landing S/149/mes · Tienda con pedido a WhatsApp S/229/mes.
                 Escríbenos y te decimos qué plan encaja contigo.
               </p>
 
@@ -1010,7 +1062,7 @@ export function PresenciaDigitalLanding() {
       <footer className="border-t border-[var(--line)] py-10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6">
           <p className="text-[0.76rem] text-[var(--muted)]">
-            © {new Date().getFullYear()} Wavys Software ·{" "}
+            © 2026 Wavys Software ·{" "}
             <Link href="/" className="hover:text-[var(--cream)]">
               software.wavys-technologies.com
             </Link>
