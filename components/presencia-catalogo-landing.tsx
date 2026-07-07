@@ -11,6 +11,7 @@ import {
   CATALOGO_FAQ,
   CATALOGO_FEATURES,
   CATALOGO_INCLUDES,
+  CATALOGO_SETUP_LABEL,
   CATALOGO_TIERS,
   catalogoWhatsappHref,
   getCatalogoTierForCount,
@@ -83,7 +84,7 @@ export function PresenciaCatalogoLanding() {
   const navRef = useRef<HTMLElement>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [theme, setTheme] = useState<Theme>("dark");
-  const [productCount, setProductCount] = useState(125);
+  const [productCount, setProductCount] = useState(200);
   const tierSyncToken = useRef(0);
   const [tierSync, setTierSync] = useState<{ count: number; token: number } | undefined>(undefined);
   const activeTierId = getCatalogoTierForCount(productCount).id;
@@ -330,7 +331,7 @@ export function PresenciaCatalogoLanding() {
                 <span className="font-serif italic text-[var(--accent-soft)]">cantidad de productos</span>
               </h2>
               <p className="mt-4 text-[0.92rem] leading-7 text-[var(--cream-soft)]/65">
-                Empieza gratis. Sube de plan cuando tu catálogo crece. Planes de pago: 12 meses de servicio, después tú decides.
+                Empieza gratis. Sube de plan cuando tu catálogo crece. Planes de pago: setup {CATALOGO_SETUP_LABEL} · 12 meses de servicio, después tú decides.
               </p>
             </div>
 
@@ -436,7 +437,7 @@ export function PresenciaCatalogoLanding() {
                   <ul className="mt-3 space-y-2 text-[0.84rem] text-[var(--cream-soft)]/72">
                     <li>Ver productos en web</li>
                     <li>Consultar por WhatsApp</li>
-                    <li>Desde S/0 · hasta S/199/mes</li>
+                    <li>Desde S/0 · hasta S/159/mes</li>
                   </ul>
                 </div>
                 <div className="rounded-2xl border border-[var(--line)] p-5">

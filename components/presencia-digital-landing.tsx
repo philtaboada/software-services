@@ -245,7 +245,7 @@ const FAQ = [
   },
   {
     q: "¿Qué es Presencia Catálogo?",
-    a: "Catálogo web inteligente y fácil de rellenar: tus productos en la web, consultas por WhatsApp, sin carrito. Gratis hasta 10 productos; planes de pago hasta 1.000 (S/99–199/mes). Toda la información está en la página Presencia Catálogo.",
+    a: "Catálogo web inteligente y fácil de rellenar: tus productos en la web, consultas por WhatsApp, sin carrito. Gratis hasta 10 productos; planes de pago hasta 2.000 (S/69–159/mes). Toda la información está en la página Presencia Catálogo.",
   },
   {
     q: "¿Qué es Presencia Tienda?",
@@ -868,7 +868,7 @@ export function PresenciaDigitalLanding() {
 
             <CatalogoPriceSlider
               embedded
-              defaultCount={125}
+              defaultCount={200}
               showCta
               showDetailLink
               className="relative z-[1] mt-8 border-t border-[var(--line)] pt-8"

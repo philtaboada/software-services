@@ -44,7 +44,7 @@ export function CatalogoPriceSlider({
   showCta = true,
   embedded = false,
   showDetailLink = false,
-  defaultCount = 125,
+  defaultCount = 200,
 }: CatalogoPriceSliderProps) {
   const sliderId = useId();
   const [value, setValue] = useState(() => clampCount(defaultCount));

@@ -14,6 +14,9 @@ export type CatalogoTier = {
   cta: string;
 };
 
+export const CATALOGO_SETUP_FEE = "350";
+export const CATALOGO_SETUP_LABEL = "S/350";
+
 export const CATALOGO_TIERS: readonly CatalogoTier[] = [
   {
     id: "gratis",
@@ -29,10 +32,10 @@ export const CATALOGO_TIERS: readonly CatalogoTier[] = [
   {
     id: "start",
     name: "Start",
-    price: "99",
-    priceLabel: "S/99",
-    products: 125,
-    productsLabel: "125",
+    price: "69",
+    priceLabel: "S/69",
+    products: 200,
+    productsLabel: "200",
     note: "12 meses · diseño Wavys",
     highlight: false,
     cta: "Quiero Start",
@@ -40,8 +43,8 @@ export const CATALOGO_TIERS: readonly CatalogoTier[] = [
   {
     id: "grow",
     name: "Grow",
-    price: "169",
-    priceLabel: "S/169",
+    price: "99",
+    priceLabel: "S/99",
     products: 500,
     productsLabel: "500",
     note: "12 meses · catálogo amplio",
@@ -51,10 +54,10 @@ export const CATALOGO_TIERS: readonly CatalogoTier[] = [
   {
     id: "max",
     name: "Max",
-    price: "199",
-    priceLabel: "S/199",
-    products: 1000,
-    productsLabel: "1.000",
+    price: "159",
+    priceLabel: "S/159",
+    products: 2000,
+    productsLabel: "2.000",
     note: "12 meses · máximo volumen",
     highlight: false,
     cta: "Quiero Max",
@@ -63,9 +66,9 @@ export const CATALOGO_TIERS: readonly CatalogoTier[] = [
 
 /** Tier según cantidad de productos que el cliente indica */
 export function getCatalogoTierForCount(count: number): CatalogoTier {
-  const n = Math.max(1, Math.min(1000, Math.round(count)));
+  const n = Math.max(1, Math.min(2000, Math.round(count)));
   if (n <= 10) return CATALOGO_TIERS[0];
-  if (n <= 125) return CATALOGO_TIERS[1];
+  if (n <= 200) return CATALOGO_TIERS[1];
   if (n <= 500) return CATALOGO_TIERS[2];
   return CATALOGO_TIERS[3];
 }
@@ -87,13 +90,13 @@ export function catalogoWhatsappHrefForCount(count: number): string {
 }
 
 export const CATALOGO_SLIDER_MIN = 1;
-export const CATALOGO_SLIDER_MAX = 1000;
-export const CATALOGO_TIER_MARKS = [10, 125, 500, 1000] as const;
+export const CATALOGO_SLIDER_MAX = 2000;
+export const CATALOGO_TIER_MARKS = [10, 200, 500, 2000] as const;
 
 export const CATALOGO_SUMMARY_ITEMS = [
   "Panel sencillo — agrega productos en minutos",
   "Consulta por WhatsApp · sin carrito ni comisiones",
-  "Gratis 10 productos · planes hasta 1.000",
+  "Gratis 10 productos · planes hasta 2.000",
 ] as const;
 
 export const CATALOGO_INCLUDES = [
@@ -130,7 +133,7 @@ export const CATALOGO_FEATURES = [
   {
     num: "05",
     title: "Crece con tu negocio",
-    body: "Empieza gratis con 10 productos y sube de plan cuando tu catálogo crece — hasta 1.000 productos.",
+    body: "Empieza gratis con 10 productos y sube de plan cuando tu catálogo crece — hasta 2.000 productos.",
   },
   {
     num: "06",
@@ -157,12 +160,12 @@ export const CATALOGO_FAQ = [
     a: "Sí. Si tu catálogo crece, subes de Start a Grow o Max. Te ayudamos con la migración sin perder lo que ya cargaste.",
   },
   {
-    q: "¿Incluye sesión de fotos?",
-    a: "No. Subes tus fotos de producto; nosotros las optimizamos para web. Para fotos del negocio incluidas, mira el plan Presencia.",
-  },
-  {
     q: "¿Cuánto tarda la entrega?",
     a: "Plan Gratis: activación rápida. Planes de pago: 7–10 días hábiles desde brief confirmado y primer pago.",
+  },
+  {
+    q: "¿Hay costo de setup?",
+    a: "Planes de pago incluyen un setup inicial de S/350 (diseño, build y publicación del catálogo). El plan Gratis no tiene setup.",
   },
 ] as const;
 
