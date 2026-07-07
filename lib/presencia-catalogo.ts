@@ -12,6 +12,7 @@ export type CatalogoTier = {
   note: string;
   highlight: boolean;
   cta: string;
+  includesDomain: boolean;
 };
 
 export const CATALOGO_SETUP_FEE = "350";
@@ -28,6 +29,7 @@ export const CATALOGO_TIERS: readonly CatalogoTier[] = [
     note: "Para arrancar sin costo",
     highlight: false,
     cta: "Empezar gratis",
+    includesDomain: false,
   },
   {
     id: "start",
@@ -36,9 +38,10 @@ export const CATALOGO_TIERS: readonly CatalogoTier[] = [
     priceLabel: "S/69",
     products: 200,
     productsLabel: "200",
-    note: "12 meses · diseño Wavys",
+    note: "12 meses · diseño Wavys · sin dominio propio",
     highlight: false,
     cta: "Quiero Start",
+    includesDomain: false,
   },
   {
     id: "grow",
@@ -47,9 +50,10 @@ export const CATALOGO_TIERS: readonly CatalogoTier[] = [
     priceLabel: "S/99",
     products: 500,
     productsLabel: "500",
-    note: "12 meses · catálogo amplio",
+    note: "12 meses · catálogo amplio · dominio incluido",
     highlight: true,
     cta: "Quiero Grow",
+    includesDomain: true,
   },
   {
     id: "max",
@@ -58,9 +62,10 @@ export const CATALOGO_TIERS: readonly CatalogoTier[] = [
     priceLabel: "S/159",
     products: 2000,
     productsLabel: "2.000",
-    note: "12 meses · máximo volumen",
+    note: "12 meses · máximo volumen · dominio incluido",
     highlight: false,
     cta: "Quiero Max",
+    includesDomain: true,
   },
 ] as const;
 
@@ -104,7 +109,8 @@ export const CATALOGO_INCLUDES = [
   "Panel sencillo — agrega productos en minutos",
   "Categorías, búsqueda y ficha de producto",
   "Consultar por WhatsApp (sin carrito)",
-  "Dominio, hosting, SSL y SEO técnico",
+  "Dominio propio (Grow y Max) · hosting y SSL en todos los planes de pago",
+  "SEO técnico en planes de pago",
   "Métricas del negocio",
   "Soporte mensual",
 ] as const;
@@ -149,7 +155,11 @@ export const CATALOGO_FAQ = [
   },
   {
     q: "¿Qué incluye el plan Gratis?",
-    a: "Hasta 10 productos, catálogo web básico y consultas por WhatsApp. Ideal para probar antes de subir a un plan de pago con dominio propio y diseño editorial completo.",
+    a: "Hasta 10 productos, catálogo web básico y consultas por WhatsApp. Ideal para probar antes de subir a un plan de pago.",
+  },
+  {
+    q: "¿El plan Start incluye dominio propio?",
+    a: "No. Start publica en link Wavys con hosting y SSL. Dominio propio (año 1) incluido desde Grow y Max.",
   },
   {
     q: "¿Cómo agrego productos?",
