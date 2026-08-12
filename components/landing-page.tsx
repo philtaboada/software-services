@@ -1,1305 +1,592 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { CtaBand } from "@/components/cta-band";
+import { FaqList } from "@/components/faq-list";
+import { HeroFlow } from "@/components/hero-flow";
+import { ArrowIcon, ArrowUpRight } from "@/components/icons";
+import { CASES, PAINS, PROCESS, SERVICES } from "@/lib/content";
+import { BOOKING_HREF, STACK } from "@/lib/site";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-type Theme = "dark" | "light";
-
-const THEME_STORAGE_KEY = "wavys-theme";
-
-function readInitialTheme(): Theme {
-  if (typeof document === "undefined") return "dark";
-  const attr = document.documentElement.getAttribute("data-theme");
-  return attr === "light" ? "light" : "dark";
-}
-
-const CONTACT_EMAIL_HREF =
-  "mailto:hola@wavystechnologies.com?subject=Quiero%20una%20propuesta%20para%20mi%20proyecto";
-
-/** Cal.com: reserva de videollamada (Meet u otro enlace que configures en el evento). */
-const SCHEDULE_MEET_HREF = "https://cal.com/wavys-call/30min" as const;
-
-const NAV_LINKS = [
-  { href: "#trabajo", label: "Trabajo" },
-  { href: "#servicios", label: "Servicios" },
-  { href: "#proceso", label: "Proceso" },
-  { href: "#faq", label: "FAQ" },
-] as const;
-
-const MARQUEE_ITEMS = [
-  "Webs con presencia",
-  "Apps que se usan",
-  "Software a medida",
-  "Dirección visual",
-  "Base técnica",
-  "Sistemas internos",
-  "Automatización",
-  "Performance real",
-] as const;
-
-const CAPABILITIES = [
-  {
-    code: "01",
-    title: "Webs con narrativa",
-    body: "Landings, sites corporativos y páginas de venta con dirección visual firme y copy que entra rápido.",
-    tag: "web",
-    accent: "accent",
-  },
-  {
-    code: "02",
-    title: "Apps que se usan",
-    body: "Flujos móviles claros, sobrios y medibles. Productos que se sienten cómodos desde la primera sesión.",
-    tag: "mobile",
-    accent: "lime",
-  },
-  {
-    code: "03",
-    title: "Sistemas que ordenan",
-    body: "Paneles, automatizaciones y software interno para equipos que ya no pueden operar sobre mensajes sueltos.",
-    tag: "systems",
-    accent: "teal",
-  },
-  {
-    code: "04",
-    title: "Identidad digital",
-    body: "Tipografía, color, ritmo y atmósfera traducidos a una interfaz coherente y escalable.",
-    tag: "brand",
-    accent: "accent",
-  },
-] as const;
-
-const PROCESS_STEPS = [
-  {
-    id: "01",
-    kicker: "diagnóstico",
-    title: "Leemos el cuello de botella",
-    body: "Antes de diseñar nada aterrizamos qué está frenando el avance: claridad comercial, experiencia o fricción operativa.",
-  },
-  {
-    id: "02",
-    kicker: "dirección",
-    title: "Definimos una dirección que aguante",
-    body: "Estructuramos mensaje, atmósfera y sistema para que la primera versión ya nazca con peso y continuidad.",
-  },
-  {
-    id: "03",
-    kicker: "construcción",
-    title: "Construimos con detalle y control",
-    body: "Diseño, desarrollo, interacción y performance resueltos con una misma mano para que todo se sienta coherente.",
-  },
-  {
-    id: "04",
-    kicker: "entrega",
-    title: "Entregamos base y siguiente jugada",
-    body: "No solo lanzamos. Dejamos claro qué conviene hacer después para que la siguiente fase no llegue a ciegas.",
-  },
-] as const;
-
-const NUMBERS = [
-  { value: 120, suffix: "+", label: "proyectos entregados" },
-  { value: 98, suffix: "%", label: "ratio de satisfacción" },
-  { value: 3, suffix: "x", label: "conversión promedio" },
-  { value: 7, suffix: "", label: "industrias activas" },
-] as const;
-
-const WORK_ITEMS = [
-  {
-    slug: "la-alcoba",
-    client: "La Alcoba",
-    title: "Primera web: experiencia gastronómica, carta y reservas en una sola narrativa",
-    year: "2024",
-    tag: "web",
-    image: "/images/portfolio-la-alcoba.png",
-    demoHref: "https://restaurant-code.vercel.app/",
-  },
-  {
-    slug: "inmobiliaria-fabre",
-    client: "Inmobiliaria Fabre",
-    title: "Sitio inmobiliario con foco en propiedades y contacto directo con el cliente",
-    year: "2025",
-    tag: "web",
-    image: "/images/portfolio-inmobiliaria-fabre.png",
-    demoHref: "https://www.inmobiliariafabre.com/",
-  },
-  {
-    slug: "wavys-technologies",
-    client: "Wavys Technologies",
-    title: "Web corporativa del estudio: mensaje, servicios y conversión en un solo flujo",
-    year: "2025",
-    tag: "web · brand",
-    image: "/images/portfolio-wavys-technologies.png",
-    demoHref: "https://wavys-technologies.com/",
-  },
-  {
-    slug: "jlh-seguros",
-    client: "JLH Corredores de Seguros",
-    title: "Portal de correduría: seguros, cotización y confianza para empresas y familias",
-    year: "2025",
-    tag: "web",
-    image: "/images/portfolio-jlh-seguros.png",
-    demoHref: "https://www.jlhcorredoresdeseguros.com/",
-  },
-] as const;
-
-const FAQ_ITEMS = [
-  {
-    q: "¿En cuánto tiempo entregáis un proyecto?",
-    a: "Depende del alcance: una landing estratégica entre 3 y 5 semanas, una web corporativa entre 5 y 8, un producto o sistema a medida arranca desde 8 semanas. Antes de arrancar siempre hay una fase de encuadre con tiempos claros.",
-  },
-  {
-    q: "¿Trabajáis con stacks ya existentes?",
-    a: "Sí. Entramos sobre Next.js, React Native, NestJS, Django, PostgreSQL, Supabase o lo que sostenga tu stack. Si hay deuda técnica pesada proponemos un plan progresivo, no un reinicio brusco.",
-  },
-  {
-    q: "¿Solo diseñáis o también desarrolláis?",
-    a: "Ambas cosas con la misma mano. La dirección visual, el copy, la interacción y la ingeniería salen del mismo equipo para que la ejecución no pierda intención por el camino.",
-  },
-  {
-    q: "¿Cómo es el modelo de colaboración?",
-    a: "Proyecto cerrado por fases o retainer mensual para producto continuo. Siempre con un punto de contacto directo, entregas semanales y un tablero compartido donde ves el avance real.",
-  },
-  {
-    q: "¿Dónde están basados?",
-    a: "España y Latinoamérica. Trabajamos en remoto con equipos de toda Iberolatam y hacemos presencial en Lima cuando el proyecto lo pide.",
-  },
-] as const;
-
-function ArrowIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="m13 5 7 7-7 7" />
-    </svg>
-  );
-}
-
-function ArrowUpRight({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M7 17 17 7" />
-      <path d="M8 7h9v9" />
-    </svg>
-  );
-}
-
-function MoonIcon() {
-  return (
-    <svg
-      className="icon-moon"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
-    </svg>
-  );
-}
-
-function SunIcon() {
-  return (
-    <svg
-      className="icon-sun"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2" />
-      <path d="M12 20v2" />
-      <path d="m4.93 4.93 1.41 1.41" />
-      <path d="m17.66 17.66 1.41 1.41" />
-      <path d="M2 12h2" />
-      <path d="M20 12h2" />
-      <path d="m6.34 17.66-1.41 1.41" />
-      <path d="m19.07 4.93-1.41 1.41" />
-    </svg>
-  );
-}
-
-function WordMask({
-  children,
-  className = "",
-}: {
-  children: string;
-  className?: string;
-}) {
-  return (
-    <span className={`word-mask ${className}`} data-word-mask>
-      <span data-word-inner>{children}</span>
-    </span>
-  );
-}
-
-type AccentTone = "accent" | "lime" | "teal";
-
-function accentClass(tone: AccentTone): string {
-  if (tone === "lime") return "text-[var(--lime)]";
-  if (tone === "teal") return "text-[var(--teal)]";
-  return "text-[var(--accent)]";
-}
+const PROOF = ["La Alcoba", "Inmobiliaria Fabre", "JLH Corredores"] as const;
 
 export function LandingPage() {
   const pageRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
-  const navRef = useRef<HTMLDivElement>(null);
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [theme, setTheme] = useState<Theme>("dark");
-
-  useEffect(() => {
-    setTheme(readInitialTheme());
-  }, []);
-
-  const toggleTheme = (): void => {
-    const next: Theme = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    document.documentElement.setAttribute("data-theme", next);
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, next);
-    } catch {
-      /* ignore storage errors */
-    }
-    ScrollTrigger.refresh();
-  };
 
   useGSAP(
     (_context, contextSafe) => {
-      const reduceMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-
-      if (reduceMotion) {
-        gsap.set("[data-word-inner]", { y: 0 });
-        gsap.set("[data-reveal]", { autoAlpha: 1, y: 0 });
-        gsap.set("[data-hero-eyebrow], [data-hero-sub], [data-hero-cta], [data-hero-card]", { autoAlpha: 1, y: 0 });
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduce) {
+        gsap.set(".line-mask > span", { y: 0 });
+        gsap.set("[data-reveal], [data-hero-mark]", { autoAlpha: 1, y: 0, x: 0 });
         return;
       }
 
-      const intro = gsap.timeline({
-        defaults: { ease: "power3.out" },
-        delay: 0.1,
+      gsap.from("[data-hero-kicker]", { autoAlpha: 0, y: 16, duration: 0.6, delay: 0.15 });
+      gsap.to(".line-mask > span", {
+        y: 0,
+        duration: 1.05,
+        stagger: 0.08,
+        ease: "expo.out",
+        delay: 0.2,
+      });
+      gsap.from("[data-hero-sub], [data-hero-cta], [data-hero-proof]", {
+        autoAlpha: 0,
+        y: 18,
+        duration: 0.7,
+        stagger: 0.08,
+        delay: 0.85,
+      });
+      gsap.from("[data-hero-mark]", {
+        autoAlpha: 0,
+        x: 36,
+        scale: 0.96,
+        duration: 1.15,
+        delay: 0.28,
+        ease: "expo.out",
       });
 
-      intro
-        .from("[data-nav-item]", {
+      gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
+        gsap.from(el, {
           autoAlpha: 0,
-          y: -14,
-          stagger: 0.05,
-          duration: 0.5,
-        })
-        .from(
-          "[data-hero-eyebrow]",
-          { autoAlpha: 0, y: 18, duration: 0.5 },
-          "-=0.25",
-        )
-        .to(
-          "[data-hero-line] [data-word-inner]",
-          {
-            y: 0,
-            duration: 1,
-            stagger: 0.06,
-            ease: "expo.out",
-          },
-          "-=0.2",
-        )
-        .from(
-          "[data-hero-sub]",
-          { autoAlpha: 0, y: 20, duration: 0.6 },
-          "-=0.6",
-        )
-        .from(
-          "[data-hero-cta]",
-          { autoAlpha: 0, y: 14, stagger: 0.08, duration: 0.5 },
-          "-=0.35",
-        )
-        .from(
-          "[data-hero-card]",
-          { autoAlpha: 0, y: 24, scale: 0.96, stagger: 0.08, duration: 0.7 },
-          "-=0.4",
-        );
-
-      gsap.utils
-        .toArray<HTMLElement>("[data-reveal]")
-        .forEach((el) => {
-          gsap.from(el, {
-            autoAlpha: 0,
-            y: 36,
-            duration: 0.9,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: el,
-              start: "top 85%",
-              once: true,
-            },
-          });
+          y: 40,
+          duration: 0.9,
+          ease: "power3.out",
+          scrollTrigger: { trigger: el, start: "top 86%", once: true },
         });
+      });
 
-      gsap.utils
-        .toArray<HTMLElement>("[data-reveal-words] [data-word-inner]")
-        .forEach((el) => {
-          gsap.fromTo(
-            el,
-            { y: "110%" },
-            {
-              y: 0,
-              duration: 0.9,
-              ease: "expo.out",
-              scrollTrigger: {
-                trigger: el.closest("[data-reveal-words]") as HTMLElement,
-                start: "top 80%",
-                once: true,
-              },
-            },
-          );
-        });
-
-      const horizontalSection = pageRef.current?.querySelector<HTMLElement>(
-        "[data-process-section]",
-      );
-      const horizontalTrack = pageRef.current?.querySelector<HTMLElement>(
-        "[data-process-track]",
-      );
-      if (horizontalSection && horizontalTrack && window.innerWidth >= 1024) {
-        const steps = horizontalTrack.querySelectorAll<HTMLElement>(
-          "[data-process-step]",
-        );
-        const getDistance = (): number =>
-          horizontalTrack.scrollWidth - window.innerWidth;
-        const horizontalTween = gsap.to(horizontalTrack, {
-          x: () => -getDistance(),
-          ease: "none",
+      const workSection = pageRef.current?.querySelector<HTMLElement>("[data-work-pin]");
+      const clips = pageRef.current?.querySelectorAll<HTMLElement>(".work-clip:not([data-first])");
+      if (workSection && clips && clips.length && window.innerWidth >= 1024) {
+        const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: horizontalSection,
+            trigger: workSection,
             pin: true,
             scrub: 1,
             start: "top top",
-            end: () => `+=${getDistance()}`,
-            invalidateOnRefresh: true,
+            end: () => `+=${window.innerHeight * clips.length}`,
           },
         });
-        steps.forEach((step) => {
-          gsap.from(step.querySelectorAll("[data-process-reveal]"), {
-            autoAlpha: 0,
-            y: 40,
-            duration: 0.9,
-            stagger: 0.08,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: step,
-              containerAnimation: horizontalTween,
-              start: "left right",
-              once: true,
-            },
-          });
+        clips.forEach((clip) => {
+          tl.fromTo(
+            clip,
+            { clipPath: "inset(100% 0 0 0)" },
+            { clipPath: "inset(0% 0 0 0)", duration: 1, ease: "none" },
+          );
+        });
+      } else {
+        gsap.set(".work-clip", { clipPath: "inset(0 0 0 0)" });
+      }
+
+      const path = pageRef.current?.querySelector<SVGPathElement>("[data-wave-path]");
+      if (path) {
+        const length = path.getTotalLength();
+        gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+        gsap.to(path, {
+          strokeDashoffset: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "[data-process]",
+            start: "top 75%",
+            end: "bottom 55%",
+            scrub: 0.6,
+          },
         });
       }
 
-      gsap.utils
-        .toArray<HTMLElement>("[data-counter]")
-        .forEach((el) => {
-          const target = Number(el.dataset.target ?? "0");
-          const suffix = el.dataset.suffix ?? "";
-          const obj = { val: 0 };
-          gsap.to(obj, {
-            val: target,
-            duration: 1.8,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: el,
-              start: "top 85%",
-              once: true,
-            },
-            onUpdate: () => {
-              el.textContent = `${Math.round(obj.val)}${suffix}`;
-            },
-          });
-        });
-
-      gsap.utils
-        .toArray<HTMLElement>("[data-parallax-img]")
-        .forEach((el) => {
-          gsap.fromTo(
-            el,
-            { yPercent: -8, scale: 1.08 },
-            {
-              yPercent: 8,
-              scale: 1.0,
-              ease: "none",
-              scrollTrigger: {
-                trigger: el,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1.2,
-              },
-            },
-          );
-        });
-
-      const onScroll = () => {
-        if (!navRef.current) return;
-        if (window.scrollY > 40) {
-          navRef.current.dataset.scrolled = "true";
-        } else {
-          navRef.current.dataset.scrolled = "false";
-        }
-      };
-      onScroll();
-      window.addEventListener("scroll", onScroll, { passive: true });
-
       const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-      const dotPos = { x: mouse.x, y: mouse.y };
-      const ringPos = { x: mouse.x, y: mouse.y };
-
-      const onPointerMove = (event: PointerEvent) => {
+      const dot = { x: mouse.x, y: mouse.y };
+      const ring = { x: mouse.x, y: mouse.y };
+      const onMove = (event: PointerEvent) => {
         mouse.x = event.clientX;
         mouse.y = event.clientY;
       };
-      window.addEventListener("pointermove", onPointerMove);
-
+      window.addEventListener("pointermove", onMove);
       const ticker = gsap.ticker.add(() => {
-        dotPos.x += (mouse.x - dotPos.x) * 0.35;
-        dotPos.y += (mouse.y - dotPos.y) * 0.35;
-        ringPos.x += (mouse.x - ringPos.x) * 0.12;
-        ringPos.y += (mouse.y - ringPos.y) * 0.12;
+        dot.x += (mouse.x - dot.x) * 0.35;
+        dot.y += (mouse.y - dot.y) * 0.35;
+        ring.x += (mouse.x - ring.x) * 0.12;
+        ring.y += (mouse.y - ring.y) * 0.12;
         if (dotRef.current) {
-          dotRef.current.style.transform = `translate(${dotPos.x}px, ${dotPos.y}px) translate(-50%, -50%)`;
+          dotRef.current.style.transform = `translate(${dot.x}px, ${dot.y}px) translate(-50%, -50%)`;
         }
         if (ringRef.current) {
-          ringRef.current.style.transform = `translate(${ringPos.x}px, ${ringPos.y}px) translate(-50%, -50%)`;
+          ringRef.current.style.transform = `translate(${ring.x}px, ${ring.y}px) translate(-50%, -50%)`;
         }
       });
 
-      const magneticEls =
-        pageRef.current?.querySelectorAll<HTMLElement>("[data-magnetic]") ?? [];
-
-      const magneticHandlers: Array<() => void> = [];
-
-      magneticEls.forEach((el) => {
-        const strength = Number(el.dataset.magneticStrength ?? "24");
-        const onMove = contextSafe!((event: PointerEvent) => {
+      const magnetics = pageRef.current?.querySelectorAll<HTMLElement>("[data-magnetic]") ?? [];
+      const cleanups: Array<() => void> = [];
+      magnetics.forEach((el) => {
+        const onMag = contextSafe!((event: PointerEvent) => {
           const rect = el.getBoundingClientRect();
-          const relX = event.clientX - (rect.left + rect.width / 2);
-          const relY = event.clientY - (rect.top + rect.height / 2);
           gsap.to(el, {
-            x: (relX / rect.width) * strength,
-            y: (relY / rect.height) * strength,
-            duration: 0.5,
+            x: ((event.clientX - (rect.left + rect.width / 2)) / rect.width) * 18,
+            y: ((event.clientY - (rect.top + rect.height / 2)) / rect.height) * 18,
+            duration: 0.45,
             ease: "power3.out",
           });
         });
         const onLeave = contextSafe!(() => {
-          gsap.to(el, {
-            x: 0,
-            y: 0,
-            duration: 0.7,
-            ease: "elastic.out(1, 0.4)",
-          });
+          gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.4)" });
+          if (ringRef.current) ringRef.current.dataset.active = "false";
         });
         const onEnter = () => {
-          if (ringRef.current) {
-            ringRef.current.dataset.active = "true";
-          }
+          if (ringRef.current) ringRef.current.dataset.active = "true";
         };
-        const onRingLeave = () => {
-          if (ringRef.current) {
-            ringRef.current.dataset.active = "false";
-          }
-        };
-        el.addEventListener("pointermove", onMove);
+        el.addEventListener("pointermove", onMag);
         el.addEventListener("pointerleave", onLeave);
         el.addEventListener("pointerenter", onEnter);
-        el.addEventListener("pointerleave", onRingLeave);
-        magneticHandlers.push(() => {
-          el.removeEventListener("pointermove", onMove);
+        cleanups.push(() => {
+          el.removeEventListener("pointermove", onMag);
           el.removeEventListener("pointerleave", onLeave);
           el.removeEventListener("pointerenter", onEnter);
-          el.removeEventListener("pointerleave", onRingLeave);
         });
       });
 
       return () => {
-        window.removeEventListener("scroll", onScroll);
-        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("pointermove", onMove);
         gsap.ticker.remove(ticker);
-        magneticHandlers.forEach((cleanup) => cleanup());
+        cleanups.forEach((fn) => fn());
       };
     },
     { scope: pageRef },
   );
 
-  const toggleFaq = (index: number): void => {
-    setOpenFaq((current) => (current === index ? null : index));
-  };
-
   return (
-    <main
-      ref={pageRef}
-      className="relative overflow-x-clip bg-[var(--background)] text-[var(--cream)]"
-    >
-      {/* ── CURSOR ── */}
-      <div ref={dotRef} className="cursor-dot" aria-hidden="true" />
-      <div
-        ref={ringRef}
-        data-active="false"
-        className="cursor-ring"
-        aria-hidden="true"
-      />
+    <div ref={pageRef} className="relative">
+      <div ref={dotRef} className="cursor-dot" aria-hidden />
+      <div ref={ringRef} data-active="false" className="cursor-ring" aria-hidden />
 
-      {/* ── NAV ── */}
-      <header
-        ref={navRef}
-        data-scrolled="false"
-        className="nav-root fixed inset-x-0 top-0 z-40 transition-[background-color,border-color] duration-500"
-      >
-        <div className="mx-auto grid max-w-[1440px] grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 px-5 py-5 sm:px-8 lg:px-12 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:gap-x-6">
-          <a
-            href="#top"
-            data-nav-item
-            className="group inline-flex min-w-0 max-w-full items-center gap-2 sm:gap-2.5 justify-self-start text-[0.72rem] font-bold uppercase tracking-[0.36em]"
-          >
-            <Image
-              src="/logo.png"
-              alt=""
-              width={36}
-              height={36}
-              className="h-9 w-auto shrink-0"
-              priority
-            />
-            <span className="min-w-0 truncate sm:whitespace-normal">
-              <span className="md:hidden">Wavys</span>
-              <span className="hidden md:inline">Wavys Technologies</span>
-            </span>
-            <sup className="shrink-0 text-[0.55rem] font-normal tracking-[0.2em] text-[var(--muted)]">
-              ES/LATAM
-            </sup>
-          </a>
-
-          <nav
-            aria-label="Navegación principal"
-            className="nav-pill hidden shrink-0 items-center justify-center gap-1 rounded-full p-1 md:flex md:justify-self-center"
-          >
-            {NAV_LINKS.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                data-nav-item
-                className="rounded-full px-4 py-1.5 text-[0.82rem] text-[var(--muted)] transition-colors duration-300 hover:text-[var(--foreground)]"
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
-
-          <div className="flex shrink-0 items-center justify-end justify-self-end gap-2 md:min-w-0 md:gap-2.5">
-            <button
-              type="button"
-              onClick={toggleTheme}
-              aria-label={
-                theme === "dark"
-                  ? "Activar modo claro"
-                  : "Activar modo oscuro"
-              }
-              data-nav-item
-              className="theme-toggle inline-flex h-10 w-10 shrink-0 aspect-square items-center justify-center"
-            >
-              <MoonIcon />
-              <SunIcon />
-            </button>
-            <a
-              href={SCHEDULE_MEET_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-nav-item
-              data-magnetic
-              data-magnetic-strength="16"
-              className="inline-flex h-10 shrink-0 items-center gap-2 rounded-full border border-[var(--accent)] bg-[var(--accent)] px-4 text-[0.78rem] font-semibold leading-none text-[var(--ink)] transition-colors duration-300 hover:bg-[var(--accent-bright)] sm:px-5 sm:text-[0.82rem]"
-            >
-              <span className="relative flex h-1.5 w-1.5 shrink-0">
-                <span className="absolute inset-0 rounded-full bg-[var(--ink)] opacity-60 animate-ping" />
-                <span className="relative h-1.5 w-1.5 rounded-full bg-[var(--ink)]" />
-              </span>
-              <span className="whitespace-nowrap">Agendar llamada</span>
-            </a>
-          </div>
+      <section id="top" className="relative min-h-[100svh] overflow-hidden">
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          <div className="absolute -bottom-24 left-[8%] h-72 w-[36rem] rounded-full bg-[var(--accent)]/18 blur-[110px]" />
+          <div className="absolute -bottom-10 right-[12%] h-64 w-[28rem] rounded-full bg-[var(--accent-soft)]/14 blur-[100px]" />
         </div>
-      </header>
-
-      {/* ═══════════════════ HERO ═══════════════════ */}
-      <section
-        id="top"
-        className="relative min-h-[100dvh] overflow-hidden pt-32 pb-20 sm:pt-36 lg:pt-40"
-      >
-        <div className="grid-bg pointer-events-none absolute inset-0" />
-        <div className="noise absolute inset-0" />
-
-        {/* Decorative corner marks */}
-        <div className="pointer-events-none absolute inset-x-5 top-24 flex items-center justify-between text-[0.62rem] font-mono uppercase tracking-[0.3em] text-[var(--muted-dim)] sm:inset-x-8 lg:inset-x-12">
-          <span>[ N 40.4168° / W 3.7038° ]</span>
-          <span className="hidden sm:block">estudio digital · est. 2020</span>
-        </div>
-
-        <div className="relative mx-auto flex max-w-[1440px] flex-col px-5 sm:px-8 lg:px-12">
-          <div className="max-w-[28rem]">
-            <p
-              data-hero-eyebrow
-              className="section-label"
-            >
-              Estudio · Diseño · Software
+        <div className="relative z-10 mx-auto grid min-h-[100svh] max-w-[1440px] items-center gap-10 px-5 pb-16 pt-28 sm:px-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-8 lg:px-12 lg:pb-10 lg:pt-24">
+          <div>
+            <p data-hero-kicker className="section-label">
+              Estudio · Lima · LatAm
             </p>
-          </div>
-
-          {/* Massive hero type */}
-          <h1
-            data-hero-line
-            className="relative mt-10 font-display font-medium uppercase leading-[0.82] tracking-[-0.055em] text-[clamp(3rem,14vw,12rem)] sm:mt-14 lg:mt-16"
-          >
-            <span className="block">
-              <WordMask>Diseño</WordMask>{" "}
-              <WordMask>que</WordMask>
-            </span>
-            <span className="block pl-[4vw] sm:pl-[8vw] lg:pl-[12vw]">
-              <span className="word-mask" data-word-mask>
-                <span data-word-inner className="font-serif italic text-[var(--accent)] font-normal lowercase">
-                  vende.
-                </span>
+            <h1 className="mt-6 max-w-[16ch] font-display text-[clamp(2.15rem,5.4vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.055em]">
+              <span className="line-mask">
+                <span>Software y diseño</span>
               </span>
-            </span>
-            <span className="block">
-              <WordMask>Software</WordMask>{" "}
-              <WordMask>que</WordMask>
-            </span>
-            <span className="block pl-[4vw] sm:pl-[8vw] lg:pl-[12vw]">
-              <span className="word-mask" data-word-mask>
-                <span data-word-inner className="font-serif italic text-[var(--cream-soft)] font-normal lowercase">
-                  sostiene.
-                </span>
+              <span className="line-mask">
+                <span>a medida para</span>
               </span>
-            </span>
-          </h1>
-
-          <div className="mt-16 grid gap-10 lg:mt-24 lg:grid-cols-[1.2fr_0.8fr] lg:items-end lg:gap-16">
+              <span className="line-mask">
+                <span className="text-[var(--accent)]">quien ya opera.</span>
+              </span>
+            </h1>
             <p
               data-hero-sub
-              className="max-w-[36rem] text-pretty text-[1.05rem] leading-8 text-[var(--cream-soft)]/75 sm:text-[1.15rem]"
+              className="mt-6 max-w-[32rem] text-pretty text-[1.05rem] leading-8 text-[var(--cream-soft)]/85 sm:text-[1.12rem]"
             >
-              Somos un estudio para negocios de España y Latinoamérica que ya
-              no quieren parecer improvisados. Diseñamos webs, apps y sistemas
-              con dirección visual firme y una base técnica que aguanta la
-              siguiente fase.
+              Webs, apps y sistemas internos para negocios con tracción en Perú y
+              LatAm. Dirección visual e ingeniería con la misma mano. IA solo
+              cuando aporta.
             </p>
-
-            <div className="flex flex-col items-start gap-4 sm:flex-row lg:justify-end">
+            <div data-hero-cta className="mt-9 flex flex-col items-start gap-3 sm:flex-row">
               <a
-                data-hero-cta
                 data-magnetic
-                href={SCHEDULE_MEET_HREF}
+                href={BOOKING_HREF}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary"
               >
-                <span>Agendar llamada</span>
+                <span>Agendar llamada 30 min</span>
                 <ArrowIcon className="h-4 w-4" />
               </a>
-              <a data-hero-cta href="#trabajo" className="btn-ghost">
-                <span>ver trabajo</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Floating context cards */}
-          <div className="mt-16 grid gap-4 sm:mt-20 sm:grid-cols-3 lg:mt-28">
-            <div
-              data-hero-card
-              className="card-outline rounded-2xl p-6"
-            >
-              <p className="eyebrow text-[var(--accent-soft)]">
-                filosofía
-              </p>
-              <p className="mt-4 font-display text-[1.35rem] font-medium leading-[1.2] tracking-[-0.02em]">
-                Menos adorno. Más intención <span className="font-serif italic text-[var(--cream-soft)]">en cada</span> decisión.
-              </p>
-            </div>
-            <div
-              data-hero-card
-              className="card-outline rounded-2xl p-6"
-            >
-              <p className="eyebrow text-[var(--accent-soft)]">
-                perfil cliente
-              </p>
-              <p className="mt-4 font-display text-[1.35rem] font-medium leading-[1.2] tracking-[-0.02em]">
-                Negocios que crecen y <span className="font-serif italic text-[var(--cream-soft)]">no</span> pueden seguir operando sobre parches.
-              </p>
-            </div>
-            <div
-              data-hero-card
-              className="card-outline rounded-2xl p-6"
-            >
-              <p className="eyebrow text-[var(--accent-soft)]">
-                entregable
-              </p>
-              <p className="mt-4 font-display text-[1.35rem] font-medium leading-[1.2] tracking-[-0.02em]">
-                Identidad, interfaz y sistema <span className="font-serif italic text-[var(--cream-soft)]">de una</span> misma mano.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom scroll indicator */}
-        <div className="pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[0.62rem] uppercase tracking-[0.3em] text-[var(--muted)] lg:flex">
-          <span>scroll</span>
-          <span className="h-8 w-px bg-[var(--muted-dim)]" />
-        </div>
-      </section>
-
-      {/* ═══════════════════ MARQUEE ═══════════════════ */}
-      <section className="relative border-y border-[var(--line)] bg-[var(--surface)] py-7 overflow-hidden">
-        <div className="marquee-track flex w-max items-center gap-10 whitespace-nowrap">
-          {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS, ...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map(
-            (item, index) => (
-              <div
-                key={`${item}-${index}`}
-                className="flex items-center gap-10 font-display text-[2rem] font-medium tracking-[-0.03em] sm:text-[2.5rem] lg:text-[3rem]"
-              >
-                <span className="text-[var(--cream)]">{item}</span>
-                <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--accent)]" />
-              </div>
-            ),
-          )}
-        </div>
-      </section>
-
-      {/* ═══════════════════ MANIFESTO ═══════════════════ */}
-      <section className="relative py-28 sm:py-36 lg:py-44">
-        <div className="mx-auto grid max-w-[1440px] gap-12 px-5 sm:px-8 lg:grid-cols-[0.3fr_1fr] lg:gap-20 lg:px-12">
-          <div data-reveal className="flex items-start gap-4">
-            <span className="section-label">Manifiesto</span>
-          </div>
-          <div>
-            <h2
-              data-reveal-words
-              className="font-display text-[clamp(2rem,5.5vw,4.8rem)] font-medium leading-[1.04] tracking-[-0.035em] text-balance"
-            >
-              <WordMask>No</WordMask>{" "}
-              <WordMask>vendemos</WordMask>{" "}
-              <span className="word-mask" data-word-mask>
-                <span data-word-inner className="font-serif italic text-[var(--accent)] font-normal lowercase">
-                  estética.
-                </span>
-              </span>{" "}
-              <WordMask>Vendemos</WordMask>{" "}
-              <WordMask>criterio</WordMask>{" "}
-              <WordMask>para</WordMask>{" "}
-              <WordMask>que</WordMask>{" "}
-              <WordMask>tu</WordMask>{" "}
-              <WordMask>pieza</WordMask>{" "}
-              <WordMask>digital</WordMask>{" "}
-              <WordMask>deje</WordMask>{" "}
-              <WordMask>de</WordMask>{" "}
-              <WordMask>competir</WordMask>{" "}
-              <WordMask>con</WordMask>{" "}
-              <span className="word-mask" data-word-mask>
-                <span data-word-inner className="font-serif italic text-[var(--lime)] font-normal lowercase">
-                  plantillas.
-                </span>
-              </span>
-            </h2>
-            <div
-              data-reveal
-              className="mt-14 grid max-w-[48rem] gap-10 lg:grid-cols-2"
-            >
-              <p className="text-pretty text-[1.05rem] leading-8 text-[var(--cream-soft)]/70">
-                Mezclamos dirección visual, escritura clara e ingeniería sobria
-                en un mismo entregable. Un solo equipo, un solo tono, un solo
-                resultado. Nada de handoffs rotos entre agencia, copy y
-                desarrollador freelance.
-              </p>
-              <p className="text-pretty text-[1.05rem] leading-8 text-[var(--cream-soft)]/70">
-                Trabajamos para negocios que ya tienen tracción y necesitan
-                dejar de improvisar. Si es tu primer experimento, no somos
-                nosotros. Si ya facturas y necesitas verte al nivel, sí.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════ CAPABILITIES ═══════════════════ */}
-      <section id="servicios" className="relative py-24 sm:py-32 lg:py-36">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
-            <div data-reveal>
-              <p className="section-label">Capacidades</p>
-              <h2 className="mt-6 font-display text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.05] tracking-[-0.035em] text-balance max-w-[20ch]">
-                Un equipo, cuatro <span className="font-serif italic text-[var(--accent)] font-normal">territorios.</span>
-              </h2>
+              <Link href="/trabajo" className="btn-ghost">
+                Ver el trabajo
+              </Link>
             </div>
             <p
-              data-reveal
-              className="max-w-[28rem] text-pretty text-[1rem] leading-7 text-[var(--cream-soft)]/60"
+              data-hero-proof
+              className="mt-8 text-[0.78rem] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]"
             >
-              Webs, apps y software interno salen con la misma dirección visual
-              y la misma lógica de sistema. Sin saltos entre pieza y pieza.
+              {PROOF.join(" · ")}
             </p>
           </div>
+          <HeroFlow />
+        </div>
+      </section>
 
-          <div className="mt-16 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {CAPABILITIES.map((item) => (
+      <section aria-label="Clientes" className="border-y border-[var(--line)] py-8">
+        <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-4 px-5 sm:px-8 lg:px-12">
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-[var(--muted)]">
+            En producción
+          </p>
+          <ul className="flex flex-wrap gap-x-8 gap-y-2 text-[0.95rem] text-[var(--cream-soft)]/80">
+            {PROOF.map((name) => (
+              <li key={name} className="font-display font-semibold tracking-[-0.02em]">
+                {name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section id="problema" className="relative py-24 sm:py-28">
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div data-reveal className="max-w-[36rem]">
+            <p className="section-label">El cuello de botella</p>
+            <h2 className="mt-5 font-display text-[clamp(1.9rem,4.5vw,3.4rem)] font-bold leading-[1.06] tracking-[-0.045em]">
+              Tres dolores. Un outcome: que el digital deje de frenar el negocio.
+            </h2>
+          </div>
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
+            {PAINS.map((pain, index) => (
               <article
-                key={item.code}
+                key={pain.title}
                 data-reveal
-                className="card-outline group relative flex min-h-[22rem] flex-col justify-between rounded-[1.5rem] p-7"
+                className="border-t border-[var(--line-strong)] pt-6"
               >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-[var(--muted)]">
-                    [{item.code}]
-                  </span>
-                  <span
-                    className={`font-mono text-[0.72rem] uppercase tracking-[0.24em] ${accentClass(item.accent as AccentTone)}`}
-                  >
-                    {item.tag}
-                  </span>
-                </div>
-                <div className="mt-12">
-                  <h3 className="font-display text-[1.7rem] font-medium leading-[1.1] tracking-[-0.03em]">
-                    {item.title}
-                  </h3>
-                  <p className="mt-4 text-[0.95rem] leading-7 text-[var(--cream-soft)]/60">
-                    {item.body}
-                  </p>
-                  <div className="mt-8 flex items-center gap-2 text-[0.8rem] font-medium text-[var(--cream)] opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                    <span>ver detalle</span>
-                    <ArrowUpRight className="h-3.5 w-3.5" />
-                  </div>
-                </div>
+                <p className="font-mono text-[0.7rem] uppercase tracking-[0.24em] text-[var(--accent)]">
+                  0{index + 1}
+                </p>
+                <h3 className="mt-4 font-display text-[1.35rem] font-semibold tracking-[-0.03em]">
+                  {pain.title}
+                </h3>
+                <p className="mt-4 text-[0.95rem] leading-7 text-[var(--cream-soft)]/65">
+                  {pain.body}
+                </p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════ PROCESS — HORIZONTAL PIN ═══════════════════ */}
-      <section
-        id="proceso"
-        data-process-section
-        className="relative min-h-[60vh] overflow-hidden border-y border-[var(--line)] bg-[var(--surface)] lg:h-screen"
-      >
-        <div className="flex h-full flex-col">
-          <div className="mx-auto flex w-full max-w-[1440px] items-end justify-between gap-6 px-5 pt-12 sm:px-8 lg:px-12 lg:pt-16">
-            <div data-reveal>
-              <p className="section-label">Proceso</p>
-              <h2 className="mt-6 font-display text-[clamp(1.8rem,4.5vw,3.4rem)] font-medium leading-[1.05] tracking-[-0.035em] max-w-[20ch]">
-                Cuatro movimientos para que nada quede al <span className="font-serif italic text-[var(--accent)] font-normal">azar.</span>
+      <section id="servicios" className="relative py-24 sm:py-28">
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div data-reveal className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p className="section-label">Servicios</p>
+              <h2 className="mt-5 max-w-[16ch] font-display text-[clamp(1.9rem,4.5vw,3.6rem)] font-bold leading-[1.06] tracking-[-0.045em]">
+                Cuatro territorios. Una sola ola.
               </h2>
             </div>
-            <p
-              data-reveal
-              className="hidden max-w-[18rem] text-[0.9rem] leading-6 text-[var(--cream-soft)]/55 lg:block"
+            <Link
+              href="/servicios"
+              className="inline-flex min-h-11 items-center gap-2 text-[0.85rem] text-[var(--cream-soft)]/70 hover:text-[var(--cream)]"
             >
-              Cada fase tiene un entregable definido y un punto de decisión
-              claro. Sabes qué recibes y cuándo.
-            </p>
+              Ver oferta <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
-
-          <div
-            data-process-track
-            className="mt-12 flex flex-1 items-center gap-6 px-5 pb-16 sm:px-8 lg:mt-20 lg:gap-8 lg:px-12 lg:pb-0"
-          >
-            {PROCESS_STEPS.map((step, idx) => (
-              <article
-                key={step.id}
-                data-process-step
-                className="card-outline relative flex min-h-[22rem] w-[86vw] shrink-0 flex-col justify-between rounded-[1.75rem] p-8 sm:w-[60vw] lg:w-[30rem] lg:min-h-[28rem] lg:p-10"
-              >
-                <div className="flex items-start justify-between">
-                  <span
-                    data-process-reveal
-                    className="font-display text-[5rem] font-medium leading-none tracking-[-0.06em] text-[var(--cream-soft)]/15 lg:text-[7rem]"
-                  >
-                    {step.id}
-                  </span>
-                  <span
-                    data-process-reveal
-                    className={`dot-accent ${idx % 2 === 0 ? "bg-[var(--accent)]" : "bg-[var(--lime)]"}`}
-                    style={{
-                      background:
-                        idx % 2 === 0 ? "var(--accent)" : "var(--lime)",
-                    }}
-                  >
-                    →
-                  </span>
-                </div>
-                <div>
-                  <p
-                    data-process-reveal
-                    className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-[var(--muted)]"
-                  >
-                    / {step.kicker}
-                  </p>
-                  <h3
-                    data-process-reveal
-                    className="mt-4 font-display text-[1.8rem] font-medium leading-[1.1] tracking-[-0.03em] lg:text-[2.2rem]"
-                  >
-                    {step.title}
-                  </h3>
-                  <p
-                    data-process-reveal
-                    className="mt-5 text-[0.95rem] leading-7 text-[var(--cream-soft)]/60"
-                  >
-                    {step.body}
-                  </p>
-                </div>
-              </article>
-            ))}
-
-            {/* spacer to allow last card to breathe on horizontal scroll */}
-            <div className="w-[12vw] shrink-0 lg:w-[20vw]" aria-hidden="true" />
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════ NUMBERS ═══════════════════ */}
-      <section className="relative py-28 sm:py-36 lg:py-44">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <div
-            data-reveal
-            className="mx-auto mb-16 max-w-[36rem] text-center"
-          >
-            <p className="section-label">En cifras</p>
-            <h2 className="mt-6 font-display text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.05] tracking-[-0.035em] text-balance">
-              Un track record <span className="font-serif italic text-[var(--accent)] font-normal">sin ruido.</span>
-            </h2>
-          </div>
-
-          <div className="grid gap-0 divide-y divide-[var(--line)] sm:grid-cols-2 sm:divide-y-0 sm:divide-x lg:grid-cols-4">
-            {NUMBERS.map((item) => (
-              <div
-                key={item.label}
-                data-reveal
-                className="flex flex-col items-start gap-3 py-10 sm:px-8 sm:py-14"
-              >
-                <span
-                  data-counter
-                  data-target={item.value}
-                  data-suffix={item.suffix}
-                  className="font-display text-[clamp(3.5rem,9vw,6.5rem)] font-medium leading-none tracking-[-0.05em] text-[var(--cream)]"
-                >
-                  0{item.suffix}
-                </span>
-                <span className="text-[0.95rem] text-[var(--cream-soft)]/60">
-                  {item.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════ WORK ═══════════════════ */}
-      <section
-        id="trabajo"
-        className="relative border-t border-[var(--line)] py-24 sm:py-32 lg:py-36"
-      >
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <div data-reveal>
-              <p className="section-label">Trabajo seleccionado</p>
-              <h2 className="mt-6 font-display text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.05] tracking-[-0.035em] text-balance max-w-[20ch]">
-                Piezas que salieron con <span className="font-serif italic text-[var(--accent)] font-normal">intención.</span>
-              </h2>
-            </div>
-            <a
-              data-reveal
-              href={CONTACT_EMAIL_HREF}
-              className="inline-flex items-center gap-2 text-[0.88rem] font-medium text-[var(--cream-soft)]/70 hover:text-[var(--cream)]"
-            >
-              <span>pedir portfolio completo</span>
-              <ArrowUpRight className="h-3.5 w-3.5" />
-            </a>
-          </div>
-
-          <div className="mt-14 grid gap-8 md:grid-cols-2 lg:gap-10">
-            {WORK_ITEMS.map((item, idx) => (
-              <a
+          <div className="mt-14 grid gap-5 lg:grid-cols-2">
+            {SERVICES.map((item, index) => (
+              <Link
                 key={item.slug}
+                href={item.href}
                 data-reveal
-                href={item.demoHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`group relative flex flex-col gap-5 outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] rounded-[1.25rem] ${
-                  idx % 2 === 1 ? "md:mt-16" : ""
+                className={`group relative overflow-hidden rounded-[1.4rem] border border-[var(--line)] ${
+                  index === 0 ? "lg:col-span-2 min-h-[22rem]" : "min-h-[18rem]"
                 }`}
               >
-                <div className="relative aspect-[8/5] overflow-hidden rounded-[1.25rem] border border-[var(--line)] bg-[var(--surface)]">
-                  <div
-                    data-parallax-img
-                    className="absolute inset-0 transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
-                  >
-                    <Image
-                      src={item.image}
-                      alt={item.client}
-                      fill
-                      sizes="(max-width:768px) 100vw, 50vw"
-                      className="object-contain object-top"
-                    />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)]/60 via-transparent to-transparent" />
-                  <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between text-[0.72rem] font-mono uppercase tracking-[0.26em] text-[var(--cream-soft)]/80">
-                    <span>{item.tag}</span>
-                    <span>{item.year}</span>
-                  </div>
-                </div>
-                <div className="flex items-start justify-between gap-6">
-                  <div>
-                    <p className="text-[0.78rem] font-semibold uppercase tracking-[0.24em] text-[var(--accent-soft)]">
-                      {item.client}
-                    </p>
-                    <h3 className="mt-3 font-display text-[1.5rem] font-medium leading-[1.2] tracking-[-0.025em] text-[var(--cream)]">
-                      {item.title}
-                    </h3>
-                    <p className="mt-2 text-[0.72rem] font-mono uppercase tracking-[0.2em] text-[var(--muted)]">
-                      ver demo en vivo
-                    </p>
-                  </div>
-                  <span className="mt-1 shrink-0 text-[var(--cream)] opacity-60 transition-all duration-500 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1">
-                    <ArrowUpRight className="h-5 w-5" />
+                <Image
+                  src={item.image}
+                  alt=""
+                  fill
+                  sizes={index === 0 ? "100vw" : "50vw"}
+                  className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#000908] via-[#000908]/55 to-transparent" />
+                <div className="absolute inset-0 flex flex-col justify-end p-7 sm:p-9">
+                  <span className="font-mono text-[0.7rem] uppercase tracking-[0.28em] text-[var(--accent)]">
+                    {item.code}
                   </span>
+                  <h3 className="mt-3 font-display text-[1.7rem] font-bold tracking-[-0.03em] sm:text-[2rem]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 max-w-[36rem] text-[0.98rem] leading-7 text-[var(--cream-soft)]/80">
+                    {item.outcome}
+                  </p>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════ FAQ ═══════════════════ */}
-      <section id="faq" className="relative py-24 sm:py-32 lg:py-36">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <div className="grid gap-12 lg:grid-cols-[0.4fr_1fr] lg:gap-24">
-            <div data-reveal>
-              <p className="section-label">Dudas frecuentes</p>
-              <h2 className="mt-6 font-display text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.05] tracking-[-0.035em] text-balance">
-                Antes de <span className="font-serif italic text-[var(--accent)] font-normal">escribir.</span>
-              </h2>
-              <p className="mt-6 max-w-[22rem] text-[0.95rem] leading-7 text-[var(--cream-soft)]/60">
-                Si tu pregunta no está aquí, escríbenos. Respondemos en menos
-                de 24h hábiles con una propuesta preliminar.
-              </p>
-            </div>
-
-            <div data-reveal>
-              {FAQ_ITEMS.map((item, index) => {
-                const isOpen = openFaq === index;
-                return (
-                  <div key={item.q} className="faq-item">
-                    <button
-                      type="button"
-                      className="faq-trigger"
-                      data-open={isOpen}
-                      onClick={() => toggleFaq(index)}
-                      aria-expanded={isOpen}
-                    >
-                      <span>{item.q}</span>
-                      <span className="faq-plus" aria-hidden="true" />
-                    </button>
-                    <div className="faq-panel" data-open={isOpen}>
-                      <p className="pb-7 max-w-[42rem] text-[0.95rem] leading-7 text-[var(--cream-soft)]/65">
-                        {item.a}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+      <section id="sistemas" className="relative border-y border-[var(--line)] bg-[var(--surface)] py-24 sm:py-28">
+        <div className="mx-auto grid max-w-[1440px] items-center gap-12 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:px-12">
+          <div data-reveal>
+            <p className="section-label">Sistemas internos</p>
+            <h2 className="mt-5 font-display text-[clamp(1.9rem,4.5vw,3.3rem)] font-bold leading-[1.06] tracking-[-0.045em]">
+              El diferenciador no es una landing. Es el software que sostiene la operación.
+            </h2>
+            <p className="mt-6 max-w-[36rem] text-[1.02rem] leading-8 text-[var(--cream-soft)]/75">
+              Construimos paneles, integraciones y flujos para equipos que ya
+              venden. En seguros, por ejemplo, el mismo estudio que firma el
+              portal público también entrega sistemas operativos en producción —
+              sin filtrar el backoffice del cliente.
+            </p>
+            <p className="mt-4 max-w-[36rem] text-[0.95rem] leading-7 text-[var(--cream-soft)]/60">
+              IA como capa: captura, calificación y seguimiento cuando hay ROI.
+              No es un producto self-serve ni la promesa de este sitio.
+            </p>
+            <Link href="/servicios/sistemas" className="btn-ghost mt-8">
+              Cómo trabajamos sistemas
+            </Link>
+          </div>
+          <div data-reveal className="relative min-h-[22rem] overflow-hidden rounded-[1.4rem] border border-[var(--line)]">
+            <Image
+              src="/images/studio/n8n-canvas-itops.jpg"
+              alt="Canvas de automatización: agentes, webhooks y ramales condicionales"
+              fill
+              sizes="(min-width: 1024px) 45vw, 100vw"
+              className="object-cover object-left"
+            />
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════ CTA ═══════════════════ */}
-      <section className="relative px-5 pb-24 sm:px-8 lg:px-12 lg:pb-32">
-        <div className="mx-auto max-w-[1440px] overflow-hidden rounded-[2rem] border border-[var(--line-strong)] bg-[var(--surface)]">
-          <div className="relative px-8 py-20 sm:px-14 sm:py-28 lg:px-20 lg:py-36">
-            <div className="grid-bg pointer-events-none absolute inset-0 opacity-60" />
-            <div className="pointer-events-none absolute -right-24 -top-24 h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,rgba(255,107,44,0.22)_0%,transparent_70%)] blur-3xl" />
-            <div className="pointer-events-none absolute -left-24 -bottom-24 h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,rgba(197,255,61,0.12)_0%,transparent_70%)] blur-3xl" />
-
-            <div className="relative max-w-[52rem]">
-              <p data-reveal className="section-label">
-                Siguiente paso
-              </p>
-              <h2
-                data-reveal
-                className="mt-8 font-display text-[clamp(2.5rem,7vw,6rem)] font-medium leading-[0.95] tracking-[-0.04em] text-balance"
-              >
-                Cuéntanos qué estás <span className="font-serif italic text-[var(--accent)] font-normal">intentando</span> construir.
-              </h2>
-              <p
-                data-reveal
-                className="mt-8 max-w-[36rem] text-pretty text-[1.05rem] leading-8 text-[var(--cream-soft)]/70"
-              >
-                Reserva una videollamada de 30 minutos o escríbenos con el tipo
-                de proyecto, contexto comercial y qué parte quieres resolver
-                primero. Te decimos cómo lo aterrizaríamos con un alcance claro
-                y tiempos reales.
-              </p>
-              <div data-reveal className="mt-12 flex flex-col items-start gap-4 sm:flex-row">
-                <a
-                  data-magnetic
-                  href={SCHEDULE_MEET_HREF}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary"
-                >
-                  <span>Agendar llamada</span>
-                  <ArrowIcon className="h-4 w-4" />
-                </a>
-                <a href="#top" className="btn-ghost">
-                  <span>volver arriba</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════ FOOTER ═══════════════════ */}
-      <footer className="relative border-t border-[var(--line)] bg-[var(--background)]">
-        <div className="mx-auto max-w-[1440px] px-5 py-14 sm:px-8 lg:px-12">
-          <div className="grid gap-12 md:grid-cols-[1.5fr_0.5fr_0.5fr_0.5fr]">
+      <section
+        id="proceso"
+        data-process
+        className="relative overflow-hidden py-24 sm:py-28"
+      >
+        <svg
+          className="pointer-events-none absolute inset-x-0 top-24 hidden h-40 w-full opacity-70 lg:block"
+          viewBox="0 0 1440 160"
+          preserveAspectRatio="none"
+          aria-hidden
+        >
+          <path
+            data-wave-path
+            className="wave-stroke"
+            d="M0 90 C 180 20, 320 140, 480 80 S 780 20, 960 95 S 1260 150, 1440 70"
+          />
+        </svg>
+        <div className="relative mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div data-reveal className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <a
-                href="#top"
-                className="inline-flex min-w-0 items-center gap-2.5 text-[0.72rem] font-bold uppercase tracking-[0.36em]"
+              <p className="section-label">Proceso</p>
+              <h2 className="mt-5 max-w-[16ch] font-display text-[clamp(1.9rem,4.5vw,3.4rem)] font-bold tracking-[-0.04em]">
+                Cuatro movimientos. Nada al azar.
+              </h2>
+            </div>
+            <Link
+              href="/proceso"
+              className="inline-flex min-h-11 items-center gap-2 text-[0.85rem] text-[var(--cream-soft)]/70 hover:text-[var(--cream)]"
+            >
+              Ver proceso <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+          <ol className="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+            {PROCESS.map((step) => (
+              <li key={step.id} data-reveal className="border-t border-[var(--line-strong)] pt-6">
+                <p className="font-mono text-[0.7rem] uppercase tracking-[0.24em] text-[var(--accent)]">
+                  {step.id} · {step.kicker}
+                </p>
+                <h3 className="mt-4 font-display text-[1.3rem] font-semibold leading-snug tracking-[-0.03em]">
+                  {step.title}
+                </h3>
+                <p className="mt-4 text-[0.95rem] leading-7 text-[var(--cream-soft)]/65">
+                  {step.body}
+                </p>
+                <dl className="mt-5 space-y-2 text-[0.8rem] leading-6 text-[var(--cream-soft)]/55">
+                  <div>
+                    <dt className="inline font-semibold text-[var(--cream-soft)]/80">Entregable. </dt>
+                    <dd className="inline">{step.deliverable}</dd>
+                  </div>
+                  <div>
+                    <dt className="inline font-semibold text-[var(--cream-soft)]/80">Tiempo. </dt>
+                    <dd className="inline">{step.time}</dd>
+                  </div>
+                  <div>
+                    <dt className="inline font-semibold text-[var(--cream-soft)]/80">Decisión. </dt>
+                    <dd className="inline">{step.decision}</dd>
+                  </div>
+                </dl>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section
+        id="trabajo"
+        data-work-pin
+        className="relative bg-[var(--background)] lg:h-screen"
+      >
+        <div className="mx-auto flex h-full max-w-[1440px] flex-col px-5 py-16 sm:px-8 lg:px-12 lg:py-10">
+          <div data-reveal className="mb-8 flex items-end justify-between gap-6">
+            <div>
+              <p className="section-label">Trabajo seleccionado</p>
+              <h2 className="mt-4 font-display text-[clamp(1.8rem,4vw,3.2rem)] font-bold tracking-[-0.04em]">
+                Piezas con peso.
+              </h2>
+            </div>
+            <Link
+              href="/trabajo"
+              className="hidden min-h-11 items-center gap-2 text-[0.85rem] text-[var(--cream-soft)]/70 hover:text-[var(--cream)] sm:inline-flex"
+            >
+              Índice de casos <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+
+          <div className="relative min-h-[28rem] flex-1 overflow-hidden rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] lg:min-h-0">
+            {CASES.map((item, index) => (
+              <Link
+                key={item.slug}
+                href={`/trabajo/${item.slug}`}
+                data-first={index === 0 ? "true" : undefined}
+                className="work-clip group absolute inset-0"
               >
                 <Image
-                  src="/logo.png"
-                  alt=""
-                  width={36}
-                  height={36}
-                  className="h-9 w-auto shrink-0"
+                  src={item.image}
+                  alt={`Captura del sitio de ${item.client}`}
+                  fill
+                  sizes="100vw"
+                  className="object-cover object-top"
+                  priority={index === 0}
                 />
-                <span className="min-w-0">
-                  <span className="md:hidden">Wavys</span>
-                  <span className="hidden md:inline">Wavys Technologies</span>
-                </span>
-              </a>
-              <p className="mt-6 max-w-[22rem] text-[0.95rem] leading-7 text-[var(--cream-soft)]/55">
-                Estudio de diseño digital y software a medida. Presencial en Lima;
-                remoto para toda Iberolatam.
-              </p>
-            </div>
-            <div>
-              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-[var(--muted)]">
-                Navegar
-              </p>
-              <ul className="mt-5 space-y-3 text-[0.95rem] text-[var(--cream-soft)]/70">
-                {NAV_LINKS.map((item) => (
-                  <li key={item.href}>
-                    <a
-                      href={item.href}
-                      className="transition-colors hover:text-[var(--cream)]"
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-[var(--muted)]">
-                Contacto
-              </p>
-              <ul className="mt-5 space-y-3 text-[0.95rem] text-[var(--cream-soft)]/70">
-                <li>
-                  <a
-                    href={CONTACT_EMAIL_HREF}
-                    className="transition-colors hover:text-[var(--cream)]"
-                  >
-                    hola@wavystechnologies.com
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="transition-colors hover:text-[var(--cream)]"
-                  >
-                    linkedin
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="transition-colors hover:text-[var(--cream)]"
-                  >
-                    instagram
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-[var(--muted)]">
-                Estado
-              </p>
-              <ul className="mt-5 space-y-3 text-[0.95rem] text-[var(--cream-soft)]/70">
-                <li className="flex items-center gap-2">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inset-0 rounded-full bg-[var(--accent)] opacity-60 animate-ping" />
-                    <span className="relative h-2 w-2 rounded-full bg-[var(--accent)]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-end justify-between gap-3">
+                  <div>
+                    <p className="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[var(--accent)]">
+                      {item.client}
+                    </p>
+                    <p className="mt-2 max-w-[28rem] font-display text-[1.25rem] font-semibold leading-snug sm:text-[1.6rem]">
+                      {item.title}
+                    </p>
+                  </div>
+                  <span className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-white/70">
+                    {item.type} · {item.year}
                   </span>
-                  aceptando proyectos
-                </li>
-                <li>próximo slot: Q2 2026</li>
-              </ul>
-            </div>
+                </div>
+              </Link>
+            ))}
           </div>
-
-          <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-[var(--line)] pt-8 sm:flex-row sm:items-center">
-            <p className="text-[0.78rem] text-[var(--muted)]">
-              © {new Date().getFullYear()} Wavys Technologies — Todos los derechos
-              reservados.
-            </p>
-            <p className="text-[0.78rem] text-[var(--muted)]">
-              Hecho con intención desde Lima
-            </p>
-          </div>
-        </div>
-
-        {/* Huge footer wordmark */}
-        <div className="overflow-hidden pb-4 sm:pb-8">
-          <p className="font-display text-center text-[18vw] font-bold leading-none tracking-[-0.07em] text-[var(--cream)]/[0.04] select-none">
-            WAVYS
+          <p className="mt-4 hidden text-[0.72rem] uppercase tracking-[0.22em] text-[var(--muted)] lg:block">
+            Scroll para pasar de pieza
           </p>
         </div>
-      </footer>
-    </main>
+      </section>
+
+      <section className="border-y border-[var(--line)] py-12">
+        <div className="mx-auto flex max-w-[1440px] flex-col items-start justify-between gap-6 px-5 sm:flex-row sm:items-center sm:px-8 lg:px-12">
+          <p className="max-w-[28rem] font-display text-[1.35rem] font-semibold tracking-[-0.03em]">
+            Si esto se parece a lo que necesitas, hablemos 30 minutos.
+          </p>
+          <a
+            data-magnetic
+            href={BOOKING_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary"
+          >
+            Agendar llamada 30 min
+            <ArrowIcon className="h-4 w-4" />
+          </a>
+        </div>
+      </section>
+
+      <section id="inversion" className="relative py-24 sm:py-28">
+        <div className="mx-auto grid max-w-[1440px] gap-12 px-5 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:px-12">
+          <div data-reveal>
+            <p className="section-label">Inversión</p>
+            <h2 className="mt-5 font-display text-[clamp(1.9rem,4.5vw,3.3rem)] font-bold tracking-[-0.04em]">
+              Cotización tras el diagnóstico. Sin cifras en vitrina.
+            </h2>
+            <p className="mt-5 max-w-[32rem] text-[0.98rem] leading-7 text-[var(--cream-soft)]/70">
+              Alcance, plazos e integraciones se cierran en la llamada de 30
+              minutos. Proyecto por fases o retainer — según lo que el negocio
+              necesite sostener.
+            </p>
+            <Link href="/inversion" className="btn-ghost mt-8">
+              Cómo cotizamos
+            </Link>
+          </div>
+          <div data-reveal className="grid gap-4 sm:grid-cols-2">
+            <article className="rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] p-7">
+              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
+                Web
+              </p>
+              <p className="mt-4 font-display text-[1.45rem] font-semibold tracking-[-0.03em]">
+                Dirección visual, copy y un camino claro a contacto.
+              </p>
+              <p className="mt-5 text-[0.92rem] leading-7 text-[var(--cream-soft)]/70">
+                Landing o site. El alcance se define después de leer el cuello de botella.
+              </p>
+            </article>
+            <article className="rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] p-7">
+              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
+                Sistemas
+              </p>
+              <p className="mt-4 font-display text-[1.45rem] font-semibold tracking-[-0.03em]">
+                Paneles, integraciones y software operativo.
+              </p>
+              <p className="mt-5 text-[0.92rem] leading-7 text-[var(--cream-soft)]/70">
+                Para equipos que ya operan. La cotización cubre lo que hay que construir, no un paquete genérico.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="equipo" className="relative border-y border-[var(--line)] bg-[var(--surface)] py-24 sm:py-28">
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div data-reveal className="max-w-[40rem]">
+            <p className="section-label">Equipo</p>
+            <h2 className="mt-5 font-display text-[clamp(1.9rem,4.5vw,3.3rem)] font-bold tracking-[-0.04em]">
+              Phil Taboada y tres developers. Un solo punto de contacto.
+            </h2>
+            <p className="mt-6 text-[1.02rem] leading-8 text-[var(--cream-soft)]/75">
+              Dirección de producto y diseño en Lima. Ingeniería en Next.js,
+              React Native, NestJS, Django, PostgreSQL y Supabase. Presencial
+              cuando el proyecto lo pide; remoto para LatAm.
+            </p>
+          </div>
+          <ul data-reveal className="mt-10 flex flex-wrap gap-2">
+            {STACK.map((item) => (
+              <li
+                key={item}
+                className="rounded-full border border-[var(--line-strong)] px-4 py-2 text-[0.85rem] text-[var(--cream-soft)]/80"
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/equipo"
+            className="mt-8 inline-flex min-h-11 items-center gap-2 text-[0.85rem] text-[var(--cream-soft)]/70 hover:text-[var(--cream)]"
+          >
+            Cómo trabajamos <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+      </section>
+
+      <section id="faq" className="relative py-24 sm:py-28">
+        <div className="mx-auto grid max-w-[1440px] gap-12 px-5 sm:px-8 lg:grid-cols-[0.42fr_1fr] lg:gap-24 lg:px-12">
+          <div data-reveal>
+            <p className="section-label">Dudas frecuentes</p>
+            <h2 className="mt-5 font-display text-[clamp(1.85rem,4vw,3.2rem)] font-bold tracking-[-0.04em]">
+              Antes de escribir.
+            </h2>
+            <p className="mt-5 max-w-[22rem] text-[0.95rem] leading-7 text-[var(--cream-soft)]/65">
+              Si tu pregunta no está aquí, escríbenos. Respondemos en menos de 24 h hábiles.
+            </p>
+          </div>
+          <div data-reveal>
+            <FaqList />
+          </div>
+        </div>
+      </section>
+
+      <CtaBand />
+    </div>
   );
 }

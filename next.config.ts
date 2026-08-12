@@ -4,6 +4,16 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/wavys-os",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/wavys-os/:path*",
+        destination: "/",
+        permanent: true,
+      },
+      {
         source: "/presencia-digital",
         destination: "/",
         permanent: true,
