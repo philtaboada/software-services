@@ -5,7 +5,7 @@ import { PageHero } from "@/components/page-hero";
 export const metadata: Metadata = {
   title: "Inversión",
   description:
-    "Cotización tras diagnóstico. Proyecto por fases o retainer. Sin cifras públicas: el alcance se cierra en la llamada.",
+    "Cotización tras diagnóstico. Proyecto por fases o retainer. El alcance se cierra en la llamada de 30 minutos.",
   alternates: { canonical: "/inversion" },
 };
 
@@ -15,11 +15,11 @@ export default function InversionPage() {
       <PageHero
         kicker="Inversión"
         title="Cotizamos después de entender el cuello de botella."
-        lede="No publicamos montos. Alcance, plazos e integraciones se cierran en una llamada de 30 minutos. Proyecto por fases o retainer, según lo que el negocio necesite sostener."
+        lede="Alcance, plazos e integraciones se cierran en una llamada de 30 minutos. Proyecto por fases o retainer, según lo que el negocio necesite sostener."
       />
       <section className="mx-auto max-w-[1440px] px-5 pb-16 sm:px-8 lg:px-12">
-        <div className="grid gap-5 md:grid-cols-2">
-          <article className="rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] p-8">
+        <div className="grid gap-10 md:grid-cols-2">
+          <article className="border-t border-[var(--line-strong)] pt-8">
             <p className="text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
               Web
             </p>
@@ -31,7 +31,7 @@ export default function InversionPage() {
               site corporativo, 5–8. El alcance se define en el diagnóstico.
             </p>
           </article>
-          <article className="rounded-[1.4rem] border border-[var(--line)] bg-[var(--surface)] p-8">
+          <article className="border-t border-[var(--line-strong)] pt-8">
             <p className="text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
               Sistemas
             </p>

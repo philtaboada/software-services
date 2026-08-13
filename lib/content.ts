@@ -65,6 +65,53 @@ export const CASES = [
   },
 ] as const;
 
+export const CLIENT_LOGOS = [
+  {
+    name: "Inmobiliaria Fabre",
+    src: "/images/clients/inmobiliaria-fabre.png",
+    href: "https://www.inmobiliariafabre.com/",
+  },
+  {
+    name: "JLH Corredores de Seguros",
+    src: "/images/clients/jlh-corredores.png",
+    href: "https://www.jlhcorredoresdeseguros.com/",
+  },
+  {
+    name: "La Alcoba",
+    src: "/images/clients/la-alcoba.png",
+    href: "https://restaurant-code.vercel.app/",
+  },
+  {
+    name: "Fundación Fabre",
+    src: "/images/clients/fundacion-fabre.png",
+  },
+  {
+    name: "Ascendia Consultores",
+    src: "/images/clients/ascendia.png",
+    href: "https://ascendiaconsultores.com/",
+  },
+  {
+    name: "Fidenza Consultores",
+    src: "/images/clients/fidenza.png",
+    href: "https://fidenzaconsultores.com/",
+  },
+  {
+    name: "Trading Latam",
+    src: "/images/clients/trading-latam.png",
+    href: "https://trading-latam.com/",
+  },
+  {
+    name: "Rankana Pet Shop",
+    src: "/images/clients/rankana.png",
+    href: "https://rankanapetshop.com/",
+  },
+  {
+    name: "W&I Research Club",
+    src: "/images/clients/clubwi.svg",
+    href: "https://clubwi-drab.vercel.app/",
+  },
+] as const;
+
 export const SERVICES = [
   {
     slug: "webs",
@@ -73,6 +120,7 @@ export const SERVICES = [
     outcome: "Landings y sites que entran rápido: dirección visual, copy y performance en el mismo entregable.",
     href: "/servicios/webs",
     image: "/images/studio/studio-lima-signals.jpg",
+    cutout: "/images/studio/mark-web-cutout.png",
   },
   {
     slug: "apps",
@@ -81,6 +129,7 @@ export const SERVICES = [
     outcome: "Flujos móviles claros y medibles. React Native cuando el producto tiene que vivir en el bolsillo.",
     href: "/servicios/apps",
     image: "/images/studio/studio-glass-system.jpg",
+    cutout: "/images/studio/mark-phone-cutout.png",
   },
   {
     slug: "sistemas",
@@ -89,6 +138,7 @@ export const SERVICES = [
     outcome: "Paneles, integraciones y software operativo para equipos que ya no pueden vivir en Excel y WhatsApp sueltos.",
     href: "/servicios/sistemas",
     image: "/images/studio/n8n-canvas-itops.jpg",
+    cutout: "/images/studio/mark-system-cutout.png",
   },
   {
     slug: "identidad",
@@ -97,6 +147,7 @@ export const SERVICES = [
     outcome: "Tipografía, color y UI system traducidos a interfaz coherente — no a una plantilla más.",
     href: "/servicios/identidad",
     image: "/images/studio/studio-circuit-wave.jpg",
+    cutout: "/images/studio/hero-wave-cutout.png",
   },
 ] as const;
 

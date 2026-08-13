@@ -49,13 +49,13 @@ export function SiteHeader() {
 
         <nav
           aria-label="Navegación principal"
-          className="hidden items-center gap-1 rounded-full border border-[var(--line)] bg-[color-mix(in_srgb,var(--surface)_70%,transparent)] p-1 md:flex"
+          className="hidden items-center gap-8 md:flex"
         >
           {NAV_LINKS.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-full px-4 py-2 text-[0.82rem] text-[var(--muted)] transition-colors hover:text-[var(--foreground)]"
+              className="text-[0.88rem] text-[var(--cream-soft)]/80 transition-colors hover:text-[var(--accent)]"
             >
               {item.label}
             </Link>
