@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Rubik } from "next/font/google";
+import Script from "next/script";
 import { JsonLd } from "@/components/json-ld";
 import { StudioShell } from "@/components/studio-shell";
 import { OG_IMAGE, SITE_URL } from "@/lib/site";
@@ -60,6 +61,18 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <JsonLd />
         <StudioShell>{children}</StudioShell>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-8BVBK2Z5EB"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-8BVBK2Z5EB');
+          `}
+        </Script>
       </body>
     </html>
   );
