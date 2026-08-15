@@ -5,6 +5,7 @@ import { contentToHtml } from '@/lib/blog';
 import { BlogChrome } from './blog-chrome';
 import { NewsletterStrip } from './newsletter-strip';
 import { PostCard } from './post-card';
+import { PostFeedback } from './post-feedback';
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat('es-PE', {
@@ -63,7 +64,9 @@ export function ArticleReader({
         </section>
       )}
 
-      <div className="px-5 pb-8 text-center">
+      <PostFeedback slug={post.slug} title={post.title} askNewsletter={false} />
+
+      <div className="px-5 py-8 text-center">
         <Link href="/blog" className="text-[11px] font-bold uppercase tracking-[0.18em] no-underline">
           ← Volver al blog
         </Link>

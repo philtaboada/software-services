@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRef } from 'react';
 import type { RadarIssue } from '@/lib/radar-issues';
 import { BlogChrome } from './blog-chrome';
+import { PostFeedback } from './post-feedback';
 import { useIssueMotion } from './use-issue-motion';
 
 function Why({ children }: { children: string }) {
@@ -336,6 +337,8 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
             <p className="rb-em mt-10 text-4xl">{issue.cierre.sign}</p>
           </div>
         </section>
+
+        <PostFeedback slug={issue.slug} title={issue.title} source="radar_issue" noun="este número" />
 
         <section id="paginas" className="border-t border-white/10 px-5 py-16 sm:px-8">
           <div className="mx-auto max-w-[1240px]">

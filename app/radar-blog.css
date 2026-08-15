@@ -250,10 +250,223 @@
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* Encuesta de cierre ------------------------------------------------------ */
+
+.rb-fb-scale {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.rb-fb-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.rb-fb-step input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.rb-fb-dot {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 1px solid rgba(12, 11, 9, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  font-family: var(--rb-sans);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--rb-ink);
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.rb-fb-label {
+  font-family: var(--rb-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rb-pap-45);
+}
+
+.rb-fb-step:hover .rb-fb-dot {
+  border-color: #0f6b6a;
+  transform: translateY(-2px);
+}
+
+.rb-fb-step input:checked ~ .rb-fb-dot {
+  background: var(--rb-ink);
+  border-color: var(--rb-ink);
+  color: var(--rb-paper);
+}
+
+.rb-fb-step input:checked ~ .rb-fb-label {
+  color: var(--rb-ink);
+}
+
+.rb-fb-step input:focus-visible ~ .rb-fb-dot {
+  outline: 2px solid #0f6b6a;
+  outline-offset: 3px;
+}
+
+.rb-fb-more {
+  margin-top: 26px;
+  animation: rb-fb-open 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.rb-fb-field-label {
+  display: block;
+  font-family: var(--rb-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rb-pap-45);
+}
+
+.rb-fb-input {
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid rgba(12, 11, 9, 0.22);
+  background: rgba(255, 255, 255, 0.8);
+  font-family: var(--rb-read);
+  font-size: 16px;
+  color: var(--rb-ink);
+  outline: none;
+}
+
+.rb-fb-input:focus {
+  border-color: #0f6b6a;
+}
+
+.rb-fb-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: var(--rb-read);
+  font-size: 16px;
+  color: var(--rb-pap-70);
+  cursor: pointer;
+}
+
+.rb-fb-check input {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  accent-color: #0f6b6a;
+  flex-shrink: 0;
+}
+
+.rb-fb-submit {
+  height: 48px;
+  padding: 0 28px;
+  border: 0;
+  background: var(--rb-ink);
+  font-family: var(--rb-sans);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rb-paper);
+  cursor: pointer;
+}
+
+.rb-fb-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.rb-fb-error {
+  font-family: var(--rb-sans);
+  font-size: 14px;
+  color: #a01c1c;
+}
+
+@keyframes rb-fb-open {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fondo vivo del índice --------------------------------------------------- */
+
+.rb-ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* Se ve algo digno aunque no haya WebGL o el usuario pida menos animación. */
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(90, 210, 208, 0.18), transparent 55%),
+    radial-gradient(ellipse at 12% 8%, rgba(60, 120, 220, 0.12), transparent 46%),
+    linear-gradient(180deg, #061312 0%, #04100f 45%, #030807 100%);
+}
+
+.rb-ambient-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Malla técnica: la parte "ecosistema conectado". */
+.rb-ambient-grid {
+  position: absolute;
+  inset: -10%;
+  background-image:
+    linear-gradient(rgba(90, 210, 208, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(90, 210, 208, 0.5) 1px, transparent 1px);
+  background-size: 92px 92px;
+  opacity: 0.05;
+  mask-image: radial-gradient(ellipse at 50% 12%, #000 0%, transparent 68%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 12%, #000 0%, transparent 68%);
+  animation: rb-ambient-drift 26s linear infinite;
+}
+
+/* Resplandor del lecho, para que las tapas no floten en la nada. */
+.rb-ambient-floor {
+  position: absolute;
+  inset: auto 0 -18% 0;
+  height: 52%;
+  background: radial-gradient(ellipse at 50% 100%, rgba(90, 210, 208, 0.16), transparent 62%);
+}
+
+@keyframes rb-ambient-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(92px, 46px, 0);
+  }
+}
+
 /* Estante de tapas ------------------------------------------------------- */
 
 .rb-shelf {
   position: relative;
+  z-index: 1;
   min-height: 0;
   flex: 1;
   perspective: 1700px;
