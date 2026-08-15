@@ -1,4 +1,5 @@
-import { CONTACT_EMAIL, NAP, SITE_URL, SOCIALS } from "@/lib/site";
+import { CONTACT_EMAIL, NAP, OG_IMAGE, SITE_URL, SOCIALS } from "@/lib/site";
+import { FAQ_ITEMS } from "@/lib/faq";
 
 export function JsonLd() {
   const data = {
@@ -10,6 +11,7 @@ export function JsonLd() {
         name: NAP.name,
         url: SITE_URL,
         email: CONTACT_EMAIL,
+        logo: `${SITE_URL}/logo.png`,
         address: {
           "@type": "PostalAddress",
           addressLocality: "Lima",
@@ -22,11 +24,23 @@ export function JsonLd() {
         "@id": `${SITE_URL}/#service`,
         name: "Wavys Technologies — software a medida y diseño",
         url: SITE_URL,
-        image: `${SITE_URL}/logo.png`,
+        image: `${SITE_URL}${OG_IMAGE}`,
         areaServed: ["PE", "LatAm"],
         parentOrganization: { "@id": `${SITE_URL}/#org` },
         description:
           "Estudio en Lima. Webs, apps y sistemas internos para negocios con tracción en Perú y LatAm.",
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${SITE_URL}/#faq`,
+        mainEntity: FAQ_ITEMS.map((item) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.a,
+          },
+        })),
       },
     ],
   };

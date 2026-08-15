@@ -16,6 +16,7 @@ export default function NotFound() {
           href={BOOKING_HREF}
           target="_blank"
           rel="noopener noreferrer"
+          data-cal-click
           className="btn-primary"
         >
           Agendar llamada 30 min

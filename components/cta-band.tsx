@@ -42,6 +42,7 @@ export function CtaBand({
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary"
+              data-cal-click
             >
               <span>Agendar llamada 30 min</span>
               <ArrowIcon className="h-4 w-4" />

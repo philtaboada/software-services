@@ -34,7 +34,7 @@ export function SiteFooter() {
             >
               <Image
                 src="/logo.png"
-                alt="Wavys Technologies"
+                alt=""
                 width={36}
                 height={36}
                 className="h-9 w-auto"
@@ -82,6 +82,7 @@ export function SiteFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="footer-link"
+                  data-cal-click
                 >
                   <CalendarIcon className="h-4 w-4" />
                   <span className="footer-link__meta">

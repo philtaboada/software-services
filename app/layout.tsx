@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Rubik } from "next/font/google";
 import { JsonLd } from "@/components/json-ld";
 import { StudioShell } from "@/components/studio-shell";
+import { OG_IMAGE, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const rubik = Rubik({
@@ -13,7 +14,7 @@ const rubik = Rubik({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://software.wavys-technologies.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Wavys Technologies — Software a medida y diseño en Perú / LatAm",
     template: "%s | Wavys Technologies",
@@ -28,15 +29,24 @@ export const metadata: Metadata = {
     description:
       "Webs, apps y sistemas internos para negocios que ya operan. Presencial en Lima; remoto para LatAm.",
     type: "website",
-    url: "https://software.wavys-technologies.com",
+    url: SITE_URL,
     siteName: "Wavys Technologies",
     locale: "es_PE",
+    images: [
+      {
+        url: OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: "Wavys Technologies — estudio de software y diseño en Lima",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Wavys Technologies — Software a medida y diseño en Perú / LatAm",
     description:
       "Estudio en Lima. Software a medida y diseño para negocios con tracción en Perú y LatAm.",
+    images: [OG_IMAGE],
   },
 };
 

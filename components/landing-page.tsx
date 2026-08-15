@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { HomeRadarSection } from "@/components/blog/home-radar-section";
 import { CtaBand } from "@/components/cta-band";
 import { FaqList } from "@/components/faq-list";
 import { ArrowIcon, ArrowUpRight } from "@/components/icons";
@@ -24,17 +25,15 @@ export function LandingPage() {
       const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set(".line-mask > span", { y: 0 });
         gsap.set("[data-reveal], [data-hero-mark], [data-clip]", { autoAlpha: 1, y: 0, clearProps: "clipPath" });
       });
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
         intro
-          .from("[data-hero-kicker]", { autoAlpha: 0, y: 16, duration: 0.55 })
-          .to(".line-mask > span", { y: 0, duration: 1.05, stagger: 0.08, ease: "expo.out" }, "-=0.15")
-          .from("[data-hero-sub], [data-hero-cta]", { autoAlpha: 0, y: 20, duration: 0.7, stagger: 0.08 }, "-=0.5")
-          .from("[data-hero-mark]", { autoAlpha: 0, y: 48, scale: 0.94, duration: 1.15, ease: "expo.out" }, 0.18);
+          .from("[data-hero-kicker]", { autoAlpha: 0, y: 16, duration: 0.45 })
+          .from("[data-hero-sub], [data-hero-cta]", { autoAlpha: 0, y: 20, duration: 0.65, stagger: 0.08 }, "-=0.15")
+          .from("[data-hero-mark]", { autoAlpha: 0, y: 48, scale: 0.94, duration: 1.15, ease: "expo.out" }, 0.12);
 
         gsap.to("[data-hero-float]", {
           y: -8,
@@ -144,6 +143,7 @@ export function LandingPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary"
+                data-cal-click
               >
                 <span>Agendar llamada 30 min</span>
                 <ArrowIcon className="h-4 w-4" />
@@ -217,6 +217,9 @@ export function LandingPage() {
                   {featured.client}
                 </h3>
                 <p className="mt-1 text-[0.95rem] text-[var(--cream-soft)]/70">{featured.title}</p>
+                <p className="mt-2 max-w-[36rem] text-[0.88rem] leading-6 text-[var(--cream-soft)]/55">
+                  {featured.result}
+                </p>
               </Link>
             ) : null}
             <div className="flex flex-col gap-5 lg:col-span-5">
@@ -237,12 +240,37 @@ export function LandingPage() {
                   <h3 className="mt-1 font-display text-[1.2rem] font-semibold tracking-[-0.03em]">
                     {item.client}
                   </h3>
+                  <p className="mt-1 text-[0.88rem] text-[var(--cream-soft)]/55">{item.result}</p>
                 </Link>
               ))}
             </div>
           </div>
         </div>
         <ThreadNode className="bottom-8 left-8" />
+      </section>
+
+      <section id="inversion" className="relative py-20 sm:py-24">
+        <ThreadNode className="right-[14%] top-10 hidden lg:block" />
+        <div className="relative mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div
+            data-reveal
+            className="flex flex-col gap-8 border-t border-[var(--line-strong)] pt-10 lg:flex-row lg:items-end lg:justify-between"
+          >
+            <div className="max-w-[36rem]">
+              <p className="section-label">Inversión</p>
+              <h2 className="mt-5 font-display text-[clamp(1.7rem,3.6vw,2.6rem)] font-bold tracking-[-0.04em]">
+                Cotizamos después de entender el cuello de botella.
+              </h2>
+              <p className="mt-4 text-[1rem] leading-7 text-[var(--cream-soft)]/70">
+                Alcance, plazos y modelo se cierran en la llamada. Sin cifras en
+                vitrina: cada operación pide un tramo distinto.
+              </p>
+            </div>
+            <Link href="/inversion" className="btn-ghost">
+              Cómo invertimos <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+        </div>
       </section>
 
       <section id="problema" className="relative py-24 sm:py-28">
@@ -281,7 +309,7 @@ export function LandingPage() {
             <div>
               <p className="section-label">Servicios</p>
               <h2 className="mt-5 max-w-[16ch] font-display text-[clamp(1.9rem,4.5vw,3.4rem)] font-bold leading-[1.08] tracking-[-0.045em]">
-                Cuatro territorios. Una sola ola.
+                Cuatro territorios. Un solo estudio.
               </h2>
             </div>
             <Link
@@ -301,11 +329,11 @@ export function LandingPage() {
                 <p className="font-mono text-[0.7rem] uppercase tracking-[0.24em] text-[var(--accent)]">
                   {item.code}
                 </p>
-                <div>
-                  <h3 className="font-display text-[1.45rem] font-semibold tracking-[-0.03em] transition-colors group-hover:text-[var(--accent)]">
+                <div className="relative z-[1]">
+                  <h3 className="font-display text-[1.45rem] font-semibold tracking-[-0.03em] text-[var(--cream)] transition-colors group-hover:text-[var(--accent)]">
                     {item.title}
                   </h3>
-                  <p className="mt-2 max-w-[36rem] text-[0.95rem] leading-7 text-[var(--cream-soft)]/65">
+                  <p className="mt-2 max-w-[36rem] text-[0.95rem] leading-7 text-[var(--cream-soft)]/70">
                     {item.outcome}
                   </p>
                 </div>
@@ -435,6 +463,8 @@ export function LandingPage() {
         </div>
         <ThreadNode className="right-8 bottom-10 hidden lg:block" />
       </section>
+
+      <HomeRadarSection />
 
       <section id="faq" className="relative py-24 sm:py-28">
         <ThreadNode className="right-8 top-10 hidden lg:block" />

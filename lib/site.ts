@@ -10,6 +10,8 @@ export const CONTACT_EMAIL = "contact@wavys-technologies.com" as const;
 export const CONTACT_EMAIL_HREF =
   "mailto:contact@wavys-technologies.com?subject=Quiero%20una%20propuesta%20para%20mi%20proyecto" as const;
 
+export const OG_IMAGE = "/og-studio.png" as const;
+
 export const NAP = {
   name: "Wavys Technologies",
   city: "Lima, Perú",
@@ -36,12 +38,16 @@ export const NAV_LINKS = [
   { href: "/servicios", label: "Servicios" },
   { href: "/inversion", label: "Inversión" },
   { href: "/equipo", label: "Equipo" },
+  { href: "/blog", label: "Blog" },
 ] as const;
 
 export const FOOTER_LINKS = [
   { href: "/trabajo", label: "Trabajo" },
   { href: "/servicios", label: "Servicios" },
+  { href: "/proceso", label: "Proceso" },
+  { href: "/equipo", label: "Equipo" },
   { href: "/inversion", label: "Inversión" },
+  { href: "/blog", label: "Blog" },
   { href: "/privacidad", label: "Privacidad" },
   { href: "/terminos", label: "Términos" },
 ] as const;

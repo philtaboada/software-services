@@ -77,6 +77,7 @@ export default async function ServicioDetallePage({
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary"
+              data-cal-click
             >
               Agendar llamada 30 min
             </a>

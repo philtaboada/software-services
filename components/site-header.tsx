@@ -33,14 +33,14 @@ export function SiteHeader() {
           href="/"
           className="inline-flex min-h-11 min-w-0 items-center gap-2.5 text-[0.72rem] font-bold uppercase tracking-[0.28em]"
         >
-          <Image
-            src="/logo.png"
-            alt="Wavys Technologies"
-            width={36}
-            height={36}
-            className="h-9 w-auto shrink-0"
-            priority
-          />
+              <Image
+                src="/logo.png"
+                alt=""
+                width={36}
+                height={36}
+                className="h-9 w-auto shrink-0"
+                priority
+              />
           <span className="truncate">
             <span className="sm:hidden">Wavys</span>
             <span className="hidden sm:inline">Wavys Technologies</span>
@@ -68,6 +68,7 @@ export function SiteHeader() {
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary hidden min-h-11 px-4 py-2 text-[0.8rem] md:inline-flex"
+            data-cal-click
           >
             Agendar llamada 30 min
           </a>
@@ -119,6 +120,7 @@ export function SiteHeader() {
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary mt-5 w-full"
+            data-cal-click
           >
             Agendar llamada 30 min
           </a>
