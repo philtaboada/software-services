@@ -261,7 +261,7 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
                   className="grid grid-cols-[48px_28px_1fr_auto] items-center gap-3 border-t border-white/12 py-4 font-[var(--rb-sans)]"
                 >
                   <span className="rb-mono text-[12px] text-white/35">{row.pos}</span>
-                  <Mark src={row.mark} />
+                  {row.mark ? <Mark src={row.mark} /> : <span aria-hidden />}
                   <div>
                     <b className="text-xl font-bold sm:text-2xl">{row.name}</b>
                     <span className="rb-rank-track">

@@ -250,36 +250,62 @@
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* Estante de tapas ------------------------------------------------------- */
+
 .rb-shelf {
   position: relative;
   min-height: 0;
   flex: 1;
-  perspective: 1400px;
-  cursor: default;
+  perspective: 1700px;
+  perspective-origin: 50% 60%;
+  touch-action: pan-y;
+  cursor: grab;
+  outline: none;
+}
+
+.rb-shelf.is-dragging {
+  cursor: grabbing;
+}
+
+.rb-shelf:focus-visible {
+  outline: 1px solid rgba(90, 210, 208, 0.5);
+  outline-offset: -6px;
+  border-radius: 12px;
 }
 
 .rb-shelf-card {
+  /* El ancho disponible se convierte a alto con la proporción de la tapa: así
+     la card nunca se deforma, la limite el alto del estante o el ancho. */
+  --rb-card-w: min(31vw, 450px);
+  --rb-card-h: min(88%, 700px, calc(var(--rb-card-w) * 62 / 43));
+  container-type: inline-size;
   position: absolute;
   left: 50%;
-  bottom: 4%;
-  width: min(27vmin, 270px);
-  height: min(43vmin, 430px);
+  bottom: calc((100% - var(--rb-card-h)) * 0.5);
+  height: var(--rb-card-h);
+  aspect-ratio: 43 / 62;
   transform-origin: 50% 100%;
   transition:
-    transform 650ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 350ms ease;
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 420ms ease;
   will-change: transform;
 }
 
-.rb-shelf-hit {
-  position: absolute;
-  bottom: 4%;
-  width: min(30vmin, 300px);
-  height: min(46vmin, 460px);
+.rb-shelf.is-dragging .rb-shelf-card {
+  transition: opacity 420ms ease;
+}
+
+.rb-shelf-link {
+  display: block;
+  height: 100%;
+  width: 100%;
   padding: 0;
   border: 0;
   background: transparent;
+  text-align: left;
+  text-decoration: none;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .rb-shelf-face {
@@ -287,49 +313,246 @@
   height: 100%;
   width: 100%;
   overflow: hidden;
-  border-radius: 2rem;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+  border-radius: clamp(14px, 7cqw, 32px);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.45);
+  transition:
+    box-shadow 400ms ease,
+    transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.rb-shelf-hint {
-  display: none;
+.is-center .rb-shelf-face {
+  box-shadow:
+    0 40px 90px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.rb-shelf:not(.is-dragging) .is-center .rb-shelf-link:hover .rb-shelf-face,
+.is-center .rb-shelf-link:focus-visible .rb-shelf-face {
+  transform: translateY(-10px);
+  box-shadow:
+    0 52px 110px rgba(0, 0, 0, 0.66),
+    0 0 0 1px rgba(90, 210, 208, 0.35);
+}
+
+.rb-face-cover {
+  object-fit: cover;
+}
+
+.rb-face-tint {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 74% 78%, rgba(255, 255, 255, 0.34), transparent 52%),
+    linear-gradient(155deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.34));
+}
+
+.rb-face-num {
+  position: absolute;
+  right: 6cqw;
+  bottom: 22cqw;
+  margin: 0;
+  font-family: var(--rb-sans);
+  font-size: 46cqw;
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: rgba(255, 255, 255, 0.16);
+}
+
+.rb-face-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.28), transparent 46%);
+}
+
+.rb-face-veil.is-cover {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.62), transparent 26%);
+}
+
+.rb-face-top,
+.rb-face-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: clamp(14px, 6.5cqw, 30px);
+}
+
+.rb-face-top {
+  top: 0;
+}
+
+.rb-face-bottom {
+  bottom: 0;
+}
+
+.rb-face-brand {
+  margin: 0;
+  font-family: var(--rb-sans);
+  font-size: clamp(19px, 10cqw, 44px);
+  font-weight: 800;
+  line-height: 0.94;
+  letter-spacing: -0.045em;
+  color: #fff;
+}
+
+.rb-face-week {
+  margin: 0.5cqw 0 0;
+  font-family: var(--rb-mono);
+  font-size: clamp(9px, 3.4cqw, 14px);
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.rb-face-cta {
+  position: absolute;
+  right: clamp(12px, 5.5cqw, 26px);
+  bottom: clamp(12px, 5.5cqw, 26px);
+  display: inline-flex;
+  align-items: center;
+  gap: 1.6cqw;
+  padding: clamp(6px, 2.4cqw, 11px) clamp(10px, 4cqw, 18px);
+  border-radius: 999px;
+  background: #f4e27a;
+  font-family: var(--rb-sans);
+  font-size: clamp(10px, 3.4cqw, 15px);
+  font-weight: 700;
+  color: #070604;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+}
+
+.rb-face-cta span {
+  display: grid;
+  place-items: center;
+  width: clamp(15px, 5cqw, 22px);
+  height: clamp(15px, 5cqw, 22px);
+  border-radius: 999px;
+  background: #070604;
+  font-size: clamp(9px, 3cqw, 13px);
+  color: #f4e27a;
+}
+
+.rb-face-title {
+  margin: 0;
+  font-family: var(--rb-sans);
+  font-size: clamp(17px, 8.6cqw, 38px);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: #fff;
+}
+
+.rb-face-dek {
+  margin: 1.6cqw 0 0;
+  font-family: var(--rb-read);
+  font-size: clamp(11px, 4.2cqw, 18px);
+  line-height: 1.32;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* Controles --------------------------------------------------------------- */
+
+.rb-shelf-nav {
+  position: relative;
+  z-index: 30;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 6px 0 clamp(14px, 3vh, 28px);
+}
+
+.rb-shelf-arrow {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #fdfdfd;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease;
+}
+
+.rb-shelf-arrow:hover {
+  background: rgba(90, 210, 208, 0.12);
+  border-color: var(--rb-teal);
+  color: var(--rb-teal);
+}
+
+.rb-shelf-dots {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.rb-shelf-dot {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.rb-shelf-dot span {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.24);
+  transition:
+    width 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 240ms ease;
+}
+
+.rb-shelf-dot:hover span {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.rb-shelf-dot.is-on span {
+  width: 20px;
+  background: var(--rb-teal);
+}
+
+/* Pantallas altas y angostas: la tapa puede ocupar más ancho porque el
+   abanico sangra a los costados. */
+@media (min-width: 769px) and (max-width: 1100px) {
+  .rb-shelf-card {
+    --rb-card-w: min(46vw, 430px);
+  }
 }
 
 @media (max-width: 768px) {
-  .rb-shelf--mobile {
-    touch-action: pan-y;
+  .rb-shelf-card {
+    --rb-card-w: min(68vw, 340px);
+    --rb-card-h: min(86%, 560px, calc(var(--rb-card-w) * 62 / 43));
   }
 
-  .rb-shelf--mobile .rb-shelf-card {
-    width: min(58vw, 280px);
-    height: min(78vw, 420px);
-    bottom: 10%;
+  .rb-shelf:not(.is-dragging) .is-center .rb-shelf-face {
+    animation: rb-cover-float 3.8s ease-in-out infinite;
   }
 
-  .rb-shelf--mobile .rb-shelf-face {
-    border-radius: 1.6rem;
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  .rb-shelf-nav {
+    gap: 8px;
   }
 
-  .rb-shelf--mobile .is-center .rb-shelf-face {
-    animation: rb-cover-float 3.4s ease-in-out infinite;
+  .rb-shelf-arrow {
+    width: 42px;
+    height: 42px;
   }
 
-  .rb-shelf-hint {
-    display: block;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 18px;
-    z-index: 14;
-    margin: 0;
-    font-family: var(--rb-mono);
-    font-size: 10px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.42);
-    animation: rb-hint-fade 2.8s ease-in-out infinite;
+  .rb-shelf-dot {
+    width: 16px;
   }
 }
 
@@ -340,16 +563,6 @@
   }
   50% {
     transform: translateY(-10px);
-  }
-}
-
-@keyframes rb-hint-fade {
-  0%,
-  100% {
-    opacity: 0.35;
-  }
-  50% {
-    opacity: 0.7;
   }
 }
 

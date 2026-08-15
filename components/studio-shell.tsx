@@ -16,14 +16,14 @@ export function StudioShell({
   return (
     <div
       className={`relative bg-[var(--background)] text-[var(--cream)] ${
-        isBlogIndex ? "h-screen overflow-hidden" : "min-h-dvh overflow-x-clip"
+        isBlogIndex ? "h-dvh overflow-hidden" : "min-h-dvh overflow-x-clip"
       }`}
     >
       <a href="#main" className="skip-link">
         Saltar al contenido
       </a>
       <SiteHeader />
-      <main id="main" className={isBlogIndex ? "h-screen overflow-hidden" : undefined}>
+      <main id="main" className={isBlogIndex ? "h-dvh overflow-hidden" : undefined}>
         {children}
       </main>
       {isBlog ? null : <SiteFooter />}
