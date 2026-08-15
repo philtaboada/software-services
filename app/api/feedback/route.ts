@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { buildFeedbackMetadata } from "@/lib/feedback-context";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_COMMENT = 2000;
@@ -31,6 +32,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Correo inválido." }, { status: 400 });
   }
 
+  const source = typeof body.source === "string" ? body.source.slice(0, 60) : "blog_article";
+  const metadata = buildFeedbackMetadata({
+    request,
+    client: body.context,
+    slug,
+    source,
+    rating,
+    hasComment: Boolean(comment),
+    wantsNewsletter,
+  });
+
   const supabase = createClient(url, key);
 
   const { error } = await supabase.from("post_feedback").insert({
@@ -40,7 +52,8 @@ export async function POST(request: Request) {
     comment: comment || null,
     email: wantsNewsletter ? email : null,
     wants_newsletter: wantsNewsletter,
-    source: typeof body.source === "string" ? body.source.slice(0, 60) : "blog_article",
+    source,
+    metadata,
   });
 
   if (error) {
@@ -53,7 +66,7 @@ export async function POST(request: Request) {
     const { error: subError } = await supabase.from("newsletter_subscribers").insert({
       email,
       source: "blog_feedback",
-      metadata: { slug },
+      metadata,
     });
     subscribed = !subError || subError.message.toLowerCase().includes("duplicate");
   }

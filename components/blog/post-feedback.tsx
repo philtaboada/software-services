@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { collectClientContext } from "@/lib/feedback-context";
 
 const SCALE = [
   { value: 1, label: "Nada" },
@@ -67,7 +68,16 @@ export function PostFeedback({
       const response = await fetch("/api/feedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug, title, rating, comment, wantsNewsletter, email, source }),
+        body: JSON.stringify({
+          slug,
+          title,
+          rating,
+          comment,
+          wantsNewsletter,
+          email,
+          source,
+          context: collectClientContext(),
+        }),
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.message || "No se pudo enviar.");
