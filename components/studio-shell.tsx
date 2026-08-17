@@ -12,6 +12,7 @@ export function StudioShell({
   const pathname = usePathname();
   const isBlog = pathname === "/blog" || pathname.startsWith("/blog/");
   const isBlogIndex = pathname === "/blog";
+  const isCarta = pathname.startsWith("/carta/");
 
   return (
     <div
@@ -22,11 +23,11 @@ export function StudioShell({
       <a href="#main" className="skip-link">
         Saltar al contenido
       </a>
-      <SiteHeader />
+      {isCarta ? null : <SiteHeader />}
       <main id="main" className={isBlogIndex ? "h-dvh overflow-hidden" : undefined}>
         {children}
       </main>
-      {isBlog ? null : <SiteFooter />}
+      {isBlog || isCarta ? null : <SiteFooter />}
     </div>
   );
 }
