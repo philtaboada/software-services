@@ -193,19 +193,19 @@ export function LandingPage() {
               Índice de casos <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
           </div>
-          <div className="grid gap-5 lg:grid-cols-12">
+          <div className="grid gap-8">
             {featured ? (
               <Link
                 href={`/trabajo/${featured.slug}`}
                 data-reveal
-                className="group lg:col-span-7"
+                className="group"
               >
-                <div data-clip className="work-shot relative aspect-[16/11]">
+                <div data-clip className="work-shot relative aspect-[16/9] lg:aspect-[21/9]">
                   <Image
                     src={featured.image}
                     alt={`Captura del sitio de ${featured.client}`}
                     fill
-                    sizes="(min-width: 1024px) 58vw, 100vw"
+                    sizes="100vw"
                     className="object-cover object-top"
                     priority
                   />
@@ -222,7 +222,7 @@ export function LandingPage() {
                 </p>
               </Link>
             ) : null}
-            <div className="flex flex-col gap-5 lg:col-span-5">
+            <div className="grid gap-5 md:grid-cols-3">
               {rest.map((item) => (
                 <Link key={item.slug} href={`/trabajo/${item.slug}`} data-reveal className="group">
                   <div data-clip className="work-shot relative aspect-[16/10]">
@@ -230,7 +230,7 @@ export function LandingPage() {
                       src={item.image}
                       alt={`Captura del sitio de ${item.client}`}
                       fill
-                      sizes="(min-width: 1024px) 38vw, 100vw"
+                      sizes="(min-width: 768px) 33vw, 100vw"
                       className="object-cover object-top"
                     />
                   </div>

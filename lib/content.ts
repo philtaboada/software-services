@@ -1,5 +1,29 @@
 export const CASES = [
   {
+    slug: "junno",
+    client: "Junno",
+    industry: "SaaS",
+    year: "2026",
+    type: "Producto · sistemas",
+    title: "Tareas, equipos y plazos en un solo producto",
+    context:
+      "Un producto para equipos que ya operan y no pueden seguir coordinando en chats, hojas y correos sueltos.",
+    problem: [
+      "La coordinación vivía repartida entre herramientas que nadie quería abrir.",
+      "Faltaba un workspace con vistas claras y colaboración en tiempo real.",
+    ],
+    approach:
+      "Producto SaaS de punta a punta: landing, auth, workspace y vistas (lista, tablero, calendario) con la misma mano de diseño e ingeniería.",
+    deliverables: [
+      "Plataforma en producción",
+      "Landing y onboarding",
+      "Vistas de lista, tablero y calendario",
+    ],
+    result: "Producto en uso. Tareas, equipos y plazos en un solo lugar.",
+    demoHref: "https://www.junno.online/",
+    image: "/images/portfolio-junno.png",
+  },
+  {
     slug: "inmobiliaria-fabre",
     client: "Inmobiliaria Fabre",
     industry: "Inmobiliaria",
@@ -66,6 +90,11 @@ export const CASES = [
 ] as const;
 
 export const CLIENT_LOGOS = [
+  {
+    name: "Junno",
+    src: "/images/clients/junno.svg",
+    href: "https://www.junno.online/",
+  },
   {
     name: "Inmobiliaria Fabre",
     src: "/images/clients/inmobiliaria-fabre.png",

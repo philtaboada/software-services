@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 64" role="img" aria-labelledby="title">
+  <title id="title">Junno</title>
+  <rect x="4" y="14" width="36" height="36" rx="14" fill="#6B5CE7" fill-opacity="0.22"/>
+  <rect x="16" y="26" width="20" height="20" rx="8" fill="#F06B4A"/>
+  <rect x="8" y="18" width="20" height="20" rx="8" fill="#6B5CE7"/>
+  <text x="52" y="42" fill="#FDFDFD" font-family="ui-sans-serif, system-ui, sans-serif" font-size="28" font-weight="700" letter-spacing="-0.8">Junno</text>
+</svg>

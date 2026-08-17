@@ -8,7 +8,7 @@ import { CASES } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Trabajo",
   description:
-    "Casos en producción: Inmobiliaria Fabre, JLH Corredores y La Alcoba. Software a medida y diseño desde Lima.",
+    "Casos en producción: Junno, Inmobiliaria Fabre, JLH Corredores y La Alcoba. Software a medida y diseño desde Lima.",
   alternates: { canonical: "/trabajo" },
 };
 
@@ -18,10 +18,10 @@ export default function TrabajoPage() {
       <PageHero
         kicker="Trabajo"
         title="Piezas con peso, en uso."
-        lede="Tres casos públicos. Sin métricas inventadas y sin usar la web corporativa de Wavys como pieza destacada."
+        lede="Cuatro casos públicos. Sin métricas inventadas y sin usar la web corporativa de Wavys como pieza destacada."
       />
       <section className="mx-auto max-w-[1440px] px-5 pb-20 sm:px-8 lg:px-12">
-        <ul className="grid gap-6 lg:grid-cols-3">
+        <ul className="grid gap-6 sm:grid-cols-2">
           {CASES.map((item) => (
             <li key={item.slug}>
               <Link
@@ -33,7 +33,7 @@ export default function TrabajoPage() {
                     src={item.image}
                     alt={`Captura del sitio de ${item.client}`}
                     fill
-                    sizes="(min-width: 1024px) 33vw, 100vw"
+                    sizes="(min-width: 640px) 50vw, 100vw"
                     className="object-cover object-top transition duration-700 group-hover:scale-[1.03]"
                   />
                 </div>
