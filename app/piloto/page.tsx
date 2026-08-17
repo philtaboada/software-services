@@ -29,7 +29,8 @@ export default function PilotoPage() {
         </h1>
         <p className="mt-6 max-w-[40rem] text-pretty text-[1.05rem] leading-8 text-[var(--cream-soft)]/80">
           Independientes, dueño visible, barrio. Brief del {PILOTO_META.dateLabel}.{" "}
-          {PILOTO_META.method} Cada ficha abre una demo de carta y un mensaje listo para WhatsApp.
+          {PILOTO_META.method} La demo que se manda es una sola: Fu-Man-Chu en /carta. Cada ficha
+          tiene el ángulo y el mensaje de WhatsApp.
         </p>
       </header>
 

@@ -84,7 +84,7 @@ export const PILOTO_RESTAURANTS: PilotoRestaurant[] = [
       { label: "WhatsApp", raw: "+51 946 345 833", e164: "51946345833", kind: "mobile", preferred: true },
     ],
     waMessage:
-      "Hola, soy de Wavys (Lima). En cumpatabernacriolla.com la carta está embebida como PDF — hay que descargarla. Armé una demo de cómo se vería Cumpa en el celular, con lo que ya publican (arroz con pato, malaya, seco). Se abre en 10 segundos, sin app. Si no les sirve, la borran.",
+      "Hola, soy de Wavys (Lima). En cumpatabernacriolla.com la carta está embebida como PDF — hay que descargarla. Te mando un ejemplo real: Fu-Man-Chu, del PDF al celular, sin app. Si les calza, la de Cumpa la armamos con su marca.",
     theme: {
       bg: "#1a100c",
       paper: "#2a1a14",
@@ -129,7 +129,7 @@ export const PILOTO_RESTAURANTS: PilotoRestaurant[] = [
       { label: "Fijo", raw: "(01) 463-2656", e164: "5114632656", kind: "landline" },
     ],
     waMessage:
-      "Hola, soy de Wavys (Lima). Vi la Carta Don Fernando 2025 en PDF — los precios se quedan en el archivo. Armé una demo de cómo se vería esa carta en el celular, con lo que ya publican. Toma 10 segundos. Si no les calza, la borran.",
+      "Hola, soy de Wavys (Lima). Vi la Carta Don Fernando 2025 en PDF — los precios se quedan en el archivo. Te mando un ejemplo real: Fu-Man-Chu, del PDF al celular. Si les calza, la de Don Fernando la armamos con su marca.",
     theme: {
       bg: "#14110c",
       paper: "#221c14",
@@ -173,7 +173,7 @@ export const PILOTO_RESTAURANTS: PilotoRestaurant[] = [
       { label: "WhatsApp reservas", raw: "+51 938 321 549", e164: "51938321549", kind: "mobile", preferred: true },
     ],
     waMessage:
-      "Hola, soy de Wavys (Lima). Vi que en La Tostadora la carta está en la web y las reservas/eventos se cierran por WhatsApp. Armé una demo de carta en el celular — café, pizzas, piqueos, vinos — para que el pedido no viva solo en el chat. Si no les sirve, la borran.",
+      "Hola, soy de Wavys (Lima). En La Tostadora la carta está en la web y las reservas se cierran por WhatsApp. Te mando un ejemplo de carta digital (Fu-Man-Chu, hecha a partir de su PDF). Si les calza, la de ustedes la armamos con su marca.",
     theme: {
       bg: "#16110e",
       paper: "#241a16",
@@ -216,7 +216,7 @@ export const PILOTO_RESTAURANTS: PilotoRestaurant[] = [
       { label: "WhatsApp", raw: "986 641 179", e164: "51986641179", kind: "mobile", preferred: true },
     ],
     waMessage:
-      "Hola, soy de Wavys (Lima). En lacuina.pe se describe la carta pero no hay precios. Armé una demo de cómo se vería La Cuina en el celular — tortilla, bravas, mollejitas — para que el comensal no tenga que preguntar por WhatsApp. Si no les calza, la borran.",
+      "Hola, soy de Wavys (Lima). En lacuina.pe se describe la carta pero no hay precios. Te mando un ejemplo de carta digital (Fu-Man-Chu). Si les calza, la de La Cuina la armamos con precios y su marca.",
     theme: {
       bg: "#140c10",
       paper: "#221218",
@@ -260,7 +260,7 @@ export const PILOTO_RESTAURANTS: PilotoRestaurant[] = [
       { label: "Fijo", raw: "(01) 256-2269", e164: "5112562269", kind: "landline" },
     ],
     waMessage:
-      "Hola, soy de Wavys (Lima). Arlotia no tiene web propia — la carta vive en un PDF de directorio y en Facebook. Armé una demo de cómo se vería en el celular (paella, pulpo, tapas), con un link que se manda por WhatsApp. Si no les sirve, la borran.",
+      "Hola, soy de Wavys (Lima). Arlotia no tiene web propia — la carta vive en un PDF de directorio. Te mando un ejemplo real: Fu-Man-Chu, del PDF al celular. Si les calza, la de Arlotia la armamos con su marca.",
     theme: {
       bg: "#0c1218",
       paper: "#141c26",
@@ -303,7 +303,7 @@ export const PILOTO_RESTAURANTS: PilotoRestaurant[] = [
       { label: "Fijo (WA no aparece)", raw: "(01) 448-8667", e164: "5114488667", kind: "landline" },
     ],
     waMessage:
-      "Hola, soy de Wavys (Lima). En elreymarino.com hay 6 platos con precio y un botón de “carta completa” que no abre un menú real. Armé una demo de cómo se vería esa carta en el celular (ceviche S/45, jalea S/49, piqueo S/90). Si no les calza, la borran.",
+      "Hola, soy de Wavys (Lima). En elreymarino.com hay 6 platos y un botón de “carta completa” que no abre un menú real. Te mando un ejemplo de carta digital (Fu-Man-Chu, hecha a partir de su PDF). Si les calza, la de ustedes la armamos completa.",
     theme: {
       bg: "#071416",
       paper: "#0e2224",
@@ -347,7 +347,7 @@ export const PILOTO_RESTAURANTS: PilotoRestaurant[] = [
       { label: "Fijo", raw: "270-3725", e164: "5112703725", kind: "landline" },
     ],
     waMessage:
-      "Hola, soy de Wavys (Lima). En la web de Pedrito (Webnode) hay 5 platos con precios que se sienten de otra temporada. Armé una demo de carta en el celular — ceviche S/22, mixto S/24, combinado S/26 — para actualizarla sin tocar la plantilla. Si no les sirve, la borran.",
+      "Hola, soy de Wavys (Lima). En la web de Pedrito (Webnode) hay 5 platos con precios que se sienten de otra temporada. Te mando un ejemplo de carta digital (Fu-Man-Chu). Si les calza, actualizamos la de Pedrito sin tocar la plantilla.",
     theme: {
       bg: "#0c1418",
       paper: "#152026",
@@ -388,7 +388,7 @@ export const PILOTO_RESTAURANTS: PilotoRestaurant[] = [
       { label: "WhatsApp", raw: "+51 923 853 445", e164: "51923853445", kind: "mobile", preferred: true },
     ],
     waMessage:
-      "Hola, soy de Wavys (Lima). Me Gusta no tiene web — la carta vive en el salón y en lo que usted recomienda. Armé una demo de cómo se vería pasta, pizza y lasagna en el celular, con un link que se manda por WhatsApp. Si no les calza, la borran.",
+      "Hola, soy de Wavys (Lima). Me Gusta no tiene web — la carta vive en el salón. Te mando un ejemplo de carta digital (Fu-Man-Chu, hecha a partir de su PDF). Si les calza, la de ustedes la armamos con su marca.",
     theme: {
       bg: "#160c0c",
       paper: "#241414",
@@ -430,7 +430,7 @@ export const PILOTO_RESTAURANTS: PilotoRestaurant[] = [
       { label: "Fijo", raw: "(01) 497-5918", e164: "5114975918", kind: "landline" },
     ],
     waMessage:
-      "Hola, soy de Wavys (Lima). Ozu no tiene dominio propio — la carta se anuncia en Instagram y en prensa. Armé una demo de cómo se vería nikkei + Thai en el celular, con un link para reservar. Si no les sirve, la borran.",
+      "Hola, soy de Wavys (Lima). Ozu no tiene dominio propio — la carta se anuncia en Instagram y en prensa. Te mando un ejemplo de carta digital (Fu-Man-Chu). Si les calza, la de Ozu la armamos con un link para reservar.",
     theme: {
       bg: "#0c0c0e",
       paper: "#161618",
@@ -472,7 +472,7 @@ export const PILOTO_RESTAURANTS: PilotoRestaurant[] = [
       { label: "Reservas", raw: "566-3875", e164: "5115663875", kind: "landline" },
     ],
     waMessage:
-      "Hola, soy de Wavys (Lima). No vimos una carta digital usable de La Casita — las reservas viven en teléfono y WhatsApp. Armé una demo de cómo se vería la pachamanca en el celular, con un botón de reserva. Si no les calza, la borran.",
+      "Hola, soy de Wavys (Lima). No vimos una carta digital usable de La Casita — las reservas viven en teléfono y WhatsApp. Te mando un ejemplo real: Fu-Man-Chu, del PDF al celular. Si les calza, la de ustedes la armamos con botón de reserva.",
     theme: {
       bg: "#16100a",
       paper: "#241810",
@@ -504,6 +504,10 @@ export function preferredPhone(item: PilotoRestaurant) {
 
 export function waHref(e164: string, text: string) {
   return `https://wa.me/${e164}?text=${encodeURIComponent(text)}`;
+}
+
+export function pitchMessage(item: PilotoRestaurant, demoUrl: string) {
+  return `${item.waMessage}\n\nAsí se ve: ${demoUrl}`;
 }
 
 export function formatSoles(value: number) {

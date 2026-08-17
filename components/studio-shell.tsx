@@ -12,7 +12,7 @@ export function StudioShell({
   const pathname = usePathname();
   const isBlog = pathname === "/blog" || pathname.startsWith("/blog/");
   const isBlogIndex = pathname === "/blog";
-  const isCarta = pathname.startsWith("/carta/");
+  const isCarta = pathname === "/carta" || pathname.startsWith("/carta/");
 
   return (
     <div

@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { CARTA_DEMO_PATH } from "@/lib/fumanchu";
 import {
   PILOTO_RESTAURANTS,
+  pitchMessage,
   preferredPhone,
   waHref,
   type PilotoRestaurant,
@@ -73,12 +75,11 @@ export function PilotoBoard() {
       <ol className="mt-8 grid gap-5">
         {list.map((item) => {
           const phone = preferredPhone(item);
-          const cartaPath = `/carta/${item.slug}`;
-          const cartaUrl =
+          const demoUrl =
             typeof window === "undefined"
-              ? cartaPath
-              : `${window.location.origin}${cartaPath}`;
-          const message = `${item.waMessage}\n\nDemo: ${cartaUrl}`;
+              ? CARTA_DEMO_PATH
+              : `${window.location.origin}${CARTA_DEMO_PATH}`;
+          const message = pitchMessage(item, demoUrl);
           const canWa = phone.kind === "mobile";
 
           return (
@@ -166,8 +167,8 @@ export function PilotoBoard() {
               </ul>
 
               <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-                <Link href={cartaPath} className="btn-primary">
-                  Ver carta demo
+                <Link href={CARTA_DEMO_PATH} className="btn-primary">
+                  Ver la demo
                 </Link>
                 {canWa ? (
                   <a
@@ -191,9 +192,9 @@ export function PilotoBoard() {
                 <button
                   type="button"
                   className="btn-ghost"
-                  onClick={() => copy(`url-${item.slug}`, cartaUrl)}
+                  onClick={() => copy(`url-${item.slug}`, demoUrl)}
                 >
-                  {copied === `url-${item.slug}` ? "Link copiado" : "Copiar link de carta"}
+                  {copied === `url-${item.slug}` ? "Link copiado" : "Copiar link de la demo"}
                 </button>
               </div>
             </li>
