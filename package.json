@@ -3,18 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@remotion/player": "^4.0.512",
     "@supabase/supabase-js": "^2.112.3",
     "gsap": "^3.15.0",
     "next": "16.2.1",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "remotion": "^4.0.512"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

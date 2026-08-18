@@ -18,9 +18,8 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Carta digital — demo Fu-Man-Chu",
-  description:
-    "Demo de carta digital Wavys: Fu-Man-Chu Chifita, del PDF al celular. La pieza que se manda por WhatsApp.",
+  title: "Fu-Man-Chu — Carta",
+  description: "Carta de Fu-Man-Chu Chifita.",
   robots: { index: false, follow: false },
   alternates: { canonical: "/carta" },
 };

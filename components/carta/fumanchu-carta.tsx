@@ -1,9 +1,8 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { FUMANCHU_BLUR } from "@/lib/fumanchu-blur";
 import {
   FUMANCHU,
   FUMANCHU_SECTIONS,
@@ -14,9 +13,12 @@ import {
   type FumanchuDish,
 } from "@/lib/fumanchu";
 
-gsap.registerPlugin(useGSAP);
-
 const HITS = featuredDishes();
+
+function blurProps(src?: string) {
+  const blurDataURL = src ? FUMANCHU_BLUR[src] : undefined;
+  return blurDataURL ? ({ placeholder: "blur", blurDataURL } as const) : {};
+}
 
 type CartLine = {
   key: string;
@@ -27,29 +29,112 @@ type CartLine = {
   image?: string;
 };
 
+function isActionTarget(target: EventTarget | null) {
+  return target instanceof Element && Boolean(target.closest("button"));
+}
+
+const HERO_VIDEO = {
+  hd: "/carta/fumanchu/hero-wok-hd.mp4",
+  lite: "/carta/fumanchu/hero-wok.mp4",
+} as const;
+
+type HeroTier = keyof typeof HERO_VIDEO | null;
+
+// El video del hero pesa más que toda la carta junta. Elegimos versión según la
+// conexión: buena baja el original, intermedia la comprimida, mala se queda con
+// la foto. Sin Network Information API (Safari) asumimos intermedia.
+function pickHeroTier(): HeroTier {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return null;
+
+  const connection = (
+    navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string; downlink?: number };
+    }
+  ).connection;
+
+  if (connection?.saveData) return null;
+  if (!connection?.effectiveType) return "lite";
+  if (!connection.effectiveType.includes("4g")) {
+    return connection.effectiveType === "3g" ? "lite" : null;
+  }
+
+  return connection.downlink !== undefined && connection.downlink < 5 ? "lite" : "hd";
+}
+
+function useHeroVideo() {
+  const [tier, setTier] = useState<HeroTier>(null);
+
+  useEffect(() => {
+    let idle = 0;
+    const start = () => {
+      idle = window.setTimeout(() => setTier(pickHeroTier()), 600);
+    };
+
+    if (document.readyState === "complete") {
+      start();
+      return () => window.clearTimeout(idle);
+    }
+
+    window.addEventListener("load", start, { once: true });
+    return () => {
+      window.removeEventListener("load", start);
+      window.clearTimeout(idle);
+    };
+  }, []);
+
+  return tier;
+}
+
 function DishCard({
   dish,
   accent,
+  open,
+  onToggle,
   onAdd,
 }: {
   dish: FumanchuDish;
   accent: string;
+  open: boolean;
+  onToggle: () => void;
   onAdd: (dish: FumanchuDish, variant?: string) => void;
 }) {
+  const [warm, setWarm] = useState(false);
+
   return (
     <article
       className="fmc-card"
       data-has-image={dish.image ? "true" : undefined}
+      data-open={open ? "true" : undefined}
       style={{ "--card-accent": accent } as CSSProperties}
+      onMouseEnter={() => setWarm(true)}
+      onClick={(event) => {
+        if (!dish.image || isActionTarget(event.target)) return;
+        onToggle();
+      }}
     >
       <div className="fmc-card-media">
         {dish.image ? (
-          <Image src={dish.image} alt="" fill sizes="90px" className="object-cover" />
+          <Image
+            src={dish.image}
+            alt=""
+            fill
+            sizes="96px"
+            loading="lazy"
+            className="object-cover"
+            {...blurProps(dish.image)}
+          />
         ) : null}
       </div>
-      {dish.image ? (
+      {dish.image && (open || warm) ? (
         <div className="fmc-card-solo" aria-hidden>
-          <Image src={dish.image} alt="" fill sizes="420px" className="object-cover" />
+          <Image
+            src={dish.image}
+            alt=""
+            fill
+            sizes="(min-width: 720px) 44vw, 92vw"
+            className="object-cover"
+            {...blurProps(dish.image)}
+          />
         </div>
       ) : null}
       <h3 className="fmc-card-name">{dish.name}</h3>
@@ -80,12 +165,13 @@ function DishCard({
 }
 
 export function FumanchuCarta() {
-  const rootRef = useRef<HTMLDivElement>(null);
+  const heroTier = useHeroVideo();
   const [filter, setFilter] = useState("todos");
   const [query, setQuery] = useState("");
   const [cart, setCart] = useState<CartLine[]>([]);
   const [openCart, setOpenCart] = useState(false);
   const [sent, setSent] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
   const sections = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -99,21 +185,12 @@ export function FumanchuCarta() {
     })).filter((section) => section.dishes.length > 0);
   }, [filter, query]);
 
+  useEffect(() => {
+    setPreview(null);
+  }, [filter, query]);
+
   const count = cart.reduce((sum, line) => sum + line.qty, 0);
   const total = cart.reduce((sum, line) => sum + line.price * line.qty, 0);
-
-  useGSAP(
-    () => {
-      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (reduce) return;
-      const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
-      intro
-        .from("[data-hero-kicker]", { autoAlpha: 0, y: 16, duration: 0.4 })
-        .from("[data-hero-word]", { autoAlpha: 0, y: 28, duration: 0.7 }, "-=0.1")
-        .from("[data-hero-lead], [data-hero-logo]", { autoAlpha: 0, y: 18, duration: 0.55, stagger: 0.08 }, "-=0.35");
-    },
-    { scope: rootRef },
-  );
 
   useEffect(() => {
     document.body.style.overflow = openCart ? "hidden" : "";
@@ -148,10 +225,31 @@ export function FumanchuCarta() {
   }
 
   return (
-    <div ref={rootRef} className="fmc">
+    <div className="fmc">
       <header className="fmc-hero">
         <div className="fmc-hero-media">
-          <Image src="/carta/fumanchu/hero-wok.webp" alt="" fill priority sizes="100vw" />
+          <Image
+            src="/carta/fumanchu/hero-wok.webp"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+            {...blurProps("/carta/fumanchu/hero-wok.webp")}
+          />
+          {heroTier ? (
+            <video
+              key={heroTier}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              aria-hidden
+            >
+              <source src={HERO_VIDEO[heroTier]} type="video/mp4" />
+            </video>
+          ) : null}
         </div>
         <div className="fmc-hero-shade" />
         <Image
@@ -160,21 +258,20 @@ export function FumanchuCarta() {
           alt="Fu-Man-Chu Chifita"
           width={420}
           height={420}
+          sizes="(min-width: 768px) 216px, 40vw"
           className="fmc-logo"
           priority
+          {...blurProps("/carta/fumanchu/logo.webp")}
         />
         <div className="fmc-hero-copy">
           <p data-hero-kicker className="fmc-badge">
-            Carta digital · no es un PDF
+            {FUMANCHU.hours.openLabel} {FUMANCHU.hours.today}
           </p>
           <h1 data-hero-word className="fmc-word">
             FU-MAN
             <br />
             <em>CHU</em>
           </h1>
-          <p data-hero-lead className="fmc-lead">
-            Chifa de barrio, en el celular. Armás el pedido con el pulgar. El archivo se queda en Drive.
-          </p>
         </div>
       </header>
 
@@ -213,39 +310,58 @@ export function FumanchuCarta() {
         {filter === "todos" && !query ? (
           <div className="fmc-featured" aria-label="Firmas de la casa">
             {HITS.map((dish) => (
-              <button
+              <article
                 key={dish.name}
-                type="button"
                 className="fmc-hit text-left"
                 data-has-image={dish.image ? "true" : undefined}
+                data-open={preview === dish.name ? "true" : undefined}
                 style={{ "--hit-accent": dish.accent } as CSSProperties}
-                onClick={() => add(dish)}
+                onClick={(event) => {
+                  if (!dish.image || isActionTarget(event.target)) return;
+                  setPreview((current) => (current === dish.name ? null : dish.name));
+                }}
               >
                 {dish.image ? (
                   <span className="fmc-hit-media">
-                    <Image src={dish.image} alt="" fill sizes="280px" className="object-cover" />
+                    <Image
+                      src={dish.image}
+                      alt=""
+                      fill
+                      sizes="(min-width: 1100px) 25vw, (min-width: 720px) 46vw, 92vw"
+                      loading="lazy"
+                      className="object-cover"
+                      {...blurProps(dish.image)}
+                    />
                   </span>
                 ) : null}
-                <p className="fmc-hit-kicker">{dish.sectionTitle} · pedir</p>
+                <p className="fmc-hit-kicker">{dish.sectionTitle}</p>
                 <p className="fmc-hit-name">{dish.name}</p>
-                {dish.price != null ? <p className="fmc-hit-price">{formatSoles(dish.price)}</p> : null}
-              </button>
+                <button type="button" className="fmc-hit-price" onClick={() => add(dish)}>
+                  {dish.price != null ? `Pedir · ${formatSoles(dish.price)}` : "Pedir"}
+                </button>
+              </article>
             ))}
           </div>
         ) : null}
 
         {sections.length === 0 ? (
-          <p className="fmc-empty">Nada con esa búsqueda. Probá “chaufa” o “wantan”.</p>
+          <p className="fmc-empty">No hay un plato con eso.</p>
         ) : (
           sections.map((section) => (
             <section key={section.id} id={section.id} className="fmc-section">
               <div className="fmc-section-head">
                 <h2 className="fmc-section-title">{section.title}</h2>
-                <p className="fmc-section-hook">{section.hook}</p>
               </div>
               <div className="fmc-grid">
                 {section.dishes.map((dish) => (
-                  <DishCard key={dish.name} dish={dish} accent={section.accent} onAdd={add} />
+                  <DishCard
+                    key={dish.name}
+                    dish={dish}
+                    accent={section.accent}
+                    open={preview === dish.name}
+                    onToggle={() => setPreview((current) => (current === dish.name ? null : dish.name))}
+                    onAdd={add}
+                  />
                 ))}
               </div>
             </section>
@@ -256,16 +372,13 @@ export function FumanchuCarta() {
           <a href={FUMANCHU.instagram} target="_blank" rel="noopener noreferrer">
             {FUMANCHU.instagramHandle}
           </a>
-          <p className="mt-2">
-            Pedido demo: se arma y se “envía”, no se cobra. Así se ve pedir sin el mozo explicando el PDF.
-          </p>
         </footer>
       </div>
 
       <div className="fmc-bar">
         <div className="fmc-bar-inner">
           <button type="button" className="fmc-btn fmc-btn-gold" onClick={() => setOpenCart(true)}>
-            {count ? `Pedido · ${count} · ${formatSoles(total)}` : "Ver pedido demo"}
+            {count ? `Pedido · ${count} · ${formatSoles(total)}` : "Ver pedido"}
           </button>
           <a
             href={FUMANCHU.instagram}
@@ -279,13 +392,13 @@ export function FumanchuCarta() {
       </div>
 
       {openCart ? (
-        <div className="fmc-sheet" role="dialog" aria-modal="true" aria-label="Pedido demo">
+        <div className="fmc-sheet" role="dialog" aria-modal="true" aria-label="Pedido">
           <button type="button" className="absolute inset-0" aria-label="Cerrar" onClick={() => setOpenCart(false)} />
           <div className="fmc-sheet-panel relative">
             <div className="fmc-sheet-head">
               <div>
-                <p className="fmc-badge">Pedido demo · no se cobra</p>
-                <h2 className="fmc-sheet-title mt-2">Tu mesa</h2>
+                <p className="fmc-badge">{FUMANCHU.name}</p>
+                <h2 className="fmc-sheet-title mt-2">Tu pedido</h2>
               </div>
               <button type="button" className="fmc-btn fmc-btn-ghost" onClick={() => setOpenCart(false)}>
                 Cerrar
@@ -294,12 +407,12 @@ export function FumanchuCarta() {
 
             {sent ? (
               <div className="fmc-ok">
-                Pedido {sent} “enviado” a cocina. Es fake: nadie recibe esto. Así se ve el flujo.
+                Pedido {sent}. Ya está en cocina.
               </div>
             ) : null}
 
             {cart.length === 0 && !sent ? (
-              <p className="fmc-empty">Todavía no hay platos. Tocá Pedir en la carta.</p>
+              <p className="fmc-empty">Aún no hay nada. Toca Pedir.</p>
             ) : null}
 
             <ul>
@@ -307,7 +420,14 @@ export function FumanchuCarta() {
                 <li key={line.key} className="fmc-line">
                   <span className="relative h-14 overflow-hidden rounded-lg bg-[#1a0c0c]">
                     {line.image ? (
-                      <Image src={line.image} alt="" fill sizes="56px" className="object-cover" />
+                      <Image
+                        src={line.image}
+                        alt=""
+                        fill
+                        sizes="56px"
+                        className="object-cover"
+                        {...blurProps(line.image)}
+                      />
                     ) : null}
                   </span>
                   <span>
@@ -334,7 +454,7 @@ export function FumanchuCarta() {
                   Total {formatSoles(total)}
                 </p>
                 <button type="button" className="fmc-btn fmc-btn-gold" onClick={sendFakeOrder}>
-                  Enviar pedido demo
+                  Enviar pedido
                 </button>
               </div>
             ) : null}

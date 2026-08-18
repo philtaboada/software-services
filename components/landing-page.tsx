@@ -12,6 +12,7 @@ import { FaqList } from "@/components/faq-list";
 import { ArrowIcon, ArrowUpRight } from "@/components/icons";
 import { LogoMarquees } from "@/components/logo-marquees";
 import { PageThread, ThreadNode } from "@/components/page-thread";
+import { WorkHoverCase } from "@/components/work-hover-case";
 import { CASES, PAINS, PROCESS, SERVICES } from "@/lib/content";
 import { BOOKING_HREF } from "@/lib/site";
 
@@ -194,54 +195,10 @@ export function LandingPage() {
             </Link>
           </div>
           <div className="grid gap-8">
-            {featured ? (
-              <Link
-                href={`/trabajo/${featured.slug}`}
-                data-reveal
-                className="group"
-              >
-                <div data-clip className="work-shot relative aspect-[16/9] lg:aspect-[21/9]">
-                  <Image
-                    src={featured.image}
-                    alt={`Captura del sitio de ${featured.client}`}
-                    fill
-                    sizes="100vw"
-                    className="object-cover object-top"
-                    priority
-                  />
-                </div>
-                <p className="mt-4 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[var(--accent)]">
-                  {featured.industry} · {featured.year}
-                </p>
-                <h3 className="mt-2 font-display text-[1.45rem] font-semibold tracking-[-0.03em]">
-                  {featured.client}
-                </h3>
-                <p className="mt-1 text-[0.95rem] text-[var(--cream-soft)]/70">{featured.title}</p>
-                <p className="mt-2 max-w-[36rem] text-[0.88rem] leading-6 text-[var(--cream-soft)]/55">
-                  {featured.result}
-                </p>
-              </Link>
-            ) : null}
+            {featured ? <WorkHoverCase item={featured} variant="featured" priority /> : null}
             <div className="grid gap-5 md:grid-cols-3">
               {rest.map((item) => (
-                <Link key={item.slug} href={`/trabajo/${item.slug}`} data-reveal className="group">
-                  <div data-clip className="work-shot relative aspect-[16/10]">
-                    <Image
-                      src={item.image}
-                      alt={`Captura del sitio de ${item.client}`}
-                      fill
-                      sizes="(min-width: 768px) 33vw, 100vw"
-                      className="object-cover object-top"
-                    />
-                  </div>
-                  <p className="mt-3 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[var(--accent)]">
-                    {item.industry} · {item.year}
-                  </p>
-                  <h3 className="mt-1 font-display text-[1.2rem] font-semibold tracking-[-0.03em]">
-                    {item.client}
-                  </h3>
-                  <p className="mt-1 text-[0.88rem] text-[var(--cream-soft)]/55">{item.result}</p>
-                </Link>
+                <WorkHoverCase key={item.slug} item={item} />
               ))}
             </div>
           </div>
