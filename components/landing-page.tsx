@@ -13,6 +13,7 @@ import { ArrowIcon, ArrowUpRight } from "@/components/icons";
 import { LogoMarquees } from "@/components/logo-marquees";
 import { PageThread, ThreadNode } from "@/components/page-thread";
 import { WorkHoverCase } from "@/components/work-hover-case";
+import { CARTA_OFERTA } from "@/lib/carta-oferta";
 import { CASES, PAINS, PROCESS, SERVICES } from "@/lib/content";
 import { BOOKING_HREF } from "@/lib/site";
 
@@ -204,6 +205,29 @@ export function LandingPage() {
           </div>
         </div>
         <ThreadNode className="bottom-8 left-8" />
+      </section>
+
+      <section id="carta-digital" className="relative py-20 sm:py-24">
+        <ThreadNode className="right-[14%] top-10 hidden lg:block" />
+        <div className="relative mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+          <div
+            data-reveal
+            className="flex flex-col gap-8 border-t border-[var(--line-strong)] pt-10 lg:flex-row lg:items-end lg:justify-between"
+          >
+            <div className="max-w-[36rem]">
+              <p className="section-label">{CARTA_OFERTA.label}</p>
+              <h2 className="mt-5 font-display text-[clamp(1.7rem,3.6vw,2.6rem)] font-bold tracking-[-0.04em]">
+                {CARTA_OFERTA.headline}
+              </h2>
+              <p className="mt-4 text-[1rem] leading-7 text-[var(--cream-soft)]/70">
+                {CARTA_OFERTA.deck}
+              </p>
+            </div>
+            <Link href={CARTA_OFERTA.path} className="btn-ghost">
+              Ver carta digital <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+        </div>
       </section>
 
       <section id="inversion" className="relative py-20 sm:py-24">
