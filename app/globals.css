@@ -1907,3 +1907,198 @@ body {
     border-radius: 1.05rem;
   }
 }
+
+/* —— Carta digital offer —— */
+.carta-hero__veil {
+  background:
+    linear-gradient(90deg, rgba(7, 6, 4, 0.92) 0%, rgba(7, 6, 4, 0.72) 42%, rgba(7, 6, 4, 0.35) 100%),
+    linear-gradient(180deg, rgba(0, 9, 8, 0.45) 0%, rgba(7, 6, 4, 0.2) 35%, rgba(7, 6, 4, 0.88) 100%);
+}
+
+@media (max-width: 1023px) {
+  .carta-hero__veil {
+    background:
+      linear-gradient(180deg, rgba(0, 9, 8, 0.55) 0%, rgba(7, 6, 4, 0.35) 28%, rgba(7, 6, 4, 0.92) 72%);
+  }
+}
+
+.carta-split {
+  border-top: 1px solid var(--line-strong);
+  padding-top: 1.75rem;
+}
+
+.carta-split__kicker {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.carta-split--muted .carta-split__kicker {
+  color: var(--muted);
+}
+
+.carta-point {
+  border: 1px solid var(--line);
+  border-radius: 1.3rem;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  padding: 1.55rem 1.45rem 1.7rem;
+  transition:
+    border-color 0.45s ease,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.45s ease;
+}
+
+.carta-point:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  background: color-mix(in srgb, var(--surface-2) 80%, transparent);
+  transform: translateY(-4px);
+}
+
+.carta-piloto {
+  position: relative;
+  background: color-mix(in srgb, var(--surface) 70%, #001510);
+}
+
+.carta-piloto__grid {
+  background-image:
+    linear-gradient(rgba(1, 253, 145, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(1, 253, 145, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 70% 80% at 80% 40%, #000 20%, transparent 75%);
+  opacity: 0.7;
+}
+
+.carta-phone {
+  position: relative;
+  width: min(100%, 17.5rem);
+}
+
+.carta-phone__glow {
+  position: absolute;
+  inset: 8% -12% -8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 28%, transparent), transparent 68%);
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+.carta-phone__bezel {
+  position: relative;
+  border-radius: 2rem;
+  border: 1px solid color-mix(in srgb, var(--cream) 18%, transparent);
+  background: #0a0c0b;
+  box-shadow:
+    0 28px 60px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  padding: 0.55rem;
+}
+
+.carta-phone__notch {
+  position: absolute;
+  top: 0.78rem;
+  left: 50%;
+  z-index: 2;
+  width: 4.2rem;
+  height: 0.7rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: #050605;
+}
+
+.carta-phone__screen {
+  overflow: hidden;
+  border-radius: 1.55rem;
+  background: #111412;
+  padding: 1.55rem 0.85rem 1rem;
+}
+
+.carta-phone__status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--cream-soft) 70%, transparent);
+}
+
+.carta-phone__dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+.carta-phone__shot {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 0.85rem;
+  background: #1a1f1c;
+}
+
+.carta-phone__lines {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.85rem;
+}
+
+.carta-phone__lines--compact {
+  margin-top: 0;
+  flex: 1;
+  align-content: center;
+}
+
+.carta-phone__line {
+  display: block;
+  height: 0.38rem;
+  width: 62%;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--cream) 14%, transparent);
+}
+
+.carta-phone__line--wide {
+  width: 78%;
+}
+
+.carta-phone__line--short {
+  width: 42%;
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.carta-phone__row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 0.85rem;
+}
+
+.carta-phone__thumb {
+  position: relative;
+  display: block;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 0.55rem;
+  background: #1a1f1c;
+}
+
+@media (min-width: 1024px) {
+  .carta-phone {
+    width: min(100%, 19.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carta-point,
+  .carta-point:hover {
+    transition: none;
+    transform: none;
+  }
+}
