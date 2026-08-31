@@ -7,6 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     "",
     "/trabajo",
+    "/carta-digital",
     "/servicios",
     "/inversion",
     "/equipo",
@@ -19,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${SITE_URL}${path || "/"}`,
     lastModified,
     changeFrequency: "weekly" as const,
-    priority: path === "" ? 1 : 0.7,
+    priority: path === "" ? 1 : path === "/carta-digital" ? 0.85 : 0.7,
   }));
 
   const cases = CASES.map((item) => ({

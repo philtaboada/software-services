@@ -35,6 +35,7 @@ export const STACK = [
 
 export const NAV_LINKS = [
   { href: "/trabajo", label: "Trabajo" },
+  { href: "/carta-digital", label: "Carta digital" },
   { href: "/servicios", label: "Servicios" },
   { href: "/inversion", label: "Inversión" },
   { href: "/equipo", label: "Equipo" },
@@ -43,6 +44,7 @@ export const NAV_LINKS = [
 
 export const FOOTER_LINKS = [
   { href: "/trabajo", label: "Trabajo" },
+  { href: "/carta-digital", label: "Carta digital" },
   { href: "/servicios", label: "Servicios" },
   { href: "/proceso", label: "Proceso" },
   { href: "/equipo", label: "Equipo" },

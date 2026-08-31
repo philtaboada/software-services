@@ -60,6 +60,11 @@ const nextConfig: NextConfig = {
         destination: "/carta",
         permanent: false,
       },
+      {
+        source: "/cartas",
+        destination: "/carta-digital",
+        permanent: true,
+      },
     ];
   },
 };
