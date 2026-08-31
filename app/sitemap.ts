@@ -14,6 +14,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/proceso",
     "/blog",
     "/blog/radar-n1",
+    "/blog/radar-n2",
+    "/blog/radar-n3",
     "/privacidad",
     "/terminos",
   ].map((path) => ({

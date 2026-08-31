@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/blog" },
   openGraph: {
     title: "Radar · Revistas",
-    description: "Las revistas semanales de Wavys. Empieza con el N°1.",
-    images: ["/radar/n1/tapa.png"],
+    description: "Las revistas semanales de Wavys. Empieza con el último número.",
+    images: ["/radar/n3/tapa.png"],
   },
 };
 

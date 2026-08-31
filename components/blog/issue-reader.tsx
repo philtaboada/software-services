@@ -162,8 +162,10 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
               <Image src={issue.tema.image} alt={issue.tema.imageAlt} fill data-parallax className="object-cover" sizes="100vw" />
             </figure>
             <p className="rb-display mt-10 max-w-[20ch] text-4xl sm:text-5xl" data-reveal>
-              {issue.tema.lead.replace('Yo doy el ok.', '')}
-              <b className="font-[var(--rb-italic)] italic"> Yo doy el ok.</b>
+              {issue.tema.lead}
+              {issue.tema.leadEm ? (
+                <b className="font-[var(--rb-italic)] italic"> {issue.tema.leadEm}</b>
+              ) : null}
             </p>
             <div className="rb-prose mt-8 text-white/84" data-stagger>
               {issue.tema.paragraphs.map((p) => (
@@ -182,11 +184,13 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
               <p className="rb-display text-[clamp(2.4rem,5vw,4.4rem)] text-[var(--rb-ink)]">
                 “{issue.tema.quote} <em className="rb-em">{issue.tema.quoteEm}</em>”
               </p>
-              <p className="rb-mono mt-6 text-[11px] text-[var(--rb-pap-45)]">Phil · sobre Grok Bot</p>
+              <p className="rb-mono mt-6 text-[11px] text-[var(--rb-pap-45)]">
+                {issue.tema.quoteAttr ?? 'Phil'}
+              </p>
             </blockquote>
 
             <h3 className="rb-display mt-20 text-4xl sm:text-6xl" data-reveal>
-              Cómo lo uso
+              {issue.tema.casesTitle ?? 'Cómo lo uso'}
             </h3>
             <div className="mt-10 grid gap-8 md:grid-cols-2 xl:grid-cols-3" data-stagger>
               {issue.tema.cases.map((item) => (
@@ -204,7 +208,7 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
             </figure>
 
             <div className="mt-16 max-w-[820px]" data-reveal>
-              <p className="rb-kicker">Grok Bot · cierre del tema</p>
+              <p className="rb-kicker">{issue.tema.closeKicker ?? 'Cierre del tema'}</p>
               <h3 className="rb-display mt-4 text-[clamp(2.2rem,5vw,4rem)]">
                 {issue.tema.closeTitle} <em className="rb-em">{issue.tema.closeTitleEm}</em>
               </h3>
@@ -283,9 +287,9 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
                 </li>
               ))}
             </ol>
-            <p className="rb-mono mt-3 text-[11px] text-white/40">
-              Índice de terceros, no de Wavys. Gemini 3.7 Flash no tiene puesto acá: aparece en los gráficos de costo y velocidad.
-            </p>
+            {issue.ranking.footnote ? (
+              <p className="rb-mono mt-3 text-[11px] text-white/40">{issue.ranking.footnote}</p>
+            ) : null}
           </div>
 
           <div className="bg-white text-[#111]">
