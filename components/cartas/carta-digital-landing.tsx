@@ -225,7 +225,7 @@ export function CartaDigitalLanding() {
 
           <div
             data-carta-phone
-            className="relative mx-auto flex w-full max-w-[20rem] justify-center pb-4 lg:max-w-none lg:justify-end lg:pb-0"
+            className="relative mx-auto flex w-full max-w-[22rem] justify-center pb-4 lg:max-w-none lg:justify-end lg:pb-0 lg:pr-4 xl:pr-10"
           >
             <ThreadNode className="left-[18%] top-[22%] hidden lg:block" />
             <ThreadNode className="right-[12%] bottom-[18%] hidden lg:block" />

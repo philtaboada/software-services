@@ -1972,7 +1972,7 @@ body {
 
 .carta-phone {
   position: relative;
-  width: min(100%, 17.5rem);
+  width: min(100%, 18.5rem);
 }
 
 .carta-phone__glow {
@@ -2091,7 +2091,7 @@ body {
 
 @media (min-width: 1024px) {
   .carta-phone {
-    width: min(100%, 19.5rem);
+    width: min(100%, 22rem);
   }
 }
 
