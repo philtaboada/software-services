@@ -13,7 +13,7 @@ import { ArrowIcon, ArrowUpRight } from "@/components/icons";
 import { LogoMarquees } from "@/components/logo-marquees";
 import { PageThread, ThreadNode } from "@/components/page-thread";
 import { WorkHoverCase } from "@/components/work-hover-case";
-import { CARTA_OFERTA } from "@/lib/carta-oferta";
+import { CARTA_CASOS, CARTA_OFERTA } from "@/lib/carta-oferta";
 import { CASES, PAINS, PROCESS, SERVICES } from "@/lib/content";
 import { BOOKING_HREF } from "@/lib/site";
 
@@ -222,6 +222,23 @@ export function LandingPage() {
               <p className="mt-4 text-[1rem] leading-7 text-[var(--cream-soft)]/70">
                 {CARTA_OFERTA.deck}
               </p>
+              <div className="mt-6 flex flex-wrap items-center gap-2.5">
+                {CARTA_CASOS.map((caso) => (
+                  <span
+                    key={caso.slug}
+                    className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-[var(--surface)]/70 px-2.5 py-1.5 text-[0.75rem] text-[var(--cream-soft)]/75"
+                  >
+                    <Image
+                      src={caso.logo}
+                      alt=""
+                      width={22}
+                      height={22}
+                      className={`h-[1.15rem] w-[1.15rem] object-contain ${caso.logoOnDark ? "" : "rounded-sm bg-white p-px"}`}
+                    />
+                    {caso.name}
+                  </span>
+                ))}
+              </div>
             </div>
             <Link href={CARTA_OFERTA.path} className="btn-ghost">
               Ver carta digital <ArrowUpRight className="h-3.5 w-3.5" />
