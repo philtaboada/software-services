@@ -41,9 +41,10 @@ export type RadarIssue = {
   author: string
   category: { name: string; slug: string }
   tags: string[]
-  toc: Array<{ id: string; label: string; folio: string }>
   pages: RadarPage[]
-  carta: {
+  /** Structured magazine sections — present on N°1–N°3. Newer issues may omit these and render as cover + page images + PDF. */
+  toc?: Array<{ id: string; label: string; folio: string }>
+  carta?: {
     kicker: string
     title: string
     titleEm: string
@@ -54,13 +55,13 @@ export type RadarIssue = {
     sign: string
     meta: string
   }
-  senal: {
+  senal?: {
     kicker: string
     notes: RadarNote[]
     image: string
     imageAlt: string
   }
-  tema: {
+  tema?: {
     kicker: string
     title: string
     titleEm: string
@@ -85,12 +86,12 @@ export type RadarIssue = {
     closeSign: string
     sources: Array<{ date: string; tag: string; text: string }>
   }
-  mas: {
+  mas?: {
     kicker: string
     title: string
     items: Array<{ who: string; title: string; body: string; why: string; mark?: string }>
   }
-  ranking: {
+  ranking?: {
     kicker: string
     title: string
     titleEm: string
@@ -99,7 +100,7 @@ export type RadarIssue = {
     rows: RadarRank[]
     charts: Array<{ src: string; label: string; em: string; alt: string }>
   }
-  cierre: {
+  cierre?: {
     kicker: string
     title: string
     titleEm: string
@@ -112,7 +113,194 @@ export type RadarIssue = {
   }
 }
 
+function radarImagePages(number: number, files: string[]): RadarPage[] {
+  return files.map((file) => {
+    const stem = file.replace(/\.png$/, '')
+    const folioMatch = stem.match(/^(\d+)/)
+    const folio = folioMatch?.[1]?.padStart(2, '0') ?? ''
+    const label = stem
+      .replace(/^\d+[a-z]?-?/, '')
+      .replace(/-/g, ' ')
+      .replace(/\b\w/g, (c) => c.toUpperCase()) || stem
+    return {
+      file: `/radar/n${number}/pages/${file}`,
+      label,
+      folio,
+    }
+  })
+}
+
 export const radarIssues: RadarIssue[] = [
+  {
+    slug: 'radar-n9',
+    number: 9,
+    title: 'LO GRATIS / CAMBIÓ',
+    dek: 'El 7 oct OpenAI llevó GPT-6 al chat de ChatGPT y desde el 8 llega gratis con respuestas que traen tablas, botones y calculadoras. El 9 oct Gemini gratis se quedó solo con Flash-Lite.',
+    excerpt:
+      'El 7 oct OpenAI llevó GPT-6 al chat de ChatGPT y desde el 8 llega gratis con respuestas que traen tablas, botones y calculadoras. El 9 oct Gemini gratis se quedó solo con Flash-Lite.',
+    weekLabel: 'N°9 · 3–9 oct 2026',
+    publishedAt: '2026-10-09T15:00:00+00:00',
+    readingTime: 8,
+    cover: '/radar/n9/tapa.png',
+    pdf: '/radar/n9/radar-n9.pdf',
+    author: 'Phil Taboada',
+    category: { name: 'Radar', slug: 'radar' },
+    tags: ['radar', 'openai', 'gpt-6', 'gratis'],
+    pages: radarImagePages(9, [
+      '01-tapa.png',
+      '02-carta.png',
+      '03-senal.png',
+      '04a-opening.png',
+      '04b-story.png',
+      '04c-cierre.png',
+      '04d-dato.png',
+      '04f-lunes.png',
+      '05-notas.png',
+      '07-herramienta.png',
+      '08-ranking.png',
+      '09-cierre.png',
+    ]),
+  },
+  {
+    slug: 'radar-n8',
+    number: 8,
+    title: 'YA CORRE / MÁS BARATO',
+    dek: 'Claude Sonnet 5.5 casi al techo del tablero (56). OpenAI frenó Astra. Argon sale a mitad de precio — aún cerrado.',
+    excerpt:
+      'Claude Sonnet 5.5 casi al techo del tablero (56). OpenAI frenó Astra. Argon sale a mitad de precio — aún cerrado.',
+    weekLabel: 'N°8 · 26 sep–2 oct 2026',
+    publishedAt: '2026-10-02T15:40:00+00:00',
+    readingTime: 8,
+    cover: '/radar/n8/tapa.png',
+    pdf: '/radar/n8/radar-n8.pdf',
+    author: 'Phil Taboada',
+    category: { name: 'Radar', slug: 'radar' },
+    tags: ['radar', 'claude', 'sonnet', 'argon'],
+    pages: radarImagePages(8, [
+      '01-tapa.png',
+      '02-carta.png',
+      '03-senal.png',
+      '04a-opening.png',
+      '04b-story.png',
+      '04c-cierre.png',
+      '05-notas.png',
+      '07-herramienta.png',
+      '08-ranking.png',
+      '09-cierre.png',
+    ]),
+  },
+  {
+    slug: 'radar-n7',
+    number: 7,
+    title: 'YA BAJA / EL PRECIO',
+    dek: 'El 22 set Anthropic bajó Claude Opus 5.5 y OpenAI bajó Sol y Luna el mismo día. En Artificial Analysis, Opus 5.5 marca 58.',
+    excerpt:
+      'El 22 set Anthropic bajó Claude Opus 5.5 y OpenAI bajó Sol y Luna el mismo día. En Artificial Analysis, Opus 5.5 marca 58.',
+    weekLabel: 'N°7 · 19–25 sep 2026',
+    publishedAt: '2026-09-25T15:00:00+00:00',
+    readingTime: 8,
+    cover: '/radar/n7/tapa.png',
+    pdf: '/radar/n7/radar-n7.pdf',
+    author: 'Phil Taboada',
+    category: { name: 'Radar', slug: 'radar' },
+    tags: ['radar', 'anthropic', 'openai', 'precio'],
+    pages: radarImagePages(7, [
+      '01-tapa.png',
+      '02-carta.png',
+      '03-senal.png',
+      '04a-opening.png',
+      '04b-story.png',
+      '04c-cierre.png',
+      '05-notas.png',
+      '07-herramienta.png',
+      '08-ranking.png',
+      '09-cierre.png',
+    ]),
+  },
+  {
+    slug: 'radar-n6',
+    number: 6,
+    title: 'YA COBRA / EL AGENTE',
+    dek: 'Meta lanzó Meta One: planes con más acceso al Business Agent en WhatsApp. Essential desde US$14.99/mes (varía por región).',
+    excerpt:
+      'Meta lanzó Meta One: planes con más acceso al Business Agent en WhatsApp. Essential desde US$14.99/mes (varía por región).',
+    weekLabel: 'N°6 · 12–18 sep 2026',
+    publishedAt: '2026-09-18T15:00:00+00:00',
+    readingTime: 8,
+    cover: '/radar/n6/tapa.png',
+    pdf: '/radar/n6/radar-n6.pdf',
+    author: 'Phil Taboada',
+    category: { name: 'Radar', slug: 'radar' },
+    tags: ['radar', 'meta', 'whatsapp', 'agente'],
+    pages: radarImagePages(6, [
+      '01-tapa.png',
+      '02-carta.png',
+      '03-senal.png',
+      '04a-opening.png',
+      '04b-story.png',
+      '04c-cierre.png',
+      '05-notas.png',
+      '07-herramienta.png',
+      '08-ranking.png',
+      '09-cierre.png',
+    ]),
+  },
+  {
+    slug: 'radar-n5',
+    number: 5,
+    title: 'Te compra el chat',
+    dek: 'Meta metió Muse en WhatsApp: un agente que abre el navegador, rellena formularios y, con tu ok, compra. Primero en EE.UU.',
+    excerpt:
+      'Meta metió Muse en WhatsApp: un agente que abre el navegador, rellena formularios y, con tu ok, compra. Primero en EE.UU.',
+    weekLabel: 'N°5 · 5–11 sep 2026',
+    publishedAt: '2026-09-11T18:21:50.54209+00:00',
+    readingTime: 8,
+    cover: '/radar/n5/tapa.png',
+    pdf: '/radar/n5/radar-n5.pdf',
+    author: 'Phil Taboada',
+    category: { name: 'Radar', slug: 'radar' },
+    tags: ['radar', 'meta', 'whatsapp', 'muse'],
+    pages: radarImagePages(5, [
+      '01-tapa.png',
+      '02-carta.png',
+      '03-senal.png',
+      '04a-opening.png',
+      '04b-story.png',
+      '04c-cierre.png',
+      '05-notas.png',
+      '07-herramienta.png',
+      '08-ranking.png',
+      '09-cierre.png',
+    ]),
+  },
+  {
+    slug: 'radar-n4',
+    number: 4,
+    title: 'YA SALIÓ / CUÁNTO',
+    dek: 'Meta publicó las tarifas de WhatsApp de octubre. Incluyen el mensaje de servicio. Ya puedes ver cuánto.',
+    excerpt:
+      'Meta publicó las tarifas de WhatsApp de octubre. Incluyen el mensaje de servicio. Ya puedes ver cuánto.',
+    weekLabel: 'N°4 · 29 ago–4 sep 2026',
+    publishedAt: '2026-09-04T17:59:26.665911+00:00',
+    readingTime: 8,
+    cover: '/radar/n4/tapa.png',
+    pdf: '/radar/n4/radar-n4.pdf',
+    author: 'Phil Taboada',
+    category: { name: 'Radar', slug: 'radar' },
+    tags: ['radar', 'meta', 'whatsapp', 'tarifas'],
+    pages: radarImagePages(4, [
+      '01-tapa.png',
+      '02-carta.png',
+      '03-senal.png',
+      '04a-opening.png',
+      '04b-story.png',
+      '04c-cierre.png',
+      '05-notas.png',
+      '07-herramienta.png',
+      '08-ranking.png',
+      '09-cierre.png',
+    ]),
+  },
   {
     slug: 'radar-n3',
     number: 3,

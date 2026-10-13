@@ -16,6 +16,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/blog/radar-n1",
     "/blog/radar-n2",
     "/blog/radar-n3",
+    "/blog/radar-n4",
+    "/blog/radar-n5",
+    "/blog/radar-n6",
+    "/blog/radar-n7",
+    "/blog/radar-n8",
+    "/blog/radar-n9",
     "/privacidad",
     "/terminos",
   ].map((path) => ({

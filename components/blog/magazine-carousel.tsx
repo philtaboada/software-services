@@ -18,15 +18,11 @@ type ShelfCard = {
 
 type Pose = { x: number; y: number; rz: number; ry: number; s: number; o: number };
 
+/** Placeholder covers for issues not yet published. Live issues from `radarIssues` replace these by number. */
 const UPCOMING: Omit<ShelfCard, "id">[] = [
-  { number: 2, weekLabel: "N°2", title: "Pronto", dek: "Se cierra el viernes.", color: "#6d5cff" },
-  { number: 3, weekLabel: "N°3", title: "Pronto", dek: "Ya se va a ver.", color: "#ff7b6b" },
-  { number: 4, weekLabel: "N°4", title: "Pronto", dek: "Ya se va a ver.", color: "#14c4b4" },
-  { number: 5, weekLabel: "N°5", title: "Pronto", dek: "Ya se va a ver.", color: "#c8f04d" },
-  { number: 6, weekLabel: "N°6", title: "Pronto", dek: "Ya se va a ver.", color: "#3b6bff" },
-  { number: 7, weekLabel: "N°7", title: "Pronto", dek: "Ya se va a ver.", color: "#ff6b3b" },
-  { number: 8, weekLabel: "N°8", title: "Pronto", dek: "Ya se va a ver.", color: "#c084fc" },
-  { number: 9, weekLabel: "N°9", title: "Pronto", dek: "Ya se va a ver.", color: "#f472b6" },
+  { number: 10, weekLabel: "N°10", title: "Pronto", dek: "Se cierra el viernes.", color: "#6d5cff" },
+  { number: 11, weekLabel: "N°11", title: "Pronto", dek: "Ya se va a ver.", color: "#ff7b6b" },
+  { number: 12, weekLabel: "N°12", title: "Pronto", dek: "Ya se va a ver.", color: "#14c4b4" },
 ];
 
 // x / y se expresan en porcentaje del propio tamaño de la tapa: el abanico
