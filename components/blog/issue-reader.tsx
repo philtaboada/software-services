@@ -26,10 +26,109 @@ function Mark({ src, ink }: { src?: string; ink?: boolean }) {
   );
 }
 
-export function IssueReader({ issue }: { issue: RadarIssue }) {
+function ImageIssueReader({ issue }: { issue: RadarIssue }) {
   const rootRef = useRef<HTMLElement>(null);
   useIssueMotion(rootRef);
-  const maxScore = Math.max(...issue.ranking.rows.map((row) => Number(row.score)));
+
+  return (
+    <BlogChrome>
+      <article ref={rootRef}>
+        <section className="relative min-h-[88vh] overflow-hidden">
+          <div className="absolute inset-0" data-hero-cover>
+            <Image
+              src={issue.cover}
+              alt={`Tapa de Radar ${issue.weekLabel}`}
+              fill
+              priority
+              className="object-cover object-top"
+              sizes="100vw"
+            />
+          </div>
+          <div className="absolute inset-0 bg-linear-to-t from-[#070604] via-[#070604]/55 to-black/20" />
+          <div className="relative mx-auto flex min-h-[88vh] max-w-[1240px] flex-col justify-end px-5 pb-14 pt-28 sm:px-8">
+            <p className="rb-mast text-[13px] text-[var(--rb-teal)]" data-hero>
+              Radar
+            </p>
+            <p className="rb-mono mt-3 text-[11px] text-white/60" data-hero>
+              {issue.weekLabel} · {issue.readingTime} min
+            </p>
+            <h1 className="rb-display mt-4 max-w-[16ch] text-[clamp(3rem,8vw,6.5rem)]" data-hero>
+              {issue.title}
+            </h1>
+            <p className="mt-5 max-w-[36ch] font-[var(--rb-italic)] text-2xl italic text-white/78 sm:text-3xl" data-hero>
+              {issue.dek}
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3" data-hero>
+              <a href="#paginas" className="rb-btn">
+                Ver páginas
+              </a>
+              <a href={issue.pdf} className="rb-btn-ghost">
+                PDF
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section id="paginas" className="border-t border-white/10 px-5 py-16 sm:px-8">
+          <div className="mx-auto max-w-[1240px]">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="rb-kicker" data-reveal>
+                  La revista impresa
+                </p>
+                <h2 className="rb-display mt-3 text-4xl sm:text-5xl" data-reveal>
+                  Páginas <em className="rb-em">completas</em>
+                </h2>
+              </div>
+              <a href={issue.pdf} className="rb-btn-ghost">
+                Descargar PDF
+              </a>
+            </div>
+            <div className="mt-10 space-y-6">
+              {issue.pages.map((page) => (
+                <figure key={page.file} data-page>
+                  <Image
+                    src={page.file}
+                    alt={`${page.label} · página ${page.folio}`}
+                    width={1240}
+                    height={1754}
+                    className="h-auto w-full border border-white/10 bg-[#111]"
+                    sizes="(min-width: 1240px) 1240px, 100vw"
+                    quality={90}
+                  />
+                  <figcaption className="rb-mono mt-3 flex justify-between text-[10px] text-white/40">
+                    <span>{page.label}</span>
+                    <span>{page.folio}</span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <PostFeedback slug={issue.slug} title={issue.title} source="radar_issue" noun="este número" />
+
+        <div className="px-5 pb-16 text-center sm:px-8">
+          <Link href="/blog" className="text-[11px] font-bold uppercase tracking-[0.18em] no-underline">
+            ← Volver al blog
+          </Link>
+        </div>
+      </article>
+    </BlogChrome>
+  );
+}
+
+function MagazineIssueReader({ issue }: { issue: RadarIssue }) {
+  const rootRef = useRef<HTMLElement>(null);
+  useIssueMotion(rootRef);
+  const carta = issue.carta!;
+  const senal = issue.senal!;
+  const tema = issue.tema!;
+  const mas = issue.mas!;
+  const ranking = issue.ranking!;
+  const cierre = issue.cierre!;
+  const toc = issue.toc ?? [];
+  const maxScore = Math.max(...ranking.rows.map((row) => Number(row.score)));
 
   return (
     <BlogChrome>
@@ -54,7 +153,7 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
               {issue.weekLabel} · {issue.readingTime} min
             </p>
             <h1 className="rb-display mt-4 max-w-[14ch] text-[clamp(3.4rem,9vw,7.5rem)]" data-hero>
-              {issue.carta.title} <em className="rb-em text-[var(--rb-teal)]">{issue.carta.titleEm}</em>
+              {carta.title} <em className="rb-em text-[var(--rb-teal)]">{carta.titleEm}</em>
             </h1>
             <p className="mt-5 max-w-[28ch] font-[var(--rb-italic)] text-2xl italic text-white/78 sm:text-3xl" data-hero>
               {issue.dek}
@@ -76,7 +175,7 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
               En este número
             </p>
             <ol className="mt-5 space-y-3" data-stagger>
-              {issue.toc.map((item) => (
+              {toc.map((item) => (
                 <li key={item.id} className="flex items-baseline justify-between border-t border-white/10 pt-3">
                   <a href={`#${item.id}`} className="text-xl text-white no-underline hover:text-[var(--rb-teal)]">
                     {item.label}
@@ -91,29 +190,29 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
         <section id="carta" className="rb-paper rb-grain">
           <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:py-24">
             <figure className="rb-scene aspect-[4/5] lg:sticky lg:top-24 lg:self-start">
-              <Image src={issue.carta.image} alt={issue.carta.imageAlt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 45vw" />
+              <Image src={carta.image} alt={carta.imageAlt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 45vw" />
               <figcaption className="rb-mono absolute bottom-4 left-4 right-4 text-[10px] text-white/80">
-                {issue.carta.caption}
+                {carta.caption}
               </figcaption>
             </figure>
             <div>
-              <p className="rb-kicker">{issue.carta.kicker}</p>
+              <p className="rb-kicker">{carta.kicker}</p>
               <h2 className="rb-display mt-4 text-[clamp(2.8rem,6vw,5.5rem)]">
-                {issue.carta.title} <em className="rb-em">{issue.carta.titleEm}</em>
+                {carta.title} <em className="rb-em">{carta.titleEm}</em>
               </h2>
               <div className="rb-prose mt-8 text-[var(--rb-ink)]">
-                {issue.carta.paragraphs.map((p) => (
+                {carta.paragraphs.map((p) => (
                   <p key={p.slice(0, 24)}>{p}</p>
                 ))}
               </div>
               <p className="rb-em rb-sign mt-10 text-6xl text-[var(--rb-ink)]" data-write-sign>
-                {issue.carta.sign.split("").map((letter, index) => (
+                {carta.sign.split("").map((letter, index) => (
                   <span key={`${letter}-${index}`} className="rb-sign-letter">
                     {letter}
                   </span>
                 ))}
               </p>
-              <p className="rb-mono mt-2 text-[11px] text-[var(--rb-pap-45)]">{issue.carta.meta}</p>
+              <p className="rb-mono mt-2 text-[11px] text-[var(--rb-pap-45)]">{carta.meta}</p>
             </div>
           </div>
         </section>
@@ -121,11 +220,11 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
         <section id="senal" className="border-t border-white/10">
           <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 lg:py-24">
             <p className="rb-kicker" data-reveal>
-              {issue.senal.kicker}
+              {senal.kicker}
             </p>
             <div className="mt-10 grid gap-12 lg:grid-cols-[1fr_0.7fr]">
               <div className="space-y-14">
-                {issue.senal.notes.map((note) => (
+                {senal.notes.map((note) => (
                   <article key={note.title} data-reveal>
                     <p className="flex items-center gap-3">
                       <Mark src={note.mark} />
@@ -140,7 +239,7 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
                 ))}
               </div>
               <figure className="rb-scene aspect-[3/4] lg:sticky lg:top-24 lg:self-start" data-clip>
-                <Image src={issue.senal.image} alt={issue.senal.imageAlt} fill data-parallax className="object-cover" sizes="(max-width: 1024px) 100vw, 40vw" />
+                <Image src={senal.image} alt={senal.imageAlt} fill data-parallax className="object-cover" sizes="(max-width: 1024px) 100vw, 40vw" />
               </figure>
             </div>
           </div>
@@ -149,26 +248,26 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
         <section id="tema" className="border-t border-white/10">
           <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 lg:py-24">
             <p className="flex items-center gap-3" data-reveal>
-              <Mark src={issue.tema.mark} />
-              <span className="rb-kicker">{issue.tema.kicker}</span>
+              <Mark src={tema.mark} />
+              <span className="rb-kicker">{tema.kicker}</span>
             </p>
             <h2 className="rb-display mt-4 text-[clamp(3rem,7vw,6.4rem)]" data-reveal>
-              {issue.tema.title} <em className="rb-em text-[var(--rb-teal)]">{issue.tema.titleEm}</em>
+              {tema.title} <em className="rb-em text-[var(--rb-teal)]">{tema.titleEm}</em>
             </h2>
             <p className="mt-4 font-[var(--rb-italic)] text-2xl italic text-white/75" data-reveal>
-              {issue.tema.dek}
+              {tema.dek}
             </p>
             <figure className="rb-scene mt-10 aspect-[16/9]" data-clip>
-              <Image src={issue.tema.image} alt={issue.tema.imageAlt} fill data-parallax className="object-cover" sizes="100vw" />
+              <Image src={tema.image} alt={tema.imageAlt} fill data-parallax className="object-cover" sizes="100vw" />
             </figure>
             <p className="rb-display mt-10 max-w-[20ch] text-4xl sm:text-5xl" data-reveal>
-              {issue.tema.lead}
-              {issue.tema.leadEm ? (
-                <b className="font-[var(--rb-italic)] italic"> {issue.tema.leadEm}</b>
+              {tema.lead}
+              {tema.leadEm ? (
+                <b className="font-[var(--rb-italic)] italic"> {tema.leadEm}</b>
               ) : null}
             </p>
             <div className="rb-prose mt-8 text-white/84" data-stagger>
-              {issue.tema.paragraphs.map((p) => (
+              {tema.paragraphs.map((p) => (
                 <p key={p.slice(0, 28)}>
                   {p}{' '}
                   {p.includes('11 de agosto') && (
@@ -182,18 +281,18 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
 
             <blockquote className="rb-paper mt-16 px-6 py-12 sm:px-12" data-reveal>
               <p className="rb-display text-[clamp(2.4rem,5vw,4.4rem)] text-[var(--rb-ink)]">
-                “{issue.tema.quote} <em className="rb-em">{issue.tema.quoteEm}</em>”
+                “{tema.quote} <em className="rb-em">{tema.quoteEm}</em>”
               </p>
               <p className="rb-mono mt-6 text-[11px] text-[var(--rb-pap-45)]">
-                {issue.tema.quoteAttr ?? 'Phil'}
+                {tema.quoteAttr ?? 'Phil'}
               </p>
             </blockquote>
 
             <h3 className="rb-display mt-20 text-4xl sm:text-6xl" data-reveal>
-              {issue.tema.casesTitle ?? 'Cómo lo uso'}
+              {tema.casesTitle ?? 'Cómo lo uso'}
             </h3>
             <div className="mt-10 grid gap-8 md:grid-cols-2 xl:grid-cols-3" data-stagger>
-              {issue.tema.cases.map((item) => (
+              {tema.cases.map((item) => (
                 <article key={item.num} className="border-t border-white/15 pt-5">
                   <p className="rb-display text-5xl text-[var(--rb-teal)]">{item.num}</p>
                   <p className="rb-mono mt-2 text-[10px] text-white/40">{item.who}</p>
@@ -204,20 +303,20 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
             </div>
 
             <figure className="rb-scene mt-12 aspect-[16/8]" data-clip>
-              <Image src={issue.tema.oficioImage} alt={issue.tema.oficioAlt} fill data-parallax className="object-cover" sizes="100vw" />
+              <Image src={tema.oficioImage} alt={tema.oficioAlt} fill data-parallax className="object-cover" sizes="100vw" />
             </figure>
 
             <div className="mt-16 max-w-[820px]" data-reveal>
-              <p className="rb-kicker">{issue.tema.closeKicker ?? 'Cierre del tema'}</p>
+              <p className="rb-kicker">{tema.closeKicker ?? 'Cierre del tema'}</p>
               <h3 className="rb-display mt-4 text-[clamp(2.2rem,5vw,4rem)]">
-                {issue.tema.closeTitle} <em className="rb-em">{issue.tema.closeTitleEm}</em>
+                {tema.closeTitle} <em className="rb-em">{tema.closeTitleEm}</em>
               </h3>
               <div className="rb-prose mt-6 text-white/84">
-                {issue.tema.closeParagraphs.map((p) => (
+                {tema.closeParagraphs.map((p) => (
                   <p key={p.slice(0, 24)}>{p}</p>
                 ))}
               </div>
-              <p className="rb-em mt-8 text-4xl">{issue.tema.closeSign}</p>
+              <p className="rb-em mt-8 text-4xl">{tema.closeSign}</p>
             </div>
           </div>
         </section>
@@ -225,13 +324,13 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
         <section id="mas" className="rb-paper rb-grain">
           <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 lg:py-24">
             <p className="rb-kicker" data-reveal>
-              {issue.mas.kicker}
+              {mas.kicker}
             </p>
             <h2 className="rb-display mt-4 text-5xl sm:text-7xl" data-reveal>
-              {issue.mas.title}
+              {mas.title}
             </h2>
             <div className="mt-12 grid gap-10 lg:grid-cols-3" data-stagger>
-              {issue.mas.items.map((item) => (
+              {mas.items.map((item) => (
                 <article key={item.who} className="border-t-2 border-[var(--rb-ink)] pt-5">
                   <p className="flex items-center gap-2.5">
                     <Mark src={item.mark} ink />
@@ -249,17 +348,17 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
         <section id="ranking">
           <div className="mx-auto max-w-[820px] px-5 py-16 sm:px-8 lg:py-20">
             <p className="rb-kicker" data-reveal>
-              {issue.ranking.kicker}
+              {ranking.kicker}
             </p>
             <h2 className="rb-display mt-4 text-[clamp(2.4rem,6vw,4.8rem)]" data-reveal>
-              {issue.ranking.title} <em className="rb-em text-[var(--rb-teal)]">{issue.ranking.titleEm}</em>
+              {ranking.title} <em className="rb-em text-[var(--rb-teal)]">{ranking.titleEm}</em>
             </h2>
             <div className="rb-why mt-8" data-reveal>
               <b>Línea Wavys</b>
-              {issue.ranking.line}
+              {ranking.line}
             </div>
             <ol className="mt-10">
-              {issue.ranking.rows.map((row) => (
+              {ranking.rows.map((row) => (
                 <li
                   key={row.pos}
                   data-rank-row
@@ -287,14 +386,14 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
                 </li>
               ))}
             </ol>
-            {issue.ranking.footnote ? (
-              <p className="rb-mono mt-3 text-[11px] text-white/40">{issue.ranking.footnote}</p>
+            {ranking.footnote ? (
+              <p className="rb-mono mt-3 text-[11px] text-white/40">{ranking.footnote}</p>
             ) : null}
           </div>
 
           <div className="bg-white text-[#111]">
             <div className="mx-auto max-w-[1360px] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-              {issue.ranking.charts.map((chart) => (
+              {ranking.charts.map((chart) => (
                 <figure key={chart.src} className="mb-14 last:mb-0" data-chart>
                   <p className="mb-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                     <span className="font-[var(--rb-sans)] text-[15px] font-extrabold tracking-[-0.02em]">
@@ -318,27 +417,27 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
         </section>
 
         <section id="cierre" className="relative min-h-[70vh] overflow-hidden">
-          <Image src={issue.cierre.image} alt={issue.cierre.imageAlt} fill data-parallax className="object-cover" sizes="100vw" />
+          <Image src={cierre.image} alt={cierre.imageAlt} fill data-parallax className="object-cover" sizes="100vw" />
           <div className="absolute inset-0 bg-[#070604]/72" />
           <div className="relative mx-auto flex min-h-[70vh] max-w-[820px] flex-col justify-end px-5 py-16 sm:px-8">
             <p className="rb-kicker" data-reveal>
-              {issue.cierre.kicker}
+              {cierre.kicker}
             </p>
             <h2 className="rb-display mt-4 text-[clamp(2.8rem,7vw,5.6rem)]" data-reveal>
-              {issue.cierre.title} <em className="rb-em">{issue.cierre.titleEm}</em>
+              {cierre.title} <em className="rb-em">{cierre.titleEm}</em>
             </h2>
             <div className="rb-prose mt-6 text-white/84" data-stagger>
-              {issue.cierre.paragraphs.map((p) => (
+              {cierre.paragraphs.map((p) => (
                 <p key={p}>{p}</p>
               ))}
             </div>
             <p className="rb-mono mt-10 text-[11px] text-white/45" data-reveal>
-              {issue.cierre.ctaLabel}
+              {cierre.ctaLabel}
             </p>
-            <a href={issue.cierre.ctaUrl} data-reveal className="rb-btn mt-3">
+            <a href={cierre.ctaUrl} data-reveal className="rb-btn mt-3">
               Agendar 30 minutos
             </a>
-            <p className="rb-em mt-10 text-4xl">{issue.cierre.sign}</p>
+            <p className="rb-em mt-10 text-4xl">{cierre.sign}</p>
           </div>
         </section>
 
@@ -387,4 +486,11 @@ export function IssueReader({ issue }: { issue: RadarIssue }) {
       </article>
     </BlogChrome>
   );
+}
+
+export function IssueReader({ issue }: { issue: RadarIssue }) {
+  if (!issue.carta) {
+    return <ImageIssueReader issue={issue} />;
+  }
+  return <MagazineIssueReader issue={issue} />;
 }
