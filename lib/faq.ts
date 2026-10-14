@@ -17,7 +17,7 @@ export const FAQ_ITEMS = [
   },
   {
     q: "¿Dónde están?",
-    a: "Lima, Perú. Remoto para Latinoamérica. Presencial en Lima cuando el proyecto lo pide.",
+    a: "Estudio en Lima, Perú (UTC−5, sin horario de verano). Trabajamos en remoto con clientes en cualquier país. Presencial en Lima cuando el proyecto lo pide.",
   },
   {
     q: "¿Hacen IA o agentes?",

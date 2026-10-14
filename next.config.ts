@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
   },
   outputFileTracingRoot: projectRoot,
   images: {
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       { protocol: "https", hostname: "*.supabase.co" },
       { protocol: "https", hostname: "*.supabase.com" },
@@ -22,6 +23,26 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "res.cloudinary.com" },
       { protocol: "https", hostname: "i.imgur.com" },
     ],
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [{ key: "Content-Language", value: "es" }],
+      },
+      {
+        source: "/",
+        headers: [{ key: "Content-Language", value: "es" }],
+      },
+      {
+        source: "/en",
+        headers: [{ key: "Content-Language", value: "en" }],
+      },
+      {
+        source: "/en/:path*",
+        headers: [{ key: "Content-Language", value: "en" }],
+      },
+    ];
   },
   async redirects() {
     return [
