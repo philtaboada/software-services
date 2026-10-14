@@ -2628,6 +2628,25 @@ body {
   white-space: nowrap;
 }
 
+@media (max-width: 767px) {
+  .hero-copy h1,
+  .hero-copy .word-line {
+    max-width: none;
+  }
+
+  .hero-copy .word-line {
+    flex-wrap: nowrap;
+    column-gap: 0.45rem;
+  }
+
+  .word-window {
+    width: max-content;
+    min-width: 0;
+    max-width: 100%;
+    flex: 0 0 auto;
+  }
+}
+
 .trust-row {
   display: flex;
   flex-wrap: wrap;
