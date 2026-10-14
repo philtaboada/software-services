@@ -25,6 +25,7 @@ const ES_LABELS = {
   processCta: "Ver el proceso",
   liveCta: "Ver en producción",
   seePlan: "Ver cómo se planeó",
+  planToggle: "Ver plan y boceto",
 };
 
 export type WorkLabels = typeof ES_LABELS;
@@ -86,21 +87,23 @@ export function WorkHoverCase({
             className="object-cover object-top"
           />
         </Link>
-        <div className="work-brief-sketch">
-          <p className="work-brief-sketch-label">{labels.sketch}</p>
-          <Image
-            src={story.sketch}
-            alt={story.sketchAlt}
-            fill
-            sizes={featured ? "40vw" : "(min-width: 768px) 33vw, 100vw"}
-            className="object-cover"
-          />
-        </div>
-        <p className="work-brief-hint">
-          <span className="size-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent)]" />
-          {labels.hint}
-        </p>
-        <div className="work-brief-panel">
+        <details className="work-plan">
+          <summary className="work-plan-summary">{labels.planToggle}</summary>
+          <div className="work-brief-sketch">
+            <p className="work-brief-sketch-label">{labels.sketch}</p>
+            <Image
+              src={story.sketch}
+              alt={story.sketchAlt}
+              fill
+              sizes={featured ? "40vw" : "(min-width: 768px) 33vw, 100vw"}
+              className="object-cover"
+            />
+          </div>
+          <p className="work-brief-hint">
+            <span className="size-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent)]" />
+            {labels.hint}
+          </p>
+          <div className="work-brief-panel">
           <div>
             <p className="section-label">{story.kicker}</p>
             <h3 className="work-brief-title">{story.headline}</h3>
@@ -190,7 +193,8 @@ export function WorkHoverCase({
               <ArrowUpRight className="h-3.5 w-3.5" />
             </a>
           </div>
-        </div>
+          </div>
+        </details>
       </div>
       <div className="work-brief-meta">
         <div>

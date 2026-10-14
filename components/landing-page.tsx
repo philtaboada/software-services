@@ -78,6 +78,7 @@ export function LandingPage({ locale }: { locale: LandingLocale }) {
     processCta: copy.work.processCta,
     liveCta: copy.work.liveCta,
     seePlan: copy.work.seePlan,
+    planToggle: copy.work.planToggle,
   };
   const stats = [
     { value: String(CASES.length), label: copy.stats.products },
@@ -103,7 +104,7 @@ export function LandingPage({ locale }: { locale: LandingLocale }) {
             <span className="aurora-blob aurora-c" />
           </div>
           <div className="grid-bg pointer-events-none absolute inset-0" aria-hidden="true" />
-          <div className="relative mx-auto grid w-full min-w-0 max-w-[1440px] items-end gap-2 px-5 pb-6 pt-24 sm:px-8 lg:min-h-[100dvh] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:px-12 lg:pb-10 lg:pt-20">
+          <div className="hero-grid relative mx-auto grid w-full min-w-0 max-w-[1440px] items-end gap-2 px-5 pb-6 pt-24 sm:px-8 lg:min-h-[100dvh] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:px-12 lg:pb-10 lg:pt-20">
             <div className="hero-copy relative z-[2] min-w-0 max-w-[40rem]">
               <p className="section-label">{copy.hero.kicker}</p>
               <h1
@@ -126,7 +127,7 @@ export function LandingPage({ locale }: { locale: LandingLocale }) {
                 </span>
                 <span className="sr-only">{copy.hero.wordsLabel}</span>
               </p>
-              <div className="mt-4 max-w-[34rem] space-y-1 text-[0.98rem] leading-6 text-[var(--cream-soft)] sm:text-[1.02rem]">
+              <div className="hero-sub mt-4 space-y-1 text-[0.98rem] leading-6 text-[var(--cream-soft)] sm:text-[1.02rem]">
                 {copy.hero.lines.map((line) => (
                   <p key={line}>{line}</p>
                 ))}
@@ -162,7 +163,7 @@ export function LandingPage({ locale }: { locale: LandingLocale }) {
                 width={850}
                 height={1124}
                 preload
-                sizes="(max-width: 1023px) 160px, 42vw"
+                sizes="(max-width: 767px) 64vw, (max-width: 1023px) 42vw, 40vw"
                 className="hero-ribbon cutout"
               />
               <ThreadNode className="right-[34%] bottom-[10%]" />
@@ -362,7 +363,7 @@ export function LandingPage({ locale }: { locale: LandingLocale }) {
                     alt=""
                     width={280}
                     height={200}
-                    sizes="(min-width: 1024px) 240px, 46vw"
+                    sizes="(min-width: 1024px) 440px, 88vw"
                     className="bento-cutout"
                   />
                 </Link>
@@ -379,8 +380,8 @@ export function LandingPage({ locale }: { locale: LandingLocale }) {
               {copy.global.title}
             </h2>
             <p className="mt-4 max-w-[38rem] text-[1.02rem] leading-7 text-[var(--cream-soft)]">{copy.global.caption}</p>
-            <div className="mt-10 grid items-center gap-8 lg:grid-cols-[minmax(0,1.25fr)_minmax(16rem,0.75fr)]">
-              <div className="min-w-0">
+            <div className="signal-stage">
+              <div className="signal-panel">
                 <WorldMap label={copy.global.mapAria} />
                 <ul className="signal-legend">
                   {copy.global.places.map((place) => (

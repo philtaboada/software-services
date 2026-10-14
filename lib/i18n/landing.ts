@@ -288,6 +288,7 @@ export const LANDING_COPY = {
       processCta: "Ver el proceso",
       liveCta: "Ver en producción",
       seePlan: "Ver cómo se planeó",
+      planToggle: "Ver plan y boceto",
     },
     diagnostic: {
       label: "El cuello de botella",
@@ -421,6 +422,7 @@ export const LANDING_COPY = {
       processCta: "See the process",
       liveCta: "See it live",
       seePlan: "See how it was planned",
+      planToggle: "See plan & sketch",
     },
     diagnostic: {
       label: "The bottleneck",
