@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       openGraph: {
         title: `Radar ${issue.weekLabel} · ${issue.title}`,
         description: issue.excerpt,
-        images: [issue.cover],
+        images: [issue.ogImage ?? issue.cover],
         type: "article",
       },
     };

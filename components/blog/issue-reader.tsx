@@ -29,6 +29,8 @@ function Mark({ src, ink }: { src?: string; ink?: boolean }) {
 function ImageIssueReader({ issue }: { issue: RadarIssue }) {
   const rootRef = useRef<HTMLElement>(null);
   useIssueMotion(rootRef);
+  const headerImage = issue.ogImage ?? issue.cover;
+  const headerObjectClass = issue.ogImage ? 'object-cover object-center' : 'object-cover object-top';
 
   return (
     <BlogChrome>
@@ -36,11 +38,11 @@ function ImageIssueReader({ issue }: { issue: RadarIssue }) {
         <section className="relative min-h-[88vh] overflow-hidden">
           <div className="absolute inset-0" data-hero-cover>
             <Image
-              src={issue.cover}
+              src={headerImage}
               alt={`Tapa de Radar ${issue.weekLabel}`}
               fill
               priority
-              className="object-cover object-top"
+              className={headerObjectClass}
               sizes="100vw"
             />
           </div>
