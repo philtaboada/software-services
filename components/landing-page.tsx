@@ -7,6 +7,7 @@ import { FaqList } from "@/components/faq-list";
 import { ArrowIcon, ArrowUpRight } from "@/components/icons";
 import { GlobalClock } from "@/components/landing/global-clock";
 import { MagneticRoot } from "@/components/landing/magnetic";
+import { WorkPlanOpen } from "@/components/landing/work-plan-open";
 import { PageThreadLoader } from "@/components/landing/page-thread-loader";
 import { SpotlightGrid } from "@/components/landing/spotlight";
 import { StickyCta } from "@/components/landing/sticky-cta";
@@ -95,6 +96,7 @@ export function LandingPage({ locale }: { locale: LandingLocale }) {
     <div className="landing-root relative">
       <PageThreadLoader />
       <MagneticRoot />
+      <WorkPlanOpen />
       <FaqJsonLd items={faqItems} />
       <div className="relative z-[1]">
         <section id="top" className="landing-hero relative overflow-hidden" aria-labelledby="hero-title">
