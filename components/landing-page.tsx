@@ -375,7 +375,7 @@ export function LandingPage({ locale }: { locale: LandingLocale }) {
         </section>
 
         <section id={copy.anchors.global} className="relative scroll-mt-28 py-16 sm:py-24" aria-labelledby="global-title">
-          <ThreadNode className="left-[12%] top-16" />
+          <ThreadNode className="left-2 top-10 sm:left-3 lg:left-4" />
           <div className={wrap}>
             <p className="section-label">{copy.global.label}</p>
             <h2 id="global-title" className={`${h2} max-w-[18ch]`}>
@@ -400,7 +400,8 @@ export function LandingPage({ locale }: { locale: LandingLocale }) {
               <GlobalClock locale={locale} copy={copy.global.clock} />
             </div>
           </div>
-          <ThreadNode className="right-[10%] bottom-10 hidden lg:block" />
+          <ThreadNode className="bottom-6 left-2 sm:left-3 lg:left-4" />
+          <ThreadNode className="bottom-6 right-6 hidden lg:block" />
         </section>
 
         <section id={copy.anchors.process} className="relative scroll-mt-28 py-16 sm:py-24" aria-labelledby="process-title">
