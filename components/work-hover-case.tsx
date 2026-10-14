@@ -14,41 +14,83 @@ type CaseItem = {
   demoHref: string;
 };
 
+const ES_LABELS = {
+  aria: "Enfoca o pasa el cursor para ver cómo se planeó y se construyó.",
+  shotAlt: "Captura del sitio de",
+  shotLink: "Ver cómo se planeó",
+  sketch: "Boceto · dirección",
+  hint: "Pasa el cursor · plan y boceto",
+  piece: "La pieza",
+  plan: "El plan",
+  processCta: "Ver el proceso",
+  liveCta: "Ver en producción",
+  seePlan: "Ver cómo se planeó",
+};
+
+export type WorkLabels = typeof ES_LABELS;
+
 export function WorkHoverCase({
   item,
   variant = "compact",
-  priority = false,
+  brief,
+  labels = ES_LABELS,
+  hrefLang,
+  markSpanish = false,
 }: {
   item: CaseItem;
   variant?: "featured" | "compact";
-  priority?: boolean;
+  brief?: {
+    kicker: string;
+    headline: string;
+    lede: string;
+    product: readonly { label: string; body: string }[];
+    plan: readonly { id: string; title: string; body: string }[];
+    closer: string;
+    sketch: string;
+    sketchAlt: string;
+    craft: readonly string[];
+    system: { colors: readonly { name: string; hex: string }[] };
+  };
+  labels?: WorkLabels;
+  hrefLang?: "es";
+  markSpanish?: boolean;
 }) {
-  const brief = CASE_BRIEFS[item.slug];
+  const story = brief ?? CASE_BRIEFS[item.slug];
   const featured = variant === "featured";
+  const esMark = () =>
+    markSpanish ? (
+      <span className="es-mark">
+        ES<span className="sr-only">, in Spanish</span>
+      </span>
+    ) : null;
 
   return (
     <article
       data-reveal
       tabIndex={0}
       className={`work-brief group ${featured ? "work-brief--featured" : "work-brief--compact"}`}
-      aria-label={`${item.client}. Enfoca o pasa el cursor para ver cómo se planeó y se construyó.`}
+      aria-label={`${item.client}. ${labels.aria}`}
     >
       <div data-clip className="work-brief-stage">
-        <Link href={`/trabajo/${item.slug}`} className="work-brief-shot" aria-label={`Ver cómo se planeó ${item.client}`}>
+        <Link
+          href={`/trabajo/${item.slug}`}
+          hrefLang={hrefLang}
+          className="work-brief-shot"
+          aria-label={`${labels.shotLink} ${item.client}`}
+        >
           <Image
             src={item.image}
-            alt={`Captura del sitio de ${item.client}`}
+            alt={`${labels.shotAlt} ${item.client}`}
             fill
-            sizes={featured ? "100vw" : "(min-width: 768px) 33vw, 100vw"}
+            sizes={featured ? "(min-width: 1024px) 72vw, 100vw" : "(min-width: 768px) 33vw, 100vw"}
             className="object-cover object-top"
-            priority={priority}
           />
         </Link>
         <div className="work-brief-sketch">
-          <p className="work-brief-sketch-label">Boceto · dirección</p>
+          <p className="work-brief-sketch-label">{labels.sketch}</p>
           <Image
-            src={brief.sketch}
-            alt={brief.sketchAlt}
+            src={story.sketch}
+            alt={story.sketchAlt}
             fill
             sizes={featured ? "40vw" : "(min-width: 768px) 33vw, 100vw"}
             className="object-cover"
@@ -56,15 +98,15 @@ export function WorkHoverCase({
         </div>
         <p className="work-brief-hint">
           <span className="size-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent)]" />
-          Pasa el cursor · plan y boceto
+          {labels.hint}
         </p>
         <div className="work-brief-panel">
           <div>
-            <p className="section-label">{brief.kicker}</p>
-            <h3 className="work-brief-title">{brief.headline}</h3>
+            <p className="section-label">{story.kicker}</p>
+            <h3 className="work-brief-title">{story.headline}</h3>
             {featured ? (
-              <p className="mt-3 max-w-[38rem] text-[0.88rem] leading-6 text-[var(--cream-soft)]/75">
-                {brief.lede}
+              <p className="mt-3 max-w-[38rem] text-[0.88rem] leading-6 text-[var(--cream-soft)]">
+                {story.lede}
               </p>
             ) : null}
           </div>
@@ -72,15 +114,15 @@ export function WorkHoverCase({
             {featured ? (
               <div>
                 <p className="font-mono text-[0.65rem] uppercase tracking-[0.22em] text-[var(--accent)]">
-                  La pieza
+                  {labels.piece}
                 </p>
                 <ul className="mt-3 space-y-2">
-                  {brief.product.map((entry) => (
+                  {story.product.map((entry) => (
                     <li key={entry.label}>
                       <p className="text-[0.88rem] font-semibold tracking-[-0.02em] text-[var(--cream)]">
                         {entry.label}
                       </p>
-                      <p className="mt-0.5 text-[0.78rem] leading-5 text-[var(--cream-soft)]/60">
+                      <p className="mt-0.5 text-[0.78rem] leading-5 text-[var(--muted)]">
                         {entry.body}
                       </p>
                     </li>
@@ -90,17 +132,17 @@ export function WorkHoverCase({
             ) : null}
             <div>
               <p className="font-mono text-[0.65rem] uppercase tracking-[0.22em] text-[var(--accent)]">
-                El plan
+                {labels.plan}
               </p>
               <ol className="mt-3 space-y-2">
-                {brief.plan.map((step) => (
+                {story.plan.map((step) => (
                   <li key={step.id} className="grid grid-cols-[2rem_minmax(0,1fr)] gap-2">
                     <span className="font-mono text-[0.66rem] text-[var(--accent)]">{step.id}</span>
                     <div>
                       <p className="text-[0.88rem] font-semibold tracking-[-0.02em] text-[var(--cream)]">
                         {step.title}
                       </p>
-                      <p className="mt-0.5 text-[0.76rem] leading-5 text-[var(--cream-soft)]/60">
+                      <p className="mt-0.5 text-[0.76rem] leading-5 text-[var(--muted)]">
                         {step.body}
                       </p>
                     </div>
@@ -110,7 +152,7 @@ export function WorkHoverCase({
             </div>
           </div>
           <div className="flex items-center gap-1.5" aria-hidden>
-            {brief.system.colors.slice(0, 5).map((token) => (
+            {story.system.colors.slice(0, 5).map((token) => (
               <span
                 key={token.hex}
                 title={`${token.name} ${token.hex}`}
@@ -120,19 +162,22 @@ export function WorkHoverCase({
             ))}
           </div>
           <div className="flex flex-wrap gap-1.5">
-            {brief.craft.map((tag) => (
+            {story.craft.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-[var(--line-strong)] px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-[0.14em] text-[var(--cream-soft)]/80"
+                className="rounded-full border border-[var(--line-strong)] px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-[0.14em] text-[var(--cream-soft)]"
               >
                 {tag}
               </span>
             ))}
           </div>
-          <p className="work-brief-closer">{brief.closer}</p>
+          <p className="work-brief-closer">{story.closer}</p>
           <div className="flex flex-col items-start gap-2 sm:flex-row">
-            <Link href={`/trabajo/${item.slug}`} className="btn-primary">
-              <span>Ver el proceso</span>
+            <Link href={`/trabajo/${item.slug}`} hrefLang={hrefLang} className="btn-primary">
+              <span>
+                {labels.processCta}
+                {esMark()}
+              </span>
               <ArrowIcon className="h-4 w-4" />
             </Link>
             <a
@@ -141,7 +186,7 @@ export function WorkHoverCase({
               rel="noopener noreferrer"
               className="btn-ghost"
             >
-              Ver en producción
+              {labels.liveCta}
               <ArrowUpRight className="h-3.5 w-3.5" />
             </a>
           </div>
@@ -161,20 +206,19 @@ export function WorkHoverCase({
           >
             {item.client}
           </h3>
-          <p className="mt-1 text-[0.88rem] text-[var(--cream-soft)]/70">{item.title}</p>
-          {featured ? (
-            <p className="mt-2 max-w-[36rem] text-[0.88rem] leading-6 text-[var(--cream-soft)]/55">
-              {item.result}
-            </p>
-          ) : (
-            <p className="mt-1 text-[0.88rem] text-[var(--cream-soft)]/55">{item.result}</p>
-          )}
+          <p className="mt-1 text-[0.88rem] text-[var(--cream-soft)]">{item.title}</p>
+          <p className="mt-2 max-w-[36rem] text-[0.88rem] leading-6 text-[var(--muted)]">
+            {item.result}
+          </p>
         </div>
         <Link
           href={`/trabajo/${item.slug}`}
-          className="inline-flex min-h-11 items-center gap-2 text-[0.85rem] text-[var(--cream-soft)]/70 hover:text-[var(--cream)]"
+          hrefLang={hrefLang}
+          className="inline-flex min-h-11 items-center gap-2 text-[0.85rem] text-[var(--cream-soft)] hover:text-[var(--cream)]"
         >
-          Ver cómo se planeó <ArrowUpRight className="h-3.5 w-3.5" />
+          {labels.seePlan}
+          {esMark()}
+          <ArrowUpRight className="h-3.5 w-3.5" />
         </Link>
       </div>
     </article>

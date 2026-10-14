@@ -4,20 +4,13 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ThreadNode } from "@/components/thread-node";
+
+export { ThreadNode };
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 type Pt = { x: number; y: number };
-
-export function ThreadNode({ className }: { className?: string }) {
-  return (
-    <span
-      data-thread-node
-      aria-hidden
-      className={`pointer-events-none absolute h-px w-px ${className ?? ""}`}
-    />
-  );
-}
 
 function rel(el: Element, page: DOMRect): Pt {
   const r = el.getBoundingClientRect();

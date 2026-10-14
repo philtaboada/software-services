@@ -19,7 +19,7 @@ function Track({
       <ul className="logo-track">
         {sequence.map((logo, index) => {
           const mark = logo.src.endsWith(".svg") ? (
-            <img src={logo.src} alt={logo.name} className="logo-mark" />
+            <img src={logo.src} alt={logo.name} className="logo-mark" loading="lazy" decoding="async" fetchPriority="low" />
           ) : (
             <Image
               src={logo.src}
@@ -52,11 +52,17 @@ function Track({
   );
 }
 
-export function LogoMarquees() {
+export function LogoMarquees({
+  label = "En producción",
+  ariaLabel = "Empresas con las que hemos trabajado",
+}: {
+  label?: string;
+  ariaLabel?: string;
+}) {
   return (
-    <section aria-label="Empresas con las que hemos trabajado" className="logo-section">
+    <section aria-label={ariaLabel} className="logo-section">
       <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-        <p className="section-label">En producción</p>
+        <p className="section-label">{label}</p>
       </div>
       <div className="logo-rows mt-8">
         <Track items={CLIENT_LOGOS} direction="left" />
