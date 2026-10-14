@@ -37,6 +37,8 @@ export type RadarIssue = {
   publishedAt: string
   readingTime: number
   cover: string
+  /** Optional horizontal blog/OG image; when set, preferred over the vertical cover in headers and Open Graph. */
+  ogImage?: string
   pdf: string
   author: string
   category: { name: string; slug: string }
@@ -113,17 +115,27 @@ export type RadarIssue = {
   }
 }
 
+const RADAR_V3_BASE =
+  'https://ofcplpcwjvomldqinbha.supabase.co/storage/v1/object/public/content-images/radar/v3/'
+
 function radarImagePages(number: number, files: string[]): RadarPage[] {
   return files.map((file) => {
-    const stem = file.replace(/\.png$/, '')
+    const isAbsolute = /^https?:\/\//i.test(file)
+    const basename = isAbsolute ? (file.split('/').pop() ?? file) : file
+    const stem = basename.replace(/\.png$/i, '')
     const folioMatch = stem.match(/^(\d+)/)
-    const folio = folioMatch?.[1]?.padStart(2, '0') ?? ''
-    const label = stem
-      .replace(/^\d+[a-z]?-?/, '')
-      .replace(/-/g, ' ')
-      .replace(/\b\w/g, (c) => c.toUpperCase()) || stem
+    const isTapa = /tapa/i.test(stem)
+    const folio = folioMatch?.[1]?.padStart(2, '0') ?? (isAbsolute && isTapa ? '01' : '')
+    const label = folioMatch
+      ? stem
+          .replace(/^\d+[a-z]?-?/, '')
+          .replace(/-/g, ' ')
+          .replace(/\b\w/g, (c) => c.toUpperCase()) || stem
+      : isAbsolute && isTapa
+        ? 'Tapa'
+        : stem.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) || stem
     return {
-      file: `/radar/n${number}/pages/${file}`,
+      file: isAbsolute ? file : `/radar/n${number}/pages/${file}`,
       label,
       folio,
     }
@@ -134,20 +146,21 @@ export const radarIssues: RadarIssue[] = [
   {
     slug: 'radar-n9',
     number: 9,
-    title: 'LO GRATIS / CAMBIÓ',
+    title: 'Lo gratis ya no se reparte igual',
     dek: 'El 7 oct OpenAI llevó GPT-6 al chat de ChatGPT y desde el 8 llega gratis con respuestas que traen tablas, botones y calculadoras. El 9 oct Gemini gratis se quedó solo con Flash-Lite.',
     excerpt:
       'El 7 oct OpenAI llevó GPT-6 al chat de ChatGPT y desde el 8 llega gratis con respuestas que traen tablas, botones y calculadoras. El 9 oct Gemini gratis se quedó solo con Flash-Lite.',
     weekLabel: 'N°9 · 3–9 oct 2026',
     publishedAt: '2026-10-09T15:00:00+00:00',
     readingTime: 8,
-    cover: '/radar/n9/tapa.png',
+    cover: `${RADAR_V3_BASE}tapa-n9-v3.png`,
+    ogImage: `${RADAR_V3_BASE}blog-n9-v3.png`,
     pdf: '/radar/n9/radar-n9.pdf',
     author: 'Phil Taboada',
     category: { name: 'Radar', slug: 'radar' },
     tags: ['radar', 'openai', 'gpt-6', 'gratis'],
     pages: radarImagePages(9, [
-      '01-tapa.png',
+      `${RADAR_V3_BASE}tapa-n9-v3.png`,
       '02-carta.png',
       '03-senal.png',
       '04a-opening.png',
@@ -164,20 +177,21 @@ export const radarIssues: RadarIssue[] = [
   {
     slug: 'radar-n8',
     number: 8,
-    title: 'YA CORRE / MÁS BARATO',
+    title: 'Lo barato ya vuela',
     dek: 'Claude Sonnet 5.5 casi al techo del tablero (56). OpenAI frenó Astra. Argon sale a mitad de precio — aún cerrado.',
     excerpt:
       'Claude Sonnet 5.5 casi al techo del tablero (56). OpenAI frenó Astra. Argon sale a mitad de precio — aún cerrado.',
     weekLabel: 'N°8 · 26 sep–2 oct 2026',
     publishedAt: '2026-10-02T15:40:00+00:00',
     readingTime: 8,
-    cover: '/radar/n8/tapa.png',
+    cover: `${RADAR_V3_BASE}tapa-n8-v3.png`,
+    ogImage: `${RADAR_V3_BASE}blog-n8-v3.png`,
     pdf: '/radar/n8/radar-n8.pdf',
     author: 'Phil Taboada',
     category: { name: 'Radar', slug: 'radar' },
     tags: ['radar', 'claude', 'sonnet', 'argon'],
     pages: radarImagePages(8, [
-      '01-tapa.png',
+      `${RADAR_V3_BASE}tapa-n8-v3.png`,
       '02-carta.png',
       '03-senal.png',
       '04a-opening.png',
