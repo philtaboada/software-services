@@ -8,7 +8,7 @@ import { SERVICES } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Servicios",
   description:
-    "Webs, apps, sistemas internos e identidad digital. Software a medida y diseño desde Lima para Perú y LatAm.",
+    "Webs, apps, sistemas internos e identidad digital. Software a medida y diseño desde Lima, remoto para cualquier país.",
   alternates: { canonical: "/servicios" },
 };
 

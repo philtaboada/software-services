@@ -15,7 +15,7 @@ export const OG_IMAGE = "/og-studio.png" as const;
 export const NAP = {
   name: "Wavys Technologies",
   city: "Lima, Perú",
-  region: "Perú y LatAm (remoto)",
+  region: "Remoto global",
 } as const;
 
 export const SOCIALS = {
