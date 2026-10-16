@@ -144,6 +144,37 @@ function radarImagePages(number: number, files: string[]): RadarPage[] {
 
 export const radarIssues: RadarIssue[] = [
   {
+    slug: 'radar-n10',
+    number: 10,
+    title: 'RADAR N°10 · ENTRA / SIN CUENTA',
+    dek: 'Desde el 14 de octubre, tu cliente puede entrar a tu llamada de WhatsApp sin tener WhatsApp. Y desde el 13, el modelo fuerte de Google, Gemini 4 Argon, ya se usa en la app si pagas.',
+    excerpt:
+      'Desde el 14 de octubre, tu cliente puede entrar a tu llamada de WhatsApp sin tener WhatsApp. Y desde el 13, el modelo fuerte de Google, Gemini 4 Argon, ya se usa en la app si pagas.',
+    weekLabel: 'N°10 · 10–16 oct 2026',
+    publishedAt: '2026-10-16T15:00:00+00:00',
+    readingTime: 8,
+    cover: '/radar/n10/tapa.png',
+    pdf: '/radar/n10/radar-n10.pdf',
+    author: 'Phil Taboada',
+    category: { name: 'Radar', slug: 'radar' },
+    tags: ['radar', 'whatsapp', 'gemini', 'argon'],
+    pages: radarImagePages(10, [
+      '01-tapa.png',
+      '02-carta.png',
+      '03-senal.png',
+      '04a-opening.png',
+      '04b-story.png',
+      '04c-cierre.png',
+      '04d-pull.png',
+      '04e-datos.png',
+      '04f-puerta.png',
+      '05-notas.png',
+      '07-herramienta.png',
+      '08-ranking.png',
+      '09-cierre.png',
+    ]),
+  },
+  {
     slug: 'radar-n9',
     number: 9,
     title: 'Lo gratis ya no se reparte igual',
