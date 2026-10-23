@@ -144,6 +144,37 @@ function radarImagePages(number: number, files: string[]): RadarPage[] {
 
 export const radarIssues: RadarIssue[] = [
   {
+    slug: 'radar-n11',
+    number: 11,
+    title: 'RADAR N°11 · NUEVA / VITRINA',
+    dek: 'El 21 de octubre ChatGPT empezó a mostrar anuncios en 14 países más de Latam; OpenAI solo nombra 4 (Argentina, Chile, Colombia y Perú). Tu cliente los va a ver. Tú puedes comprarlos.',
+    excerpt:
+      'El miércoles 21 de octubre OpenAI llevó los anuncios de ChatGPT a 26 países más; en América Latina suma 14, pero solo nombra 4 (Argentina, Chile, Colombia y Perú). Salen solo en los planes Free y Go. Esa misma semana Google armó dentro de Gemini un espacio para el dueño de negocio chico y Anthropic presentó Claude Duet, un agente que te pide permiso antes de pagar o enviar.',
+    weekLabel: 'N°11 · 17–23 oct 2026',
+    publishedAt: '2026-10-23T15:00:00+00:00',
+    readingTime: 8,
+    cover: '/radar/n11/tapa.png',
+    pdf: '/radar/n11/radar-n11.pdf',
+    author: 'Phil Taboada',
+    category: { name: 'Radar', slug: 'radar' },
+    tags: ['radar', 'chatgpt', 'anuncios', 'gemini'],
+    pages: radarImagePages(11, [
+      '01-tapa.png',
+      '02-carta.png',
+      '03-senal.png',
+      '04a-opening.png',
+      '04b-story.png',
+      '04c-cierre.png',
+      '04d-pull.png',
+      '04e-datos.png',
+      '04f-puerta.png',
+      '05-notas.png',
+      '07-herramienta.png',
+      '08-ranking.png',
+      '09-cierre.png',
+    ]),
+  },
+  {
     slug: 'radar-n10',
     number: 10,
     title: 'RADAR N°10 · ENTRA / SIN CUENTA',
