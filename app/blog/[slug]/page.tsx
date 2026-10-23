@@ -22,6 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         images: [issue.ogImage ?? issue.cover],
         type: "article",
       },
+      alternates: { canonical: `/blog/${slug}` },
     };
   }
 
@@ -30,6 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: loaded.post.title,
     description: loaded.post.excerpt,
+    alternates: { canonical: `/blog/${slug}` },
   };
 }
 
