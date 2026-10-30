@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Rubik } from "next/font/google";
 import Script from "next/script";
 import { JsonLd } from "@/components/json-ld";
@@ -11,28 +11,30 @@ const rubik = Rubik({
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
 });
+
+export const viewport: Viewport = {
+  themeColor: "#000908",
+  colorScheme: "dark",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Wavys Technologies — Software a medida y diseño en Perú / LatAm",
+    default: "Wavys Technologies — software a medida y diseño",
     template: "%s | Wavys Technologies",
   },
   description:
-    "Estudio en Lima. Diseñamos webs, apps y sistemas internos para negocios con tracción en Perú y LatAm. IA solo cuando aporta.",
-  alternates: {
-    canonical: "/",
-  },
+    "Estudio en Lima. Software a medida, diseño web, apps y sistemas internos para negocios que ya operan. Remoto, en cualquier país.",
   openGraph: {
-    title: "Wavys Technologies — Software a medida y diseño en Perú / LatAm",
+    title: "Wavys Technologies — software a medida y diseño",
     description:
-      "Webs, apps y sistemas internos para negocios que ya operan. Presencial en Lima; remoto para LatAm.",
+      "Webs, apps y sistemas internos para negocios que ya operan. Estudio en Lima, remoto para cualquier país.",
     type: "website",
     url: SITE_URL,
     siteName: "Wavys Technologies",
     locale: "es_PE",
+    alternateLocale: ["en_US"],
     images: [
       {
         url: OG_IMAGE,
@@ -44,9 +46,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Wavys Technologies — Software a medida y diseño en Perú / LatAm",
+    title: "Wavys Technologies — software a medida y diseño",
     description:
-      "Estudio en Lima. Software a medida y diseño para negocios con tracción en Perú y LatAm.",
+      "Estudio en Lima. Software a medida y diseño para negocios que ya operan, en cualquier país.",
     images: [OG_IMAGE],
   },
 };

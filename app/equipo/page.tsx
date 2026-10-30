@@ -6,7 +6,7 @@ import { STACK } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Equipo",
   description:
-    "Estudio de software a medida y diseño en Lima. Un equipo para que el digital trabaje a favor del negocio. Remoto para LatAm.",
+    "Estudio de software a medida y diseño en Lima. Un equipo para que el digital trabaje a favor del negocio. Remoto para cualquier país.",
   alternates: { canonical: "/equipo" },
 };
 
@@ -29,7 +29,7 @@ export default function EquipoPage() {
             </h2>
             <p className="mt-4 text-[0.98rem] leading-7 text-[var(--cream-soft)]/75">
               Alcance, visual y decisión en la misma mesa. Presencial en Lima
-              cuando el proyecto lo pide; remoto para LatAm.
+              cuando el proyecto lo pide; remoto para cualquier país.
             </p>
           </article>
           <article className="border-t border-[var(--line-strong)] pt-6">

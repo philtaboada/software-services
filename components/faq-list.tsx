@@ -1,9 +1,13 @@
 import { FAQ_ITEMS } from "@/lib/faq";
 
-export function FaqList() {
+export function FaqList({
+  items = FAQ_ITEMS,
+}: {
+  items?: readonly { readonly q: string; readonly a: string }[];
+}) {
   return (
     <div>
-      {FAQ_ITEMS.map((item) => (
+      {items.map((item) => (
         <details key={item.q} className="faq-item">
           <summary className="faq-trigger">
             <span>{item.q}</span>

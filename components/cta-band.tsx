@@ -5,18 +5,29 @@ import { BOOKING_HREF, CONTACT_EMAIL, CONTACT_EMAIL_HREF } from "@/lib/site";
 export function CtaBand({
   kicker = "Siguiente paso",
   title = "Cuéntanos qué estás intentando construir.",
+  primaryLabel = "Agendar llamada 30 min",
+  emailLabel,
+  reply = "Respondemos en menos de 24 h hábiles.",
+  emailHref = CONTACT_EMAIL_HREF,
+  id,
 }: {
   kicker?: string;
   title?: string;
+  primaryLabel?: string;
+  emailLabel?: string;
+  reply?: string;
+  emailHref?: string;
+  id?: string;
 }) {
+  const email = emailLabel ?? `Escribir a ${CONTACT_EMAIL}`;
   return (
-    <section className="relative px-5 pb-20 sm:px-8 lg:px-12 lg:pb-28">
+    <section id={id} className="relative scroll-mt-28 px-5 pb-20 sm:px-8 lg:px-12 lg:pb-28">
       <div className="relative mx-auto min-h-[22rem] max-w-[1440px] overflow-hidden rounded-[1.5rem] border border-[var(--line)]">
         <Image
           src="/images/studio/studio-circuit-wave.jpg"
           alt=""
           fill
-          sizes="1440px"
+          sizes="(max-width: 1440px) 100vw, 1440px"
           className="object-cover opacity-50"
         />
         <div className="absolute inset-0 bg-[#000908]/55" />
@@ -44,15 +55,15 @@ export function CtaBand({
               className="btn-primary"
               data-cal-click
             >
-              <span>Agendar llamada 30 min</span>
+              <span>{primaryLabel}</span>
               <ArrowIcon className="h-4 w-4" />
             </a>
-            <a href={CONTACT_EMAIL_HREF} className="btn-ghost">
-              Escribir a {CONTACT_EMAIL}
+            <a href={emailHref} className="btn-ghost max-w-full text-center">
+              {email}
             </a>
           </div>
-          <p className="mt-6 text-[0.9rem] text-[var(--cream-soft)]/60">
-            Respondemos en menos de 24 h hábiles.
+          <p className="mt-6 text-[0.9rem] text-[var(--cream-soft)]">
+            {reply}
           </p>
         </div>
       </div>

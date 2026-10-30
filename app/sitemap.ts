@@ -4,8 +4,16 @@ import { SITE_URL } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
+  const alternates = {
+    languages: {
+      es: `${SITE_URL}/`,
+      en: `${SITE_URL}/en`,
+      "x-default": `${SITE_URL}/`,
+    },
+  };
   const staticRoutes = [
     "",
+    "/en",
     "/trabajo",
     "/carta-digital",
     "/servicios",
@@ -31,7 +39,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${SITE_URL}${path || "/"}`,
     lastModified,
     changeFrequency: "weekly" as const,
-    priority: path === "" ? 1 : path === "/carta-digital" ? 0.85 : 0.7,
+    priority: path === "" || path === "/en" ? 1 : path === "/carta-digital" ? 0.85 : 0.7,
+    ...((path === "" || path === "/en") ? { alternates } : {}),
   }));
 
   const cases = CASES.map((item) => ({

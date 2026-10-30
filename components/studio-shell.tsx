@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { CHROME, localeFromPath } from "@/lib/i18n/chrome";
 
 export function StudioShell({
   children,
@@ -10,18 +11,21 @@ export function StudioShell({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const locale = localeFromPath(pathname);
+  const isLanding = pathname === "/" || pathname === "/en";
   const isBlog = pathname === "/blog" || pathname.startsWith("/blog/");
   const isBlogIndex = pathname === "/blog";
   const isCarta = pathname === "/carta" || pathname.startsWith("/carta/");
 
   return (
     <div
+      lang={locale}
       className={`relative bg-[var(--background)] text-[var(--cream)] ${
         isBlogIndex ? "h-dvh overflow-hidden" : "min-h-dvh overflow-x-clip"
-      }`}
+      } ${isLanding ? "landing-shell" : ""}`}
     >
       <a href="#main" className="skip-link">
-        Saltar al contenido
+        {CHROME[locale].skip}
       </a>
       {isCarta ? null : <SiteHeader />}
       <main id="main" className={isBlogIndex ? "h-dvh overflow-hidden" : undefined}>
