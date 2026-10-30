@@ -144,6 +144,37 @@ function radarImagePages(number: number, files: string[]): RadarPage[] {
 
 export const radarIssues: RadarIssue[] = [
   {
+    slug: 'radar-n12',
+    number: 12,
+    title: 'RADAR N°12 · SIN COPIAR / NI PEGAR',
+    dek: 'Desde el 29 de octubre Gemini arma y corrige tu documento, tu PDF o tu hoja de cálculo dentro del mismo chat, para todos los usuarios. La IA dejó de darte texto para pegar. Ahora mete mano en tu archivo.',
+    excerpt:
+      'El jueves 29 de octubre Google hizo que Gemini cree, muestre y edite documentos, PDF, presentaciones y hojas de cálculo dentro del mismo chat, para todos los usuarios (hojas y presentaciones solo en web; PDF también en celular). Fue la pieza más grande de una semana con una sola idea: la IA dejó de devolverte texto para copiar y pegar y empezó a trabajar sobre tus cosas.',
+    weekLabel: 'N°12 · 24–30 oct 2026',
+    publishedAt: '2026-10-30T15:00:00+00:00',
+    readingTime: 8,
+    cover: '/radar/n12/tapa.png',
+    pdf: '/radar/n12/radar-n12.pdf',
+    author: 'Phil Taboada',
+    category: { name: 'Radar', slug: 'radar' },
+    tags: ['radar', 'gemini', 'archivos', 'canva'],
+    pages: radarImagePages(12, [
+      '01-tapa.png',
+      '02-carta.png',
+      '03-senal.png',
+      '04a-opening.png',
+      '04b-story.png',
+      '04c-cierre.png',
+      '04d-pull.png',
+      '04e-datos.png',
+      '04f-tarde.png',
+      '05-notas.png',
+      '07-herramienta.png',
+      '08-ranking.png',
+      '09-cierre.png',
+    ]),
+  },
+  {
     slug: 'radar-n11',
     number: 11,
     title: 'RADAR N°11 · NUEVA / VITRINA',

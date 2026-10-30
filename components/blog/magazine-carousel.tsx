@@ -20,9 +20,9 @@ type Pose = { x: number; y: number; rz: number; ry: number; s: number; o: number
 
 /** Placeholder covers for issues not yet published. Live issues from `radarIssues` replace these by number. */
 const UPCOMING: Omit<ShelfCard, "id">[] = [
-  { number: 12, weekLabel: "N°12", title: "Pronto", dek: "Se cierra el viernes.", color: "#6d5cff" },
-  { number: 13, weekLabel: "N°13", title: "Pronto", dek: "Ya se va a ver.", color: "#ff7b6b" },
-  { number: 14, weekLabel: "N°14", title: "Pronto", dek: "Ya se va a ver.", color: "#14c4b4" },
+  { number: 13, weekLabel: "N°13", title: "Pronto", dek: "Se cierra el viernes.", color: "#6d5cff" },
+  { number: 14, weekLabel: "N°14", title: "Pronto", dek: "Ya se va a ver.", color: "#ff7b6b" },
+  { number: 15, weekLabel: "N°15", title: "Pronto", dek: "Ya se va a ver.", color: "#14c4b4" },
 ];
 
 // x / y se expresan en porcentaje del propio tamaño de la tapa: el abanico
